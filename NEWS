@@ -1,0 +1,52 @@
+## GPareto 1.1.1
+
+## change / GPareto 1.1.0
+  * improve 3D Pareto front representation with rgl
+  * no more transpose with predict_kms
+  * checkPredict use light option
+
+## change / GPareto 1.0.3
+  * easyGParetoptim and GParetoptim now allow noisy objectives, with the noise.var argument
+  * resolve inconsistency with integration.points in GParetoptim
+  * use faster options of predict.km when possible, predict_kms function to predict on a list of models
+  * n.steps.remaining now is an element of crit_control
+  * arguments for check_predict only in crit_control for all functions
+  * EMI is now computed using the semi-analytical formula for 2 objectives (if the range of objective is small enough, for stability)
+  * quietly load KrigInv in the vignette to solve rebuilding issues
+  * warnings from genoud are suppressed unless trace is high enough
+
+## change / GPareto 1.0.2
+  * update the vignette
+  * changes in checkPredict for matrix/vector arithmetics
+
+## change / GPareto 1.0.1
+  * new function 'easyGParetoptim', a user-friendly wrapper of the function 'GParetoptim' with arguments as the base optim method
+  * change arguments 'fun' and 'cheapfun' of 'GParetoptim' and 'crit_optimizer' to 'fn' and 'cheapfn' to match arguments of 'optim' and 'easyGParetoptim'
+  * new function 'getDesign', to get the best design corresponding to a given target
+  * new function 'plotGPareto' to display the result of an optimization, possibly quantifiying the uncertainty on it
+  * a random point is selected with GParetoptim is the inner optimization of the criterion failed by returning an already known point
+  * no more messages about refPoints when trace is 0
+  * bug corrected in crit_SMS with eps
+  * bug corrected with seed for genoud and for EHI, EMI
+  * bug corrected for SUR
+  * correct bug in automatic refPoint selection
+  * passing any optimizer to crit_optimizer is now possible
+  * add method simulate to class 'fastfun'
+  * penalty with checkPredict to -1 for all criterion
+  * nb.samp reduced to 50 for SAA approximation of EHI and EMI for faster evaluation
+  * printing of iterations with 'GParetoptim' improved
+  * correct bug with 'GParetoptim' when no 'optimcontrol' does not contain a method
+  * shorter argument 'n.grid' instead of 'nPointsGrid' in 'plotParetoGrid'
+  * modifications of display with GParetoptim when no refPoint is provided
+  * corrections and modifications in the documentation of 'GParetoptim', 'crit_SMS', 'plotParetoEmp' and 'CPF'
+  * modifications to 'checkPredict' to take into account arbitrary position of 'fastfun' functions 
+  * the example of 'crit_SUR' is now the same as the other criteria
+  * correct bugs with d>2 with test functions ZDT1-6
+  * correct bug in MOP2
+  * correct bug with 'crit_EHI' when PF is provided but not refPoint
+
+## change / GPareto 1.0.0
+  * update of references
+  * bug corrected in 'plotParetoEmp' to account for the case with a single point
+  * possibility in 'plotParetoEmp' to display a Pareto front with maximization
+  * bug corrected in 'crit_EHI' to count the number of objectives
