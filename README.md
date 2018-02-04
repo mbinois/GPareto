@@ -1,0 +1,2 @@
+# GPareto
+GPareto cran package
