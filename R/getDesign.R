@@ -144,7 +144,7 @@ getDesign <- function(model, target, lower, upper, optimcontrol = NULL){
   pred <- predict_kms(model, newdata=par, type="UK", checkNames = FALSE, light.return = TRUE, cov.compute = FALSE)
   # mu <- as.numeric(pred$mean)
   # sigma <- as.numeric(pred$sd)
-  return(list(par=par, value=value, mean = pred$mean, sd = pred$sd))
+  return(list(par=par, value=value, mean = drop(pred$mean), sd = drop(pred$sd)))
   # return(list(par=par, value=value, mean = tmp[,2], sd = tmp[,3])) #,
   #lower95 = tmp[,4], upper95 = tmp[,5]))
 }
