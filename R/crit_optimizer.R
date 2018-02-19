@@ -9,7 +9,7 @@
 ##' needed about the objective function reduces here to the vector of response values
 ##' embedded in the models (no call to the objective functions or simulators (except with \code{cheapfn})).
 ##'
-##' @title Maximization of multiobjective Expected Improvement criteria
+##' @title Maximization of multiobjective infill criterion
 ##' 
 ##' @param crit sampling criterion. Four choices are available : "\code{SMS}", "\code{EHI}", "\code{EMI}" and "\code{SUR}",
 ##' @param model list of objects of class \code{\link[DiceKriging]{km}}, one for each objective functions,
