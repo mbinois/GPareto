@@ -117,7 +117,7 @@ CPF <-
         f1lim <- seq(min(fun1sims), refPoint[1], length.out = n.grid)
       }
       if(is.null(f2lim)){
-        f2lim <- seq(min(fun1sims), refPoint[2], length.out = n.grid)
+        f2lim <- seq(min(fun2sims), refPoint[2], length.out = n.grid)
       }
     }
     
