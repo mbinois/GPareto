@@ -7,6 +7,6 @@ This R package provides tools for multi-objective optimization of expensive blac
 ## Installation
 For the stable version: http://cran.r-project.org/package=GPareto
 
-This the development version
+This the development version, contributions are welcomed.
 
 ## Note: roxygen is used for the documentation
