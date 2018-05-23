@@ -218,6 +218,46 @@ plot.CPF <- function(x, ...){
   }
 }
 
+
+## ' TODO replace plotSymdevfun by this function
+plotdev <- function(x, ...){
+  # #' @title Plot of the attainment function and Vorob'ev expectation.
+  # #' @details See \code{\link[GPareto]{CPF}} for an example.
+  
+  vals <- x$values
+  vals[vals > x$beta_star] <- 1 - vals[vals > x$beta_star]
+  
+  if(is.null(x$VE)){
+    filled.contour(x$x, x$y,vals,
+                   col = gray(11:0/11), levels=seq(0,1,,11),
+                   main = "Empirical attainment function",
+                   xlab = expression(f[1]), ylab = expression(f[2]),
+                   plot.axes = { axis(1); axis(2);
+                     # #points(x$PF[1, ], x$PF[2, ], pch = 17, col = "blue");
+                     # points(x$response[,1], x$responses[,2], pch = 17, col="blue");
+                     # contour(x$x, x$y, vals, add=T,
+                     #         levels = c(0,0.2,0.4,0.6,0.8,1),labcex=1);
+                     plotParetoEmp(x$PF,col="red", lwd = 2);
+                   }
+    )
+  }else{
+    filled.contour(x$x, x$y, vals,
+                   col = gray(11:0/11), levels=seq(0,1,,11),
+                   main = substitute(paste("Empirical attainment function, ",beta,"* = ", a),
+                                     list(a = formatC(x$beta_star, digits = 2))),
+                   xlab = expression(f[1]), ylab = expression(f[2]),
+                   plot.axes = { axis(1); axis(2);
+                     #points(x$PF[1, ], x$PF[2, ], pch = 17, col = "blue");
+                     # points(x$response[,1], x$responses[,2], pch = 17, col="blue");
+                     # contour(x$x, x$y, vals, add=T,
+                     #         levels = c(0,0.2,0.4,0.6,0.8,1),labcex=1);
+                     plotParetoEmp(x$PF,col="red", lwd = 2);
+                     plotParetoEmp(x$VE,col="blue",lwd=2)
+                   }
+    )
+  }
+}
+
 #' @export
 print.summary.CPF <- function(x, ...) {
   ## Number of simulations
@@ -399,9 +439,10 @@ VorobDev <- function(CPF, refPoint = NULL){
   VD <- 0 #Vorob'ev deviation
   
   # symmetric difference : 2*H(AUB) - H(A) - H(B)
+  H2 <- dominated_hypervolume(t(CPF$VE), ref = c(ma1, ma2))
   for(i in 1:nsim){
     H1 <- dominated_hypervolume(rbind(CPF$fun1sims[i,],CPF$fun2sims[i,]), ref = c(ma1, ma2))
-    H2 <- dominated_hypervolume(t(CPF$VE), ref = c(ma1, ma2))
+    
     H12 <- dominated_hypervolume(cbind(rbind(CPF$fun1sims[i,],CPF$fun2sims[i,]),
                                        t(CPF$VE)), ref = c(ma1, ma2))
     VD = VD + 2*H12 -H1 -H2
