@@ -5,7 +5,7 @@
 ##' 
 ##' @title Expected Hypervolume Improvement with m objectives
 ##' 
-##' @param x a vector representing the input for which one wishes to calculate \code{EHI},
+##' @param x a vector representing the input for which one wishes to calculate \code{EHI}, alternatively a matrix with one point per row,
 ##' @param model list of objects of class \code{\link[DiceKriging]{km}}, one for each objective functions,
 ##' @param paretoFront (optional) matrix corresponding to the Pareto front of size \code{[n.pareto x n.obj]}, or any reference set of observations, 
 ##' @param critcontrol optional list with arguments:
@@ -57,8 +57,8 @@
 ##' mf1 <- km(~., design = design.grid, response = response.grid[,1])
 ##' mf2 <- km(~., design = design.grid, response = response.grid[,2])
 ##' 
-##' EHI_grid <- apply(test.grid, 1, crit_EHI, model = list(mf1, mf2),
-##'                      critcontrol = list(refPoint = c(300,0)))
+##' crit_EHI(x = as.matrix(test.grid), model = list(mf1, mf2),
+##'          critcontrol = list(refPoint = c(300,0)))
 ##' 
 ##' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid), nlevels = 50,
 ##'                matrix(EHI_grid, n.grid), main = "Expected Hypervolume Improvement",
