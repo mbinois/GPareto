@@ -100,7 +100,7 @@ EHI_2d <- function(x, model, critcontrol=NULL, type = "UK", paretoFront = NULL){
     check <- checkPredict(x, model, threshold = critcontrol$threshold, distance = "covratio", type = type)
     idxOk <- which(!check)
     resu <- rep(0, n.candidates)
-    resu[setdiff(1:n.candidates, idxOk)] <- -1
+    resu[-idxOk] <- -1
     resu[idxOk] <- EHI_2d_wrap_Rcpp(paretoFront, refPoint, mu[idxOk,,drop=FALSE], sigma[idxOk,,drop=FALSE])
     return(resu)
   }
