@@ -5,9 +5,32 @@
 
 using namespace Rcpp;
 
+// nonDomInd_cpp
+std::vector<int> nonDomInd_cpp(NumericMatrix mat);
+RcppExport SEXP _GParetoEHI_nonDomInd_cpp(SEXP matSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
+    rcpp_result_gen = Rcpp::wrap(nonDomInd_cpp(mat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// nonDomSet
+LogicalVector nonDomSet(NumericMatrix points, NumericMatrix ref);
+RcppExport SEXP _GParetoEHI_nonDomSet(SEXP pointsSEXP, SEXP refSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type points(pointsSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type ref(refSEXP);
+    rcpp_result_gen = Rcpp::wrap(nonDomSet(points, ref));
+    return rcpp_result_gen;
+END_RCPP
+}
 // hvolume2d_Rcpp
 double hvolume2d_Rcpp(NumericMatrix S, double x1, double x2);
-RcppExport SEXP _GPareto_hvolume2d_Rcpp(SEXP SSEXP, SEXP x1SEXP, SEXP x2SEXP) {
+RcppExport SEXP _GParetoEHI_hvolume2d_Rcpp(SEXP SSEXP, SEXP x1SEXP, SEXP x2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,7 +43,7 @@ END_RCPP
 }
 // exipsi_Rcpp
 double exipsi_Rcpp(double a, double b, double m, double s);
-RcppExport SEXP _GPareto_exipsi_Rcpp(SEXP aSEXP, SEXP bSEXP, SEXP mSEXP, SEXP sSEXP) {
+RcppExport SEXP _GParetoEHI_exipsi_Rcpp(SEXP aSEXP, SEXP bSEXP, SEXP mSEXP, SEXP sSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -33,28 +56,30 @@ BEGIN_RCPP
 END_RCPP
 }
 // EHI_2d_wrap_Rcpp
-double EHI_2d_wrap_Rcpp(NumericMatrix P, NumericVector r, NumericVector mu, NumericVector s);
-RcppExport SEXP _GPareto_EHI_2d_wrap_Rcpp(SEXP PSEXP, SEXP rSEXP, SEXP muSEXP, SEXP sSEXP) {
+NumericVector EHI_2d_wrap_Rcpp(NumericMatrix P, NumericVector r, NumericMatrix mu, NumericMatrix s);
+RcppExport SEXP _GParetoEHI_EHI_2d_wrap_Rcpp(SEXP PSEXP, SEXP rSEXP, SEXP muSEXP, SEXP sSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type P(PSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type r(rSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type mu(muSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type s(sSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type s(sSEXP);
     rcpp_result_gen = Rcpp::wrap(EHI_2d_wrap_Rcpp(P, r, mu, s));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_GPareto_hvolume2d_Rcpp", (DL_FUNC) &_GPareto_hvolume2d_Rcpp, 3},
-    {"_GPareto_exipsi_Rcpp", (DL_FUNC) &_GPareto_exipsi_Rcpp, 4},
-    {"_GPareto_EHI_2d_wrap_Rcpp", (DL_FUNC) &_GPareto_EHI_2d_wrap_Rcpp, 4},
+    {"_GParetoEHI_nonDomInd_cpp", (DL_FUNC) &_GParetoEHI_nonDomInd_cpp, 1},
+    {"_GParetoEHI_nonDomSet", (DL_FUNC) &_GParetoEHI_nonDomSet, 2},
+    {"_GParetoEHI_hvolume2d_Rcpp", (DL_FUNC) &_GParetoEHI_hvolume2d_Rcpp, 3},
+    {"_GParetoEHI_exipsi_Rcpp", (DL_FUNC) &_GParetoEHI_exipsi_Rcpp, 4},
+    {"_GParetoEHI_EHI_2d_wrap_Rcpp", (DL_FUNC) &_GParetoEHI_EHI_2d_wrap_Rcpp, 4},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_GPareto(DllInfo *dll) {
+RcppExport void R_init_GParetoEHI(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

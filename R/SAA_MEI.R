@@ -62,7 +62,9 @@ SAA_mEI <- function(x, model,
   
   n.obj <- length(model)
   d <- model[[1]]@d
-  x.new <- matrix(x, 1, d)
+  #x.new <- matrix(x, 1, d)
+  if (!is.matrix(x)) x<-matrix(x,1,d)
+  n.candidates<-nrow(x)
   
   if(is.null(paretoFront)){
     observations <- Reduce(cbind, lapply(model, slot, "y"))
@@ -101,35 +103,40 @@ SAA_mEI <- function(x, model,
   #   mu[i]    <- pred$mean
   #   sigma[i] <- pred$sd
   # }
-  pred <- predict_kms(model, newdata=x.new, type=type, checkNames = FALSE, light.return = TRUE, cov.compute = FALSE)
-  mu <- as.numeric(pred$mean)
-  sigma <- as.numeric(pred$sd)
+  pred <- predict_kms(model, newdata=x, type=type, checkNames = FALSE, light.return = TRUE, cov.compute = FALSE)
+  mu <- t(pred$mean)
+  sigma <- t(pred$sd)
   
   ## A new x too close to the known observations could result in numerical problems
-  if(checkPredict(x, model, type = type, distance = critcontrol$distance, threshold = critcontrol$threshold)){
-    return(-1)
-  }else{
-    # Set seed to have a deterministic function to optimize
-    # see http://www.cookbook-r.com/Numbers/Saving_the_state_of_the_random_number_generator/
-    if (exists(".Random.seed", .GlobalEnv))
-      oldseed <- .GlobalEnv$.Random.seed
-    else
-      oldseed <- NULL
-    
-    set.seed(seed)
-    
-    Samples <- mvrnorm(n = nb.samp, mu, diag(sigma))
-    
-    if (!is.null(oldseed)) 
-      .GlobalEnv$.Random.seed <- oldseed
-    else
-      rm(".Random.seed", envir = .GlobalEnv)
-    
-    
-    Res <- apply(Samples, 1, Improvement, front = paretoFront, refPoint = refPoint)
-    
-    return(mean(Res))
+  check <- checkPredict(x, model, type = type, distance = "covratio", threshold = critcontrol$threshold)
+  idxOk <- which(!check)
+  Res <- rep(-1,n.candidates)
+  # Set seed to have a deterministic function to optimize
+  # see http://www.cookbook-r.com/Numbers/Saving_the_state_of_the_random_number_generator/
+  if (exists(".Random.seed", .GlobalEnv))
+    oldseed <- .GlobalEnv$.Random.seed
+  else
+    oldseed <- NULL
+  
+  set.seed(seed)
+  
+  Samples <- matrix(0,nb.samp*length(idxOk),n.obj)
+  cpt<-1
+  for (i in idxOk){
+    Samples[(1+(cpt-1)*nb.samp):(cpt*nb.samp),] <- mvrnorm(n = nb.samp, mu[i,], diag(sigma[i,]))
+    cpt<-cpt+1
   }
+  
+  if (!is.null(oldseed)) 
+    .GlobalEnv$.Random.seed <- oldseed
+  else
+    rm(".Random.seed", envir = .GlobalEnv)
+  
+  #ImprovementSamples <- apply(Samples, 1, Improvement, front = paretoFront, refPoint = refPoint)
+  ImprovementSamples <- Hypervolume_improvement_vec(points = Samples, front = paretoFront, refPoint = refPoint)
+  for (i in 1:length(idxOk)) Res[idxOk[i]] <- mean(ImprovementSamples[(1+(i-1)*nb.samp):(i*nb.samp)])
+  
+  return(Res)
   
 }
 
@@ -139,6 +146,21 @@ Hypervolume_improvement <- function(point, front, refPoint){
     Hi <- hypervolume_indicator(t(rbind(point,front)), t(front), refPoint)  
   }
   return(-Hi)
+}
+
+contribution_to_front <- function(point, front, refPoint){
+  return(dominated_hypervolume(t(rbind(point,front)),refPoint))
+}
+
+Hypervolume_improvement_vec <- function(points, front, refPoint){
+  Hi <- rep(0,nrow(points))
+  HypInitial <- dominated_hypervolume(t(front),refPoint)
+  idxND <- which(nonDomSet(points,front))
+  Hi[idxND] <- apply(points[idxND,,drop=FALSE], 1, contribution_to_front, front = front, refPoint = refPoint) 
+  #for (i in idxND) Hi[i] <- dominated_hypervolume(t(rbind(points[i,],front)),refPoint)
+  Hi <- Hi-HypInitial
+  #for (i in idxND) Hi[i] <- hypervolume_contribution(t(rbind(points[i,],front)),refPoint)[1]
+  return(Hi)
 }
 
 # ref_point added to have the same arguments than Hypervolume_improvement
