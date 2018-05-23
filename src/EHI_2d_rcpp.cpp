@@ -51,11 +51,15 @@ double exipsi_Rcpp(double a, double b, double m, double s){
 
 
 // [[Rcpp::export]]
-double EHI_2d_wrap_Rcpp(NumericMatrix P,NumericVector r, NumericVector mu, NumericVector s){
+NumericVector EHI_2d_wrap_Rcpp(NumericMatrix P,NumericVector r, NumericMatrix mu, NumericMatrix s){
   
  // determine all lower left corner cell coordinates
   
+  
+  int n = mu.nrow();
   int k = P.nrow();
+  NumericVector resu(n);
+  for (int candidat = 0; candidat < n; candidat++){  
   
   NumericVector c2(P(_,1));
   std::sort(c2.begin(), c2.end());
@@ -142,15 +146,17 @@ double EHI_2d_wrap_Rcpp(NumericMatrix P,NumericVector r, NumericVector mu, Numer
       }
       
       // Marginal integration over the length of a cell
+      NumericVector candidateMu(mu(candidat,_));
+      NumericVector candidateSigma(s(candidat,_));
       
-      Psi1 = exipsi_Rcpp(fMax1,cU1,mu(0),s(0)) - exipsi_Rcpp(fMax1,cL1,mu(0),s(0));
+      Psi1 = exipsi_Rcpp(fMax1,cU1,candidateMu(0),candidateSigma(0)) - exipsi_Rcpp(fMax1,cL1,candidateMu(0),candidateSigma(0));
       
       // Marginal integration over the height of a cell
-      Psi2 = exipsi_Rcpp(fMax2,cU2,mu[1],s[1]) - exipsi_Rcpp(fMax2,cL2,mu[1],s[1]);
+      Psi2 = exipsi_Rcpp(fMax2,cU2,candidateMu[1],candidateSigma[1]) - exipsi_Rcpp(fMax2,cL2,candidateMu[1],candidateSigma[1]);
       
       // Cumulative Gaussian over length for correction constant
-      NumericVector tmp1(1, (cU1-mu(0))/s(0));
-      NumericVector tmp2(1, (cL1-mu(0))/s(0));
+      NumericVector tmp1(1, (cU1-candidateMu(0))/candidateSigma(0));
+      NumericVector tmp2(1, (cL1-candidateMu(0))/candidateSigma(0));
       
       tmp1 = pnorm(tmp1);
       tmp2 = pnorm(tmp2);
@@ -158,10 +164,10 @@ double EHI_2d_wrap_Rcpp(NumericMatrix P,NumericVector r, NumericVector mu, Numer
       GaussCDF1 = tmp1(0) - tmp2(0);
       
       // Cumulative Gaussian over length for correction constant
-      tmp1 = (cU2-mu[1])/s[1];
+      tmp1 = (cU2-candidateMu[1])/candidateSigma[1];
       tmp1 = pnorm(tmp1);
       
-      tmp2 = (cL2-mu[1])/s[1];
+      tmp2 = (cL2-candidateMu[1])/candidateSigma[1];
       tmp2 = pnorm(tmp2);
       
       GaussCDF2 = tmp1(0) - tmp2(0);
@@ -178,7 +184,9 @@ double EHI_2d_wrap_Rcpp(NumericMatrix P,NumericVector r, NumericVector mu, Numer
       res += std::max(ccc(i,j), 0.0);
     }
   }
+  resu[candidat]= res;
+}
   
-  return(res);
+  return(resu);
 }
 
