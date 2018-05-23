@@ -132,8 +132,8 @@ SAA_mEI <- function(x, model,
   else
     rm(".Random.seed", envir = .GlobalEnv)
   
-  #ImprovementSamples <- apply(Samples, 1, Improvement, front = paretoFront, refPoint = refPoint)
-  ImprovementSamples <- Hypervolume_improvement_vec(points = Samples, front = paretoFront, refPoint = refPoint)
+  ImprovementSamples <- apply(Samples, 1, Improvement, front = paretoFront, refPoint = refPoint)
+  # ImprovementSamples <- Hypervolume_improvement_vec(points = Samples, front = paretoFront, refPoint = refPoint)
   for (i in 1:length(idxOk)) Res[idxOk[i]] <- mean(ImprovementSamples[(1+(i-1)*nb.samp):(i*nb.samp)])
   
   return(Res)
