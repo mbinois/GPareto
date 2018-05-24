@@ -30,7 +30,7 @@ std::vector<int> nonDomInd_cpp(NumericMatrix mat){
   return(kung(1, mat.nrow(), ptr_mat, mat.ncol(), mat.nrow()));
 }
 
-// Kung sorting
+//' Kung sorting
 //' @param i_begin, i_end first index in the matrix to consider
 //' @param ptr_mat pointer to matrix with dimensions:
 //' @param nobj,nr number of columns and rows
@@ -122,6 +122,34 @@ LogicalVector nonDomSet(NumericMatrix points, NumericMatrix ref){
 
 }
 
-
-
+//' Fast computation of distance between two matrices
+//' @param X1,X2 matrices with one point per row
+//' @noRd
+// [[Rcpp::export]]
+NumericMatrix distcpp_2(NumericMatrix X1, NumericMatrix X2){
+  int nr1 = X1.nrow();
+  int nr2 = X2.nrow();
+  int dim = X1.ncol();
+  NumericMatrix s(nr1, nr2);
+  double tmp;
+  
+  double* ptrs = &s(0,0);
+  const double* ptrX2 = (const double*) &X2(0,0);
+  const double* ptrX1 = (const double*) &X1(0,0);
+  for(int i = 0; i < nr2; i++){
+    for(int j = 0; j < nr1; j++, ptrs++){
+      for(int k = 0; k < dim; k++){
+        tmp = (*ptrX1 - *ptrX2);
+        *ptrs += tmp * tmp;
+        ptrX1 += nr1;
+        ptrX2 += nr2;
+      }
+      ptrX2 -= nr2*dim;
+      ptrX1 -= nr1*dim - 1;
+    }
+    ptrX2++;
+    ptrX1 -= nr1;
+  }
+  return s;
+}
 

@@ -1,7 +1,7 @@
 ##' Check that the new point is not too close to already known observations to avoid numerical issues.
 ##' Closeness can be estimated with several distances.
 ##' @title Prevention of numerical instability for a new observation
-##' @param x a vector representing the input to check,
+##' @param x a vector representing the input to check, alternatively a matrix with one point per row,
 ##' @param model list of objects of class \code{\link[DiceKriging]{km}}, one for each objective functions,
 ##' @param threshold optional value for the minimal distance to an existing observation, default to \code{1e-4},
 ##' @param distance selection of the distance between new observations, between "\code{euclidean}",
@@ -26,9 +26,12 @@ checkPredict <- function(x, model, threshold = 1e-4, distance = "covdist", type 
     threshold <- 1e-4
   
   if(distance == "euclidean"){
-    tp1 <- as.numeric(t(model[[1]]@X))
-    tp2 <- matrix(tp1 - as.numeric(x), nrow = model[[1]]@n, byrow = TRUE)^2
-    mindist <- min(sqrt(rowSums(tp2)))
+    # tp1 <- as.numeric(t(model[[1]]@X))
+    # tp2 <- matrix(tp1 - as.numeric(x), nrow = model[[1]]@n, byrow = TRUE)^2
+    mindist <- distcpp_2(x, model[[1]]@X)
+    mindist <- apply(mindist, 1, min)
+    mindist <- sqrt(mindist)
+    return(mindist < threshold)
   }else{
     # d <- length(which(sapply(model, class) == "km")) # to filter the fastobj (no troubles to update)
     if(distance == "covratio"){
