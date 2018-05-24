@@ -2,6 +2,7 @@
 
 ## change / GPareto 1.1.1
   * vectorized crit_EHI thanks to David Gaudrie
+  * vectorized checkPredict function, with additional 'none' option
 
 ## GPareto 1.1.1
 
