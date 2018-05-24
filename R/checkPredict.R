@@ -37,9 +37,10 @@ checkPredict <- function(x, model, threshold = 1e-4, distance = "covdist", type 
       for(i in 1:length(model)){
         if(class(model[[i]]) != "fastfun"){
           pred.sd <- predict(object = model[[i]], newdata = x, type = type, checkNames = FALSE, light.return = TRUE)
-          mindist <- min(mindist, pred.sd$sd/sqrt(model[[i]]@covariance@sd2))
+          mindist <- pmin(mindist, pred.sd$sd/sqrt(model[[i]]@covariance@sd2))
         }
       }
+      return(mindist < threshold)
     }else{
       
       # if one model is likely to be unable to take the new point without numerical instabilities,
