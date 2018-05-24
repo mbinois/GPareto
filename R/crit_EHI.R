@@ -57,7 +57,7 @@
 ##' mf1 <- km(~., design = design.grid, response = response.grid[,1])
 ##' mf2 <- km(~., design = design.grid, response = response.grid[,2])
 ##' 
-##' crit_EHI(x = as.matrix(test.grid), model = list(mf1, mf2),
+##' EHI_grid <- crit_EHI(x = as.matrix(test.grid), model = list(mf1, mf2),
 ##'          critcontrol = list(refPoint = c(300,0)))
 ##' 
 ##' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid), nlevels = 50,
