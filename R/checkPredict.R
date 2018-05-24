@@ -58,13 +58,13 @@ checkPredict <- function(x, model, threshold = 1e-4, distance = "covdist", type 
         if(class(model[[i]]) != "fastfun"){
           
           if(class(model[[i]]@covariance) %in% c("covTensorProduct", "covIso")){
-            kxy <- drop(covMat1Mat2(model[[i]]@covariance, x, model[[i]]@X))
+            kxy <- covMat1Mat2(model[[i]]@covariance, x, model[[i]]@X)
             kxx <- model[[i]]@covariance@sd2 # k(x,x) = k(y,y) = variance term
             mindist <- pmin(mindist, sqrt(pmax(0, 2 * kxx - 2 * apply(kxy, 1, max))/model[[i]]@covariance@sd2))
             
           }else{
             kxx <- diag(covMatrix(model[[i]]@covariance, x)$C)
-            kxy <- drop(covMat1Mat2(model[[i]]@covariance, x, model[[i]]@X))
+            kxy <- covMat1Mat2(model[[i]]@covariance, x, model[[i]]@X)
             kyy <- diag(covMatrix(model[[i]]@covariance, model[[i]]@X)$C)
             mindist <- pmin(mindist,
                             sqrt(pmax(0, kxx - 2 * apply(kxy - matrix(kyy, nrow(x), model[[i]]@n, byrow = T), 1, max))/model[[i]]@covariance@sd2))

@@ -111,6 +111,9 @@ SAA_mEI <- function(x, model,
   check <- checkPredict(x, model, type = type, distance = critcontrol$distance, threshold = critcontrol$threshold)
   idxOk <- which(!check)
   Res <- rep(-1,n.candidates)
+  
+  if(length(idxOk) == 0) return(Res)
+  
   # Set seed to have a deterministic function to optimize
   # see http://www.cookbook-r.com/Numbers/Saving_the_state_of_the_random_number_generator/
   if (exists(".Random.seed", .GlobalEnv))

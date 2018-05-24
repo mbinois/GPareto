@@ -98,10 +98,9 @@ EHI_2d <- function(x, model, critcontrol=NULL, type = "UK", paretoFront = NULL){
     ## A new x too close to the known observations could result in numerical problems
     # check <- apply(x, 1, checkPredict, model = model, type = type, distance = critcontrol$distance, threshold = critcontrol$threshold)
     check <- checkPredict(x, model, threshold = critcontrol$threshold, distance = critcontrol$distance, type = type)
-    idxOk <- which(!check)
     resu <- rep(0, n.candidates)
-    resu[-idxOk] <- -1
-    resu[idxOk] <- EHI_2d_wrap_Rcpp(paretoFront, refPoint, mu[idxOk,,drop=FALSE], sigma[idxOk,,drop=FALSE])
+    resu[check] <- -1
+    resu[!check] <- EHI_2d_wrap_Rcpp(paretoFront, refPoint, mu[idxOk,,drop=FALSE], sigma[idxOk,,drop=FALSE])
     return(resu)
   }
 }
