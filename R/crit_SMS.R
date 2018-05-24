@@ -65,7 +65,7 @@ crit_SMS <- function(x, model, paretoFront=NULL, critcontrol=NULL, type="UK")
   
   distp <- 0  # penalty if too close in the checkPredict sense
   
-  if(checkPredict(x, model, type = type, distance = critcontrol$distance, threshold = critcontrol$threshold)){
+  if(checkPredict(x.new, model, type = type, distance = critcontrol$distance, threshold = critcontrol$threshold)){
     # return(0) Not compatible with penalty with SMS
     distp <- 1 # may be changed
   }#else{

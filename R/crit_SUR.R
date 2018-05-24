@@ -83,7 +83,7 @@
 crit_SUR <- function(x, model, paretoFront = NULL, critcontrol = NULL, type = "UK"){
   X.new <- matrix(x, nrow=1, ncol=model[[1]]@d)
   
-  if(checkPredict(x, model, type = type, distance = critcontrol$distance, threshold = critcontrol$threshold)){
+  if(checkPredict(X.new, model, type = type, distance = critcontrol$distance, threshold = critcontrol$threshold)){
     crit <- -1
   } else {
     

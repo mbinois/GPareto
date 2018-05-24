@@ -63,7 +63,7 @@ SAA_mEI <- function(x, model,
   n.obj <- length(model)
   d <- model[[1]]@d
   #x.new <- matrix(x, 1, d)
-  if (!is.matrix(x)) x<-matrix(x,1,d)
+  if (!is.matrix(x)) x <- matrix(x, 1, d)
   n.candidates<-nrow(x)
   
   if(is.null(paretoFront)){
@@ -108,7 +108,7 @@ SAA_mEI <- function(x, model,
   sigma <- t(pred$sd)
   
   ## A new x too close to the known observations could result in numerical problems
-  check <- checkPredict(x, model, type = type, distance = "covratio", threshold = critcontrol$threshold)
+  check <- checkPredict(x, model, type = type, distance = critcontrol$distance, threshold = critcontrol$threshold)
   idxOk <- which(!check)
   Res <- rep(-1,n.candidates)
   # Set seed to have a deterministic function to optimize

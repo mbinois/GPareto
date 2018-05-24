@@ -96,8 +96,8 @@ EHI_2d <- function(x, model, critcontrol=NULL, type = "UK", paretoFront = NULL){
     sigma <- t(pred$sd)
     
     ## A new x too close to the known observations could result in numerical problems
-    check <- apply(x, 1, checkPredict, model = model, type = type, distance = critcontrol$distance, threshold = critcontrol$threshold)
-    # check <- checkPredict(x, model, threshold = critcontrol$threshold, distance = "covratio", type = type)
+    # check <- apply(x, 1, checkPredict, model = model, type = type, distance = critcontrol$distance, threshold = critcontrol$threshold)
+    check <- checkPredict(x, model, threshold = critcontrol$threshold, distance = critcontrol$distance, type = type)
     idxOk <- which(!check)
     resu <- rep(0, n.candidates)
     resu[-idxOk] <- -1
