@@ -84,9 +84,9 @@ SAA_mEI <- function(x, model,
   }
   
   
-  Improvement <- Maximin_Improvement
+  # Improvement <- Maximin_Improvement
   if(critcontrol$type == "hypervolume"){
-    Improvement <- Hypervolume_improvement
+    # Improvement <- Hypervolume_improvement
     if (is.null(refPoint)){
       if(is.null(critcontrol$extendper)) critcontrol$extendper <- 0.1
       # refPoint    <- matrix(apply(paretoFront, 2, max) + 1, 1, n.obj)
@@ -135,8 +135,9 @@ SAA_mEI <- function(x, model,
   else
     rm(".Random.seed", envir = .GlobalEnv)
   
-  ImprovementSamples <- apply(Samples, 1, Improvement, front = paretoFront, refPoint = refPoint)
-  # ImprovementSamples <- Hypervolume_improvement_vec(points = Samples, front = paretoFront, refPoint = refPoint)
+  if(critcontrol$type == "hypervolume") ImprovementSamples <- Hypervolume_improvement_vec(points = Samples, front = paretoFront, refPoint = refPoint)
+  else ImprovementSamples <- apply(Samples, 1, Maximin_Improvement, front = paretoFront, refPoint = refPoint)
+  
   for (i in 1:length(idxOk)) Res[idxOk[i]] <- mean(ImprovementSamples[(1+(i-1)*nb.samp):(i*nb.samp)])
   
   return(Res)
