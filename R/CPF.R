@@ -163,7 +163,7 @@ CPF <-
       if(compute.VorobExp == FALSE){
         stop("Vorob'ev expectation required, set compute.VorobExp to TRUE")
       }
-      res$VD <- VorobDev(res)
+      res$VD <- VorobDev(res, refPoint = refPoint)
     }
     
     class(res) <- "CPF"
