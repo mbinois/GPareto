@@ -282,10 +282,10 @@ GParetoptim <- function (model, fn, cheapfn = NULL, crit = "SMS", nsteps, lower,
   d <- model[[1]]@d
   
   if(is.null(optimcontrol$method)) optimcontrol$method <- "genoud"
-  if(is.null(optimcontrol$threshold)) optimcontrol$threshold <- 1e-4
-  if(is.null(optimcontrol$distance)) optimcontrol$distance <- "euclidean"
+  if(is.null(critcontrol$threshold)) critcontrol$threshold <- 1e-4
+  if(is.null(critcontrol$distance)) critcontrol$distance <- "euclidean"
   if(is.null(optimcontrol$trace)) optimcontrol$trace <- 1
-  if(is.null(critcontrol)) critcontrol <- list()
+  # if(is.null(critcontrol)) critcontrol <- list()
   
   ## Check that no model is noisy
   if(is.null(noise.var)) {
