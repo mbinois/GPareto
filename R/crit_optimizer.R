@@ -470,7 +470,7 @@ crit_optimizer <- function(crit = "SMS", model, lower, upper, cheapfn = NULL, ty
     if (is.null(control$s)) control$s = max(floor(10+2*sqrt(d)), 20)
     
     # if criterion is EHI, use vectorized evaluation with pso
-    if(criterion == "EHI") control$vectorize <- TRUE
+    if(crit == "EHI") control$vectorize <- TRUE
     
     o <- psoptim(par = rep(NA, d) , criterion, lower = lower, upper = upper, control = control, model=model, type=type, 
                  paretoFront=paretoFront, critcontrol=critcontrol)
