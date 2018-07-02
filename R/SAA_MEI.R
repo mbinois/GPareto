@@ -160,9 +160,9 @@ Hypervolume_improvement_vec <- function(points, front, refPoint){
   Hi <- rep(0,nrow(points))
   HypInitial <- dominated_hypervolume(t(front),refPoint)
   idxND <- which(nonDomSet(points,front))
-  Hi[idxND] <- apply(points[idxND,,drop=FALSE], 1, contribution_to_front, front = front, refPoint = refPoint) 
+  Hi[idxND] <- apply(points[idxND,,drop=FALSE], 1, contribution_to_front, front = front, refPoint = refPoint) - HypInitial
   #for (i in idxND) Hi[i] <- dominated_hypervolume(t(rbind(points[i,],front)),refPoint)
-  Hi <- Hi-HypInitial
+  #Hi <- Hi-HypInitial
   #for (i in idxND) Hi[i] <- hypervolume_contribution(t(rbind(points[i,],front)),refPoint)[1]
   return(Hi)
 }
