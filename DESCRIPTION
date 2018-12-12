@@ -1,8 +1,8 @@
 Package: GPareto
 Type: Package
 Title: Gaussian Processes for Pareto Front Estimation and Optimization
-Version: 1.1.2
-Date: 2018-12-07
+Version: 1.1.3
+Date: 2018-12-11
 Author: Mickael Binois, Victor Picheny
 Maintainer: Mickael Binois <mbinois@mcs.anl.gov>
 Description: Gaussian process regression models, a.k.a. Kriging models, are
