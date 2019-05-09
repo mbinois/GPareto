@@ -16,7 +16,9 @@
 ##' T. Wagner, M. Emmerich, A. Deutz, W. Ponweiser (2010), On expected-improvement criteria for model-based multi-objective optimization,   
 ##' \emph{Parallel Problem Solving from Nature}, 718-727, Springer, Berlin. \cr \cr
 ##' J. D. Svenson (2011), \emph{Computer Experiments: Multiobjective Optimization and Sensitivity Analysis}, Ohio State University, PhD thesis. \cr \cr
-##' C. Chevalier (2013), \emph{Fast uncertainty reduction strategies relying on Gaussian process models}, University of Bern, PhD thesis.  
+##' C. Chevalier (2013), \emph{Fast uncertainty reduction strategies relying on Gaussian process models}, University of Bern, PhD thesis. \cr \cr
+##' M. Binois, V. Picheny (2019), GPareto: An R Package for Gaussian-Process-Based Multi-Objective Optimization and Analysis,
+##' \emph{Journal of Statistical Software}, 89(8), 1--30.
 ##' @details 
 ##' Important functions: \cr
 ##' \code{\link[GPareto]{GParetoptim}} \cr

@@ -67,7 +67,9 @@
 ##' \emph{Statistics and Computing}, 25(6), 1265-1280. \cr \cr
 ##' T. Wagner, M. Emmerich, A. Deutz, W. Ponweiser (2010), On expected-improvement criteria for model-based multi-objective optimization.   
 ##' \emph{Parallel Problem Solving from Nature}, 718-727, Springer, Berlin. \cr \cr
-##' J. D. Svenson (2011), \emph{Computer Experiments: Multiobjective Optimization and Sensitivity Analysis}, Ohio State university, PhD thesis. 
+##' J. D. Svenson (2011), \emph{Computer Experiments: Multiobjective Optimization and Sensitivity Analysis}, Ohio State university, PhD thesis. \cr \cr
+##' M. Binois, V. Picheny (2019), GPareto: An R Package for Gaussian-Process-Based Multi-Objective Optimization and Analysis,
+##' \emph{Journal of Statistical Software}, 89(8), 1--30.
 ##' 
 ##' @importFrom DiceDesign maximinESE_LHS lhsDesign
 ##' 
