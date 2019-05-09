@@ -3,7 +3,6 @@ using namespace Rcpp;
 
 bool Pdom(const double* ptr_mat, int i, int j, int nobj, int nr);
 std::vector<int> kung(int i_begin, int i_end, const double* ptr_mat, int nobj, int nr);
-
 //' Non dominated indices of a matrix
 //' @param mat matrix of objective values, of size n x nobj
 //' @return indices of non-dominated points
@@ -26,30 +25,31 @@ std::vector<int> kung(int i_begin, int i_end, const double* ptr_mat, int nobj, i
 // [[Rcpp::export]]
 std::vector<int> nonDomInd_cpp(NumericMatrix mat){
   const double* ptr_mat = (const double*) &mat(0,0); // pointer to the matrix elements
-
+  
   return(kung(1, mat.nrow(), ptr_mat, mat.ncol(), mat.nrow()));
 }
 
-//' Kung sorting
+// Kung sorting
 //' @param i_begin, i_end first index in the matrix to consider
 //' @param ptr_mat pointer to matrix with dimensions:
 //' @param nobj,nr number of columns and rows
 //' @noRd
 std::vector<int> kung(int i_begin, int i_end, const double* ptr_mat, int nobj, int nr){
-
+  
   std::vector<int> tmp1;
   if(i_begin == i_end){
     tmp1.push_back(i_begin);
     return(tmp1);
   }
-
+  
   tmp1 = kung(i_begin, (i_begin + i_end)/2, ptr_mat, nobj, nr);
   std::vector<int> tmp2 = kung((i_begin + i_end)/2 + 1, i_end, ptr_mat, nobj, nr);
-
-  int j, i = 0;
-  int sizetmp1 = tmp1.size();
-
-  while(i < tmp2.size()){
+  
+  std::size_t j, i = 0;
+  std::size_t sizetmp1 = tmp1.size();
+  std::size_t sizetmp2 = tmp2.size();
+  
+  while(i < sizetmp2){
     j = 0;
     while(j < sizetmp1){
       if(!Pdom(ptr_mat, tmp1[j]-1, tmp2[i]-1, nobj, nr)){ // elements starts from 0 in C++
@@ -59,7 +59,7 @@ std::vector<int> kung(int i_begin, int i_end, const double* ptr_mat, int nobj, i
     if(j == sizetmp1) tmp1.push_back(tmp2[i]);
     i++;
   }
-
+  
   return(tmp1);
 }
 
@@ -85,15 +85,15 @@ bool Pdom(const double* ptr_mat, int i, int j, int nobj, int nr){
 //'
 //' test <- matrix(runif(d * n), n)
 //' ref <- matrix(runif(d * n), n)
-//' indPF <- nonDomInd(ref)
+//' indPF <- which(!is_dominated(t(ref)))
 //'
-//' system.time(res <- nonDomSet(test, ref[indPF,,drop = F]))
+//' system.time(res <- nonDomSet(test, ref[indPF,,drop = FALSE]))
 //'
 //' res2 <- rep(NA, n2)
 //' library(emoa)
 //' t0 <- Sys.time()
 //' for(i in 1:n2){
-//'   res2[i] <- !is_dominated(t(rbind(test[i,, drop = F], ref[indPF,])))[1]
+//'   res2[i] <- !is_dominated(t(rbind(test[i,, drop = FALSE], ref[indPF,])))[1]
 //' }
 //' print(Sys.time() - t0)
 //'
@@ -103,7 +103,7 @@ bool Pdom(const double* ptr_mat, int i, int j, int nobj, int nr){
 LogicalVector nonDomSet(NumericMatrix points, NumericMatrix ref){
   LogicalVector res(points.nrow());
   int j, k;
-
+  
   for(int i = 0; i < points.nrow(); i++){
     j = 0;
     while(j < ref.nrow()){
@@ -117,9 +117,9 @@ LogicalVector nonDomSet(NumericMatrix points, NumericMatrix ref){
     }
     if(j == ref.nrow()) res(i) = true;
   }
-
+  
   return(res);
-
+  
 }
 
 //' Fast computation of distance between two matrices
