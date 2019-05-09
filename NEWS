@@ -4,7 +4,8 @@
   * vectorized crit_EHI thanks to David Gaudrie
   * vectorized checkPredict function, with additional 'none' option
   * checkPredict new default is "euclidean" for speed
-  * update vignette for update of fancyvrb.sty with xcolor
+  * update vignette for various edits and update of fancyvrb.sty with xcolor 
+  * add reference to JSS paper
 
 ## GPareto 1.1.1
 
