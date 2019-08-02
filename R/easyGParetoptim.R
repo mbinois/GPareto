@@ -245,6 +245,7 @@ easyGParetoptim <- function (fn, cheapfn = NULL, budget, lower, upper, par=NULL,
     candidate.points <- matrix(rep(lower,control$maxit)+rep(upper-lower,control$maxit)*runif(control$maxit*d),byrow=T,ncol=d)
     optimcontrol = list(method="discrete", candidate.points=candidate.points, notrace = !control$trace>0)
   }
+  if (control$inneroptim=="discrete") optimcontrol <- list(method = "discrete", candidate.points = control$candidate.points)
   
   if (control$method=="SUR") {
     critcontrol$distrib <- "SUR"
