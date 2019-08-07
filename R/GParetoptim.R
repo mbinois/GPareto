@@ -53,6 +53,7 @@
 ##'  A trace \code{trace} argument is available, it can be set to \code{0} to suppress all messages, to \code{1} (default) for displaying the optimization progresses,
 ##'  and \code{>1} for the highest level of details. 
 ##' 
+##' @param ncores number of CPU available (> 1 makes mean parallel \code{TRUE}). Only used with \code{discrete} optimization for now.
 ##' @param ... additional parameters to be given to the objective \code{fn}.
 ##' @export
 ##' @return
@@ -274,9 +275,9 @@
 ##'  plotGPareto(omEGO6)    
 ##' }
 
-GParetoptim <- function (model, fn, cheapfn = NULL, crit = "SMS", nsteps, lower, upper, type = "UK", cov.reestim=TRUE,
+GParetoptim <- function (model, fn, ..., cheapfn = NULL, crit = "SMS", nsteps, lower, upper, type = "UK", cov.reestim=TRUE,
                          critcontrol = NULL, noise.var = NULL, reinterpolation = NULL,
-                         optimcontrol = list(method = "genoud", trace = 1), ...){
+                         optimcontrol = list(method = "genoud", trace = 1), ncores = 1){
   
   n <- nrow(model[[1]]@X)
   d <- model[[1]]@d
@@ -467,11 +468,11 @@ GParetoptim <- function (model, fn, cheapfn = NULL, crit = "SMS", nsteps, lower,
     if(reinterpolation){
       sol <- try(crit_optimizer(crit = crit, model = reinterp.model, lower = lower, upper = upper, 
                                 optimcontrol = optimcontrol, type = type, paretoFront = paretoFront, 
-                                critcontrol = c(critcontrol, "nsteps.remaining" = nsteps-i)))
+                                critcontrol = c(critcontrol, "nsteps.remaining" = nsteps-i), ncores = ncores))
     }else{
       sol <- try(crit_optimizer(crit = crit, model = model, lower = lower, upper = upper, 
                                 optimcontrol = optimcontrol, type = type, paretoFront = paretoFront, 
-                                critcontrol = c(critcontrol, "nsteps.remaining" = nsteps-i)))
+                                critcontrol = c(critcontrol, "nsteps.remaining" = nsteps-i), ncores = ncores))
     }
     
     if (typeof(sol) == "character") {
