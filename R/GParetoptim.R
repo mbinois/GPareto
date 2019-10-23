@@ -578,7 +578,7 @@ GParetoptim <- function (model, fn, ..., cheapfn = NULL, crit = "SMS", nsteps, l
       
       if (typeof(newmodel[[j]]) == "character") {
         if(optimcontrol$trace > 0){
-          cat("Unable to udpate kriging model ", j, " at iteration", i-1, "- optimization stopped \n")
+          cat("Unable to update kriging model ", j, " at iteration", i-1, "- optimization stopped \n")
           cat("lastmodel ", j, " is the model at iteration", i-1, "\n")
           cat("par and values contain the ",i , "th observation \n \n")
         }
