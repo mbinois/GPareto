@@ -4,9 +4,17 @@
 \alias{predict_kms}
 \title{Predict function for list of \code{\link[DiceKriging]{km}} models.}
 \usage{
-predict_kms(model, newdata, type, se.compute = TRUE,
-  cov.compute = FALSE, light.return = FALSE, bias.correct = FALSE,
-  checkNames = TRUE, ...)
+predict_kms(
+  model,
+  newdata,
+  type,
+  se.compute = TRUE,
+  cov.compute = FALSE,
+  light.return = FALSE,
+  bias.correct = FALSE,
+  checkNames = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{list of \code{\link[DiceKriging]{km}} models}

@@ -4,8 +4,7 @@
 \alias{crit_SMS}
 \title{Analytical expression of the SMS-EGO criterion with m>1 objectives}
 \usage{
-crit_SMS(x, model, paretoFront = NULL, critcontrol = NULL,
-  type = "UK")
+crit_SMS(x, model, paretoFront = NULL, critcontrol = NULL, type = "UK")
 }
 \arguments{
 \item{x}{a vector representing the input for which one wishes to calculate the criterion,}

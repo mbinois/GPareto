@@ -4,8 +4,13 @@
 \alias{crit_EHI}
 \title{Expected Hypervolume Improvement with m objectives}
 \usage{
-crit_EHI(x, model, paretoFront = NULL, critcontrol = list(nb.samp = 50,
-  seed = 42), type = "UK")
+crit_EHI(
+  x,
+  model,
+  paretoFront = NULL,
+  critcontrol = list(nb.samp = 50, seed = 42),
+  type = "UK"
+)
 }
 \arguments{
 \item{x}{a vector representing the input for which one wishes to calculate \code{EHI}, alternatively a matrix with one point per row,}

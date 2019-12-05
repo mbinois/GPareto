@@ -4,8 +4,14 @@
 \alias{integration_design_optim}
 \title{Function to build integration points (for the SUR criterion)}
 \usage{
-integration_design_optim(SURcontrol = NULL, d = NULL, lower, upper,
-  model = NULL, min.prob = 0.001)
+integration_design_optim(
+  SURcontrol = NULL,
+  d = NULL,
+  lower,
+  upper,
+  model = NULL,
+  min.prob = 0.001
+)
 }
 \arguments{
 \item{SURcontrol}{Optional list specifying the procedure to build the integration points and weights. 

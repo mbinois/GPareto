@@ -4,8 +4,14 @@
 \alias{plotParetoEmp}
 \title{Pareto front visualization}
 \usage{
-plotParetoEmp(nondominatedPoints, add = TRUE, max = FALSE,
-  bounds = NULL, alpha = 0.5, ...)
+plotParetoEmp(
+  nondominatedPoints,
+  add = TRUE,
+  max = FALSE,
+  bounds = NULL,
+  alpha = 0.5,
+  ...
+)
 }
 \arguments{
 \item{nondominatedPoints}{points considered to plot the Pareto front with segments, matrix with one point per row,}

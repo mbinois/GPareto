@@ -4,8 +4,16 @@
 \alias{plot_uncertainty}
 \title{Plot uncertainty}
 \usage{
-plot_uncertainty(model, paretoFront = NULL, type = "pn", lower, upper,
-  resolution = 51, option = "mean", nintegpoints = 400)
+plot_uncertainty(
+  model,
+  paretoFront = NULL,
+  type = "pn",
+  lower,
+  upper,
+  resolution = 51,
+  option = "mean",
+  nintegpoints = 400
+)
 }
 \arguments{
 \item{model}{list of objects of class \code{\link[DiceKriging]{km}}, one for each objective functions,}

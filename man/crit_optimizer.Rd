@@ -4,9 +4,18 @@
 \alias{crit_optimizer}
 \title{Maximization of multiobjective infill criterion}
 \usage{
-crit_optimizer(crit = "SMS", model, lower, upper, cheapfn = NULL,
-  type = "UK", paretoFront = NULL, critcontrol = NULL,
-  optimcontrol = NULL, ncores = 1)
+crit_optimizer(
+  crit = "SMS",
+  model,
+  lower,
+  upper,
+  cheapfn = NULL,
+  type = "UK",
+  paretoFront = NULL,
+  critcontrol = NULL,
+  optimcontrol = NULL,
+  ncores = 1
+)
 }
 \arguments{
 \item{crit}{sampling criterion. Four choices are available : "\code{SMS}", "\code{EHI}", "\code{EMI}" and "\code{SUR}",}

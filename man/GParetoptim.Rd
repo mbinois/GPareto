@@ -5,10 +5,23 @@
 \title{Sequential multi-objective Expected Improvement maximization and model re-estimation,
  with a number of iterations fixed in advance by the user}
 \usage{
-GParetoptim(model, fn, ..., cheapfn = NULL, crit = "SMS", nsteps,
-  lower, upper, type = "UK", cov.reestim = TRUE, critcontrol = NULL,
-  noise.var = NULL, reinterpolation = NULL,
-  optimcontrol = list(method = "genoud", trace = 1), ncores = 1)
+GParetoptim(
+  model,
+  fn,
+  ...,
+  cheapfn = NULL,
+  crit = "SMS",
+  nsteps,
+  lower,
+  upper,
+  type = "UK",
+  cov.reestim = TRUE,
+  critcontrol = NULL,
+  noise.var = NULL,
+  reinterpolation = NULL,
+  optimcontrol = list(method = "genoud", trace = 1),
+  ncores = 1
+)
 }
 \arguments{
 \item{model}{list of objects of class \code{\link[DiceKriging]{km}}, one for each objective functions,}

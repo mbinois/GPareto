@@ -4,8 +4,15 @@
 \alias{ParetoSetDensity}
 \title{Estimation of Pareto set density}
 \usage{
-ParetoSetDensity(model, lower, upper, CPS = NULL, nsim = 50,
-  simpoints = 1000, ...)
+ParetoSetDensity(
+  model,
+  lower,
+  upper,
+  CPS = NULL,
+  nsim = 50,
+  simpoints = 1000,
+  ...
+)
 }
 \arguments{
 \item{model}{list of objects of class \code{\link[DiceKriging]{km}}, one for each objective functions,}

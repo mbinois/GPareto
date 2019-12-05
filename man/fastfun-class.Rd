@@ -12,13 +12,13 @@
 
 \S4method{update}{fastfun}(object, newX, newy, ...)
 
-\S4method{simulate}{fastfun}(object, nsim, seed, newdata, cond, nugget.sim,
-  checkNames, ...)
+\S4method{simulate}{fastfun}(object, nsim, seed, newdata, cond, nugget.sim, checkNames, ...)
 }
 \arguments{
 \item{object}{\code{\link[GPareto]{fastfun}} object}
 
-\item{newdata}{Matrix of the new location for the design}
+\item{newdata}{an optional vector, matrix or data frame containing the points where to perform predictions.
+Default is \code{NULL}: simulation is performed at design points specified in \code{object}.}
 
 \item{...}{further arguments (not used)}
 
@@ -35,13 +35,6 @@
 \item{nugget.sim}{an optional number corresponding to a numerical nugget effect. Not used.}
 
 \item{checkNames}{an optional boolean. Not used.}
-
-\item{object}{\code{\link[GPareto]{fastfun}} object}
-
-\item{newdata}{an optional vector, matrix or data frame containing the points where to perform predictions.
-Default is \code{NULL}: simulation is performed at design points specified in \code{object}.}
-
-\item{...}{further arguments (not used)}
 }
 \description{
 Class for fast to compute objective.

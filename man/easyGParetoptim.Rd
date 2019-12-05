@@ -4,10 +4,19 @@
 \alias{easyGParetoptim}
 \title{EGO algorithm for multiobjective optimization}
 \usage{
-easyGParetoptim(fn, ..., cheapfn = NULL, budget, lower, upper,
-  par = NULL, value = NULL, noise.var = NULL, control = list(method
-  = "SMS", trace = 1, inneroptim = "pso", maxit = 100, seed = 42),
-  ncores = 1)
+easyGParetoptim(
+  fn,
+  ...,
+  cheapfn = NULL,
+  budget,
+  lower,
+  upper,
+  par = NULL,
+  value = NULL,
+  noise.var = NULL,
+  control = list(method = "SMS", trace = 1, inneroptim = "pso", maxit = 100, seed = 42),
+  ncores = 1
+)
 }
 \arguments{
 \item{fn}{the multi-objective function to be minimized (vectorial output), found by a call to \code{\link[base]{match.fun}}, see details,}

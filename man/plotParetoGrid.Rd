@@ -4,8 +4,7 @@
 \alias{plotParetoGrid}
 \title{Visualisation of Pareto front and set}
 \usage{
-plotParetoGrid(fname = "ZDT1", xlim = c(0, 1), ylim = c(0, 1),
-  n.grid = 100)
+plotParetoGrid(fname = "ZDT1", xlim = c(0, 1), ylim = c(0, 1), n.grid = 100)
 }
 \arguments{
 \item{fname}{name of the function considered,}

@@ -4,8 +4,7 @@
 \alias{crit_SUR}
 \title{Analytical expression of the SUR criterion for two or three objectives.}
 \usage{
-crit_SUR(x, model, paretoFront = NULL, critcontrol = NULL,
-  type = "UK")
+crit_SUR(x, model, paretoFront = NULL, critcontrol = NULL, type = "UK")
 }
 \arguments{
 \item{x}{a vector representing the input for which one wishes to calculate the criterion,}

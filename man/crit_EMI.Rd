@@ -4,8 +4,13 @@
 \alias{crit_EMI}
 \title{Expected Maximin Improvement with m objectives}
 \usage{
-crit_EMI(x, model, paretoFront = NULL, critcontrol = list(nb.samp = 50,
-  seed = 42), type = "UK")
+crit_EMI(
+  x,
+  model,
+  paretoFront = NULL,
+  critcontrol = list(nb.samp = 50, seed = 42),
+  type = "UK"
+)
 }
 \arguments{
 \item{x}{a vector representing the input for which one wishes to calculate \code{EMI},}

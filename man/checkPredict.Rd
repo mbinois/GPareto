@@ -4,8 +4,7 @@
 \alias{checkPredict}
 \title{Prevention of numerical instability for a new observation}
 \usage{
-checkPredict(x, model, threshold = 1e-04, distance = "euclidean",
-  type = "UK")
+checkPredict(x, model, threshold = 1e-04, distance = "euclidean", type = "UK")
 }
 \arguments{
 \item{x}{a vector representing the input to check, alternatively a matrix with one point per row,}
