@@ -40,7 +40,7 @@
 ##' 
 
 plotParetoEmp <- function(nondominatedPoints, add = TRUE, max = FALSE, bounds=NULL, alpha=0.5, ...){
-  if (class(nondominatedPoints) != "matrix") {
+  if (length(dim(nondominatedPoints)) != 2) {
     cat("The nondominatedPoints argument should be a matrix \n")
   } else {
     
