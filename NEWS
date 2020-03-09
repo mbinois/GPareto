@@ -1,3 +1,16 @@
+## GPareto 1.1.4
+
+## change / GPareto 1.1.3
+  * support for discrete optimization in easyGParetoptim
+  * correct PF not taken into account in plotSymDevFun
+  * initialize nintegpoints with plot_uncertainty
+
+## GPareto 1.1.3
+
+## change / GPareto 1.1.1
+ * add reference to JSS paper
+ * fix GParetoptim when there is only one nondominated solution
+
 ## GPareto 1.1.2
 
 ## change / GPareto 1.1.1
@@ -5,7 +18,6 @@
   * vectorized checkPredict function, with additional 'none' option
   * checkPredict new default is "euclidean" for speed
   * update vignette for various edits and update of fancyvrb.sty with xcolor 
-  * add reference to JSS paper
 
 ## GPareto 1.1.1
 
