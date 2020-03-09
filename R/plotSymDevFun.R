@@ -58,7 +58,9 @@ plotSymDevFun <- function(CPF, n.grid = 100){
   SymDevGraph = matrix(0,n.grid, n.grid)
   for(i in 1:dim(CPF$fun1sims)[1]){
     SymDevGraph = SymDevGraph +
-      SymDiffRaw(nondominated_points(rbind(CPF$fun1sims[i,], CPF$fun2sims[i,])), 
+      SymDiffRaw(nondominated_points(cbind(rbind(CPF$fun1sims[i,], 
+                                                 CPF$fun2sims[i,]), 
+                                           t(CPF$PF))), 
                  nondominated_points(t(CPF$VE)),c(flim1[1],flim1[2]),
                  c(flim2[1],flim2[2]),n.grid)
   }
