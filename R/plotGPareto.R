@@ -278,10 +278,10 @@ plotGPareto <- function(res, add = FALSE, UQ_PF = FALSE, UQ_PS = FALSE, UQ_dens 
     if(control$gridtype == "runif"){
       simPoints <- matrix(runif(control$npsim*ncol(res$par)), control$npsim)
     }else{
-      if(control$grid_type == "LHS"){
+      if(control$gridtype == "LHS"){
         simPoints <- lhsDesign(control$npsim, ncol(res$par))$design
       }else{
-        if(control$grid_type == "grid2d"){
+        if(control$gridtype == "grid2d"){
           simPoints <- as.matrix(expand.grid(seq(0, 1,length.out = control$npsim),
                                              seq(0, 1,length.out = control$npsim)))
         }
