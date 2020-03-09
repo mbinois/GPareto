@@ -75,7 +75,6 @@
 ##' 
 ##' plotParetoGrid("MOP2", n.grid = 21)
 ##' 
-##' @rdname TestFunctions
 ##' @export
 ZDT1 <-
   function(x){

@@ -1,0 +1,18 @@
+bibentry(bibtype = "Article",
+  title        = "{GPareto}: An {R} Package for Gaussian-Process-Based Multi-Objective Optimization and Analysis",
+  author       = c(person(given = "Micka\\\"el",
+                          family = "Binois",
+                          email = "mickael.binois@mines-stetienne.fr"),
+                   person(given = "Victor",
+                          family = "Picheny",
+                          email = "victor.picheny@inra.fr")),
+  journal      = "Journal of Statistical Software",
+  year         = "2019",
+  volume       = "89",
+  number       = "8",
+  pages        = "1--30",
+  doi          = "10.18637/jss.v089.i08",
+
+  header       = "To cite GPareto in publications use:"
+)
+

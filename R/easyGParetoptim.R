@@ -41,6 +41,7 @@
 ##' @param value initial set of objective observations \eqn{fn(par)}. Computed if not provided.
 ##' Not that \code{value} may NOT contain any \code{cheapfn} value,
 ##' @param control an optional list of control parameters. See "Details",
+##' @param ncores number of CPU available (> 1 makes mean parallel \code{TRUE}). Only used with \code{discrete} optimization for now.
 ##' @param ... additional parameters to be given to the objective \code{fn}.
 ##' @export
 ##' @return
@@ -67,7 +68,9 @@
 ##' \emph{Statistics and Computing}, 25(6), 1265-1280. \cr \cr
 ##' T. Wagner, M. Emmerich, A. Deutz, W. Ponweiser (2010), On expected-improvement criteria for model-based multi-objective optimization.   
 ##' \emph{Parallel Problem Solving from Nature}, 718-727, Springer, Berlin. \cr \cr
-##' J. D. Svenson (2011), \emph{Computer Experiments: Multiobjective Optimization and Sensitivity Analysis}, Ohio State university, PhD thesis. 
+##' J. D. Svenson (2011), \emph{Computer Experiments: Multiobjective Optimization and Sensitivity Analysis}, Ohio State university, PhD thesis. \cr \cr
+##' M. Binois, V. Picheny (2019), GPareto: An R Package for Gaussian-Process-Based Multi-Objective Optimization and Analysis,
+##' \emph{Journal of Statistical Software}, 89(8), 1--30.
 ##' 
 ##' @importFrom DiceDesign maximinESE_LHS lhsDesign
 ##' 
@@ -151,8 +154,8 @@
 ##' points(res$par, col="blue", pch = 17)
 ##' }
 
-easyGParetoptim <- function (fn, cheapfn = NULL, budget, lower, upper, par=NULL, value=NULL, noise.var=NULL,
-                             control=list(method="SMS", trace=1, inneroptim="pso", maxit=100, seed=42), ...) {
+easyGParetoptim <- function (fn, ..., cheapfn = NULL, budget, lower, upper, par=NULL, value=NULL, noise.var=NULL,
+                             control=list(method="SMS", trace=1, inneroptim="pso", maxit=100, seed=42), ncores = 1) {
   
   if (is.null(control$method)) control$method <- "SMS"
   if (is.null(control$trace)) control$trace   <- 1
@@ -243,6 +246,7 @@ easyGParetoptim <- function (fn, cheapfn = NULL, budget, lower, upper, par=NULL,
     candidate.points <- matrix(rep(lower,control$maxit)+rep(upper-lower,control$maxit)*runif(control$maxit*d),byrow=T,ncol=d)
     optimcontrol = list(method="discrete", candidate.points=candidate.points, notrace = !control$trace>0)
   }
+  if (control$inneroptim=="discrete") optimcontrol <- list(method = "discrete", candidate.points = control$candidate.points)
   
   if (control$method=="SUR") {
     critcontrol$distrib <- "SUR"
@@ -257,11 +261,11 @@ easyGParetoptim <- function (fn, cheapfn = NULL, budget, lower, upper, par=NULL,
   if (is.null(noise.var)) {
     omEGO <- GParetoptim(model = model, fn = fn, cheapfn = cheapfn,
                          crit = control$method, nsteps=n.ite, lower=lower, upper=upper, cov.reestim=TRUE, 
-                         optimcontrol=optimcontrol, critcontrol = critcontrol, ...)
+                         optimcontrol=optimcontrol, critcontrol = critcontrol, ncores = ncores, ...)
   } else {
     omEGO <- GParetoptim(model = model, fn = fn, cheapfn = cheapfn, noise.var=noise.var, reinterpolation = TRUE, 
                          crit = control$method, nsteps=n.ite, lower=lower, upper=upper, cov.reestim=TRUE, 
-                         optimcontrol=optimcontrol, critcontrol = critcontrol, ...)
+                         optimcontrol=optimcontrol, critcontrol = critcontrol, ncores = ncores, ...)
   }
   
   allX <- omEGO$lastmodel[[1]]@X
@@ -275,13 +279,13 @@ easyGParetoptim <- function (fn, cheapfn = NULL, budget, lower, upper, par=NULL,
   if (is.null(noise.var)) {
     # Compute current best
     value <- t(nondominated_points(t(ally)))
-    par   <- allX[!is_dominated(t(ally)),]
+    par   <- allX[!is_dominated(t(ally)),, drop = FALSE]
     return(list(par=par, value = value, history=list(X=allX, y=ally), model=omEGO$lastmodel))
   } else {
     # Compute current denoised best
     observations.denoised <- omEGO$observations.denoised
     value <- t(nondominated_points(t(observations.denoised)))
-    par   <- allX[!is_dominated(t(observations.denoised)),]
+    par   <- allX[!is_dominated(t(observations.denoised)),, drop = FALSE]
     return(list(par=par, value = value, history=list(X=allX, y=ally, y.denoised=observations.denoised), model=omEGO$lastmodel))
   }
   }

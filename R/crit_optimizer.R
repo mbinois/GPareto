@@ -37,7 +37,8 @@
 ##'  and return a list with \code{par} and \code{value}.
 ##'  A trace \code{trace} argument is available, it can be set to \code{0} to suppress all messages, to \code{1} (default) for displaying the optimization progresses,
 ##'  and \code{>1} for the highest level of details.
-##'        
+##' 
+##' @param ncores number of CPU available (> 1 makes mean parallel \code{TRUE}). Only used with \code{discrete} optimization for now.
 ##' @return A list with components: 
 ##'  \itemize{
 ##'  \item{\code{par}}{: The best set of parameters found,}
@@ -241,10 +242,11 @@
 ##'                             }
 ##'               )
 ##' }
+##' @import parallel
 ##' @export
 
 crit_optimizer <- function(crit = "SMS", model, lower, upper, cheapfn = NULL, type = "UK", paretoFront = NULL, 
-                           critcontrol = NULL, optimcontrol = NULL){
+                           critcontrol = NULL, optimcontrol = NULL, ncores = 1){
   ###########################################################################################
   # Finds the maximizer of the criterion
   ###########################################################################################
@@ -376,8 +378,13 @@ crit_optimizer <- function(crit = "SMS", model, lower, upper, cheapfn = NULL, ty
     optim.points <- optimcontrol$candidate.points
     colnames(optim.points) <- colnames(model[[1]]@X)
     
-    all.crit <- apply(optim.points, 1, criterion, paretoFront=paretoFront, model=model, type=type,
-                      critcontrol=critcontrol)
+    crit_mcl <- function(idx, optim.points,...){
+      criterion(x = as.numeric(optim.points[idx,]), ...)
+    }
+    
+    all.crit <- unlist(mclapply(X = 1:nrow(optim.points), FUN = crit_mcl, optim.points = optim.points,
+                         paretoFront=paretoFront, model=model, type=type,
+                         critcontrol=critcontrol, mc.cores = ncores))
     value <- max(all.crit)
     i.best <- which(all.crit==value)[sample.int(length(which(all.crit==value)), 1)]
     par <- matrix(optim.points[i.best,],nrow=1, ncol=model[[1]]@d)
