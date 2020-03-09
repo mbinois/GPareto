@@ -46,6 +46,7 @@ plot_uncertainty <- function(model, paretoFront = NULL, type = "pn", lower, uppe
                              resolution = 51, option = "mean", nintegpoints = 400){
   if(is.null(resolution)) resolution <- 51
   if(is.null(nintegpoints)) nintegpoints <- 400
+  if(is.null(option)) option <- "mean"
   n.obj <- length(model)
   observations <- matrix(0, model[[1]]@n, n.obj)
   for (i in 1:n.obj) observations[,i] <- model[[i]]@y
