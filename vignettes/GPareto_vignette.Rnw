@@ -17,13 +17,13 @@
 %% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Micka\"el Binois, Victor Picheny} %% comma-separated
 \Plaintitle{GPareto: An R Package for Gaussian-Process Based Multi-Objective Optimization and Analysis} %% without formatting
-\Shorttitle{\pkg{GPareto}: Gaussian Process-Based Multi-Objective Optimization and Analysis in \proglang{R}} %% a short title (if necessary)
+\Shorttitle{\pkg{GPareto}: An \proglang{R} Package for GP-Based Multi-Objective Optimization and Analysis} %% a short title (if necessary)
 
 %% an abstract and keywords
 \Abstract{
-The \gp package for \proglang{R} provides multi-objective optimization algorithms for expensive black-box functions and uncertainty quantification methods. Popular methods such as EGO in the mono-objective case relies on Gaussian processes or kriging to build surrogate models. Driven by the prediction uncertainty given by these models, several infill criteria have also been proposed in a multi-objective setup to select new points sequentially and efficiently cope with severely limited evaluation budgets. They are implemented in the package, in addition with estimation of the whole Pareto front location and uncertainty quantification visualization in the design and objective spaces. Finally, it attempts to fill the gap between expert use of the corresponding methods and simple usage, where many efforts have been put on providing graphical visualization, standard tuning and interactivity.
+The \gp package for \proglang{R} provides multi-objective optimization algorithms for expensive black-box functions and an ensemble of dedicated uncertainty quantification methods. Popular methods such as Efficient Global Optimization in the mono-objective case rely on Gaussian processes or Kriging to build surrogate models. Driven by the prediction uncertainty given by these models, several infill criteria have also been proposed in a multi-objective setup to select new points sequentially and efficiently cope with severely limited evaluation budgets. They are implemented in the package, in addition with Pareto front estimation and uncertainty quantification visualization in the design and objective spaces. Finally, it attempts to fill the gap between expert use of the corresponding methods and user-friendliness, where many efforts have been put on providing graphical post-processing, standard tuning and interactivity.
 }
-\Keywords{kriging, Pareto front, EGO, uncertainty quantification}
+\Keywords{Kriging, Pareto front, Efficient Global Optimization, uncertainty quantification}
 \Plainkeywords{keywords, comma-separated, not capitalized, Java} %% without formatting
 %% at least one keyword must be supplied
 
@@ -141,12 +141,12 @@ The image of the Pareto set in the objective space, $y^{(1)}(\mathbb{X}^*), \ldo
 which is useful to practitioners to select solutions (see Figure \ref{fig:ex1d} for an illustration).
 In practice, the Pareto set is usually not finite, and optimization strategies aim at providing a finite set that represents $\mathbb{X}^*$ well.
 
-
-In general, numerical optimization has motivated a substantial activity in the \proglang{R} \cite{R2019} community: see for instance the 
-CRAN Task View on ``Optimization and Mathematical Programming'' \citep{theussl2014cran} or the recent special JSS issue \citep{Varadhan2014}.
+In general, numerical optimization has motivated a substantial activity in the \proglang{R} community: see for instance the 
+CRAN Task View on optimization and Mathematical Programming \citep{theussl2014cran} or the recent special Journal of Statistical Software issue \citep{Varadhan2014}.
 However, most works are dedicated to mono-objective optimization with large budgets. For small budgets, the packages \pkg{DiceOptim} \citep{Roustant2012,Ginsbourger2015} and \pkg{tgp} \citep{Gramacy2007,Gramacy2010}
 propose GP-based techniques, but for mono-objective problems only.
-There are a few packages on MOO in general: \pkg{nsga2R} \citep{Tsou2013}, \pkg{emoa} \citep{Mersmann2012}, \pkg{mopsocd} \citep{Naval2013}, \pkg{goalprog} \citep{Novomestky2008} and \pkg{mco} \citep{Mersmann2014}, which provide tools and algorithms such as NSGA-II algorithm implementations \citep{Deb2002} or hypervolume computations (see Section \ref{sec:MOO}). 
+There are a few packages on MOO in general: \pkg{nsga2R} \citep{Tsou2013}, \pkg{emoa} \citep{Mersmann2012}, \pkg{mopsocd} \citep{Naval2013}, \pkg{goalprog} \citep{Novomestky2008} and \pkg{mco} \citep{Mersmann2014}, which provide tools and algorithms such as NSGA-II (nondominated
+sorting genetic algorithm II) implementations \citep{Deb2002} or hypervolume computations (see Section \ref{sec:MOO}). 
 As for methods available for expensive black-box functions optimization, the package \pkg{SPOT} \citep{Bartz-Beielstein2012} seems to be the only alternative to \gp.
 
 On the other hand, GP-based MOO has recently generated a substantial activity in the statistical and optimization communities, with focuses either on sampling strategies \citep{Ponweiser2008a,Wagner2010,Svenson2011,Emmerich2011,Picheny2013,Zuluaga2013} or on uncertainty quantification \citep{Bhardwaj2012,Calandra2014,Binois2015}.
@@ -199,7 +199,7 @@ offers options to take noise into account.
 However, the EGO algorithm may not be used directly; \citet{Picheny2013b} provides a review of 
 the extensions that have been proposed to handle noisy objectives. Within those, the \textit{reinterpolation} approach 
 of \citet{Forrester2006} is attractive, since it amounts to building a secondary noiseless GP that can be directly used with EGO.
-As shown in \citet{Koch2015}, this approach can be readily applied to the multi-objective case, and is implemented in \pkg{GPareto}.
+As showed in \citet{Koch2015}, this approach can be readily applied to the multi-objective case, and is implemented in \pkg{GPareto}.
 
 \subsubsection{The multi-objective case}
 When multiple objectives are considered ($y$ has values in $\Rset^q$), Steps 2 and 3 need to be modified. 
@@ -298,11 +298,11 @@ but the blue point is better in terms of volume increment.}%
 
 These indicators, among others, have been used to define generalizations of the expected improvement.
 Empirical comparisons showed the clear superiority of some approaches to others \citep{Svenson2011,Wagner2010}, but no global consensus on a particular improvement function. 
-In \gp, two infill criteria derived from this point of view are available: the \emph{expected hypervolume improvement} \citep[EHI; ][]{Emmerich2011} and 
-\emph{expected maximin improvement} \citep[EMI; ][related to the epsilon indicator]{Svenson2010}. See the corresponding references for the technical details.
+In \gp, two infill criteria derived from this point of view are available: the \emph{expected hypervolume improvement} \citep[EHI, ][]{Emmerich2011} and 
+\emph{expected maximin improvement} \citep[EMI, ][related to the epsilon indicator]{Svenson2010}. See the corresponding references for the technical details.
 
 Two alternatives have been included in \gp as well.
-First, in the \emph{SMS-EGO} approach \citep[S-metric selection EGO; ][]{Ponweiser2008a,Wagner2010}, the improvement is calculated as the hypervolume added to the current Pareto front by the lower confidence bound of the prediction at $\x$, 
+First, in the \emph{SMS-EGO} approach \citep[S-metric selection EGO, ][]{Ponweiser2008a,Wagner2010}, the improvement is calculated as the hypervolume added to the current Pareto front by the lower confidence bound of the prediction at $\x$, 
 hence it is closely related, but not equal to the EHI.  
 To avoid large plateaus of zero improvement, an adaptive penalization is provided in regions where the lower confidence bound is dominated.
 
@@ -329,7 +329,7 @@ In short, it exploits the capacity of the GP models to generate different possib
 For each path, a Pareto front is obtained (say, $\mathcal{P}^{(1)}, \ldots, \mathcal{P}^{(N)}$). Then, the set of fronts are used to define an average set $\mathcal{\bar P}$ estimating the true Pareto front while the deviation from this set is used as a measure of uncertainty. 
 Note that handling sets of conditional Pareto fronts as performed in \citet{Binois2015} requires the use of random closed sets theory \citep{Molchanov2005}; 
 in particular, the estimator and uncertainty measure used are the Vorob'ev expectation and deviation, respectively. 
-Visually, representing the deviation for each random Pareto front directly illustrates which parts of the Pareto front are precisely known or not (see Figure \ref{fig:ex2}).
+Visually, representing the deviation for each random Pareto front directly illustrates which parts of the Pareto front are precisely known or not (see Figure~\ref{fig:ex2}).
 
 
 \begin{figure}[htpb]%
@@ -436,15 +436,15 @@ Note that both approaches require extensive sampling over the design space, whic
 The structure of the package reflects its main orientations: multi-objective optimization and associated quantification of uncertainty. In particular, readers familiar with the \pkg{DiceOptim} and \pkg{KrigInv} packages will find a very similar set of functions ranging from high-level interfaces to lower level criteria.  Additional helper functions are also provided as well as test functions. 
 
 
-\subsection{Functions related to the sequential design of experiments}
+\subsection{Functions related to sequential design of experiments}
 
-As described in Section \ref{sec:EGO}, Gaussian-process based optimization can be separated into four steps. Depending on the characteristics of the problem at hand, several levels of control are available. 
+As described in Section \ref{sec:EGO}, Gaussian-process based optimization can be separated in four steps. Depending on the characteristics of the problem at hand, several levels of control are available. 
 For the sake of clarity, we start by describing the highest-level functionalities before detailing routines that enable more control on the optimization process or may be integrated in other procedures.
 
 \subsubsection[User-friendly wrapper: easyGParetoptim]{User-friendly wrapper: \code{easyGParetoptim}}
 \label{sec:easyGParetoptim}
 
-This is a simple interface to multi-objective optimization that perform all steps described in Section \ref{sec:EGO}, which does not require much knowledge on the specificities of Gaussian process based optimization. If no additional control parameters are set, all Steps 1--4 are performed according to default values.
+This is a simple interface to multi-objective optimization that perform all steps described in Section \ref{sec:EGO}, which does not require much knowledge on the specificities of Gaussian process based optimization. If no additional control parameters are set, all Steps 1-4 are performed according to default values.
 
 The minimal arguments for \code{easyGParetoptim} are the following, common with many optimization methods in \proglang{R} such as \code{optim}:
 \begin{itemize}
@@ -453,7 +453,7 @@ The minimal arguments for \code{easyGParetoptim} are the following, common with 
   \item \code{lower}, \code{upper}, vectors giving the limits of the domain for optimization.
 \end{itemize}
 
-A design of experiments may be passed using the argument \code{par} and corresponding values provided with \code{values}; otherwise a Maximin LHS design is constructed from \pkg{DiceDesign}. 
+A design of experiments may be passed using the argument \code{par} and corresponding values provided with \code{values}; otherwise a maximin LHS design is constructed from \pkg{DiceDesign}. 
 
 Noisy objectives can be handled with the argument \code{noise.var}, which stands for the noise variance. 
 We assume here that the user has prior knowledge of the variance. The two main options are to provide a vector
@@ -461,18 +461,18 @@ of size $q$ (constant noise) or a function (same arguments as \code{fn}) if the 
 
 Additional tuning of the inner procedures are available using the \code{control} list, in particular 
 the criterion (\code{method}) and the optimization routine of the acquisition function (\code{inneroptim}).
-By default, \code{easyGParetoptim} uses \code{"SMS"} as criterion, with \code{"pso"} as inner-optimization routine. 
+By default, \code{easyGParetoptim} uses \code{SMS} as criterion, with \code{pso} as inner-optimization routine. 
 Both choices have been made to favor speed while ensuring robustness. They are also the default choice for the following \code{GParetoptim} routine.
 
 \subsubsection[GParetoptim]{\code{GParetoptim}}
 This function handles Steps 3 and 4, hence assuming that users have performed a design of experiments and built surrogate models at their convenience,
 which they provide in the argument \code{model}. Besides \code{fn}, \code{lower}, \code{upper} and \code{noise.var} shared with \code{easyGParetoptim}, 
 more parameters are directly exposed, such as \code{crit} for selecting the infill criteria or \code{cov.reestim} to decide whether or not hyperparameters are updated after adding new observations. 
-More flexibility is given using control parameters, \code{optim\_control} for the optimization of the infill criterion and \code{crit\_control} for parameters of the latter, that are useful for the following \code{crit\_optimizer} function. 
+More flexibility is given using control parameters, \code{optim\_control} for the optimization of the infill criterion and \code{crit\_control} for parameters of this latter, that are useful for the following \code{crit\_optimizer} function. 
 
 \subsubsection[crit optimizer]{\code{crit\_optimizer}}
   
-Optimizing the criteria, also known as acquisition functions, is quite complicated due to their multi-modality: see Figure \ref{fig:ex2} for an illustration. Besides, in general, no derivative expressions are available and there are large plateaus. On top of that, the attraction basin of the global optimum of the infill criterion may have a very small volume in the variable space \citep[see][for the illustration of this problem]{Roustant2012}. Nonetheless, acquisition functions are typically much cheaper to evaluate than the objective functions and intensive optimization can be carried out.
+Optimizing the criteria, a.k.a.\ acquisition functions, is quite complicated due to their multi-modality: see Figure~\ref{fig:ex2} for an illustration. Besides, in general, no derivative expressions are available and there are large plateaus. On top of that, the attraction basin of the global optimum of the infill criterion may have a very small volume in the variable space \citep[see][for the illustration of this problem]{Roustant2012}. Nonetheless, acquisition functions are typically much cheaper to evaluate than the objective functions and intensive optimization can be carried out.
 
 Three solutions to perform this inner optimization are provided in \gp: 
 \begin{enumerate}
@@ -481,20 +481,20 @@ Three solutions to perform this inner optimization are provided in \gp:
   \item the \code{psoptim} optimization method \citep{Bendtsen2012}, a particle swarm algorithm is also provided;
 \end{enumerate}
 and the corresponding tuning parameters may be passed to \code{optimcontrol}. 
-Passing any other optimization method is also possible, given that it works as the standard \code{optim} method in \proglang{R} from package \pkg{stats}.
+Passing any other optimization method is also possible, given that it works as the standard \code{optim} method in \proglang{R} from package \pkg{stats} \citep{R2015}.
 
 \subsubsection{Criteria functions}
 \label{subsub:crit}
-Four criteria are available in \gp 1.1.3: 
+Four criteria are available in \gp 1.1.4: 
 \begin{itemize}
-  \item \code{crit_SMS} for the SMS-EGO criterion \citep{Ponweiser2008a,Wagner2010}; (based on the \proglang{MATLAB} source code of the authors);
+  \item \code{crit_SMS} for the SMS-EGO criterion \citep{Ponweiser2008a,Wagner2010} (based on the \proglang{MATLAB} source code of the authors);
   \item \code{crit_EHI} for the expected hypervolume improvement criterion \citep{Emmerich2011} (based on the \proglang{MATLAB} source code of the authors for the bi-objective case);
   \item \code{crit_EMI} for the expected maximin improvement criterion \citep{Svenson2010,Svenson2011};
-  \item \code{crit_SUR} for the expected excursion volume reduction criterion \citep{Picheny2013}.
+  \item \code{crit_SUR} for the expected excursion volume Reduction criterion \citep{Picheny2013}.
 \end{itemize}
 
-The \code{crit_SMS} criterion has an analytical expression for any number of objectives while the one for \code{crit_EHI} has this only for the bi-objective case. There is a semi-analytical\footnote{numerical quadrature is needed for some 1-dimensional integrals, see \cite{Svenson2011}.} formula for \code{crit_EMI} for two objectives. Note that the formula for \code{crit_EHI} is coded using \pkg{Rcpp}  \citep{Eddelbuettel2011,Eddelbuettel2013}, 
-which offers considerable speed-up over an \proglang{R} implementation. 
+The \code{crit_SMS} criterion has an analytical expression for any number of objectives while the one for \code{crit_EHI} is only for the bi-objective case. There is a semi-analytical\footnote{numerical quadrature is needed for some 1-dimensional integrals, see \cite{Svenson2011}.} formula for \code{crit_EMI} for two objectives. Note that the formula for \code{crit_EHI} is coded using \pkg{Rcpp}  \citep{Eddelbuettel2011,Eddelbuettel2013}, 
+which offers considerable speed-up over an \proglang{R} implementation.
  
 With $m >2$,  computations of \code{crit_EMI} and \code{crit_EHI} rely on sample average approximation (SAA) \citep{Shapiro2003}, as proposed e.g., in \cite{Svenson2011}.
 The principle is to take samples from the posterior distribution of $\textbf{Y}(\x)$, i.e., $\textbf{Y}(\x)^{(1)}, \dots, \textbf{Y}(\x)^{(p)}$, 
@@ -1079,44 +1079,62 @@ The authors would like to thank Yves Deville (Alpestat), David Ginsbourger (Univ
 \newblock \emph{Foundations and Trends in Machine Learning}, \textbf{4}(3),
   195--266.
 
+\bibitem[{Ankenman \emph{et~al.}(2010)Ankenman, Nelson, and
+  Staum}]{Ankenman2010}
+Ankenman B, Nelson BL, Staum J (2010).
+\newblock \enquote{Stochastic Kriging for Simulation Metamodeling.}
+\newblock \emph{Operations research}, \textbf{58}(2), 371--382.
+
 \bibitem[{Bartz-Beielstein and Zaefferer(2012)}]{Bartz-Beielstein2012}
 Bartz-Beielstein T, Zaefferer M (2012).
 \newblock \enquote{A Gentle Introduction to Sequential Parameter Optimization.}
-\newblock \emph{Technical Report~2}, Bibliothek der Fachhochschule Koeln.
+\newblock \emph{Technical report}, Bibliothek der Fachhochschule Koeln.
 \newblock \urlprefix\url{http://opus.bsz-bw.de/fhk/volltexte/2012/19}.
 
 \bibitem[{Bendtsen(2012)}]{Bendtsen2012}
 Bendtsen C (2012).
-\newblock \emph{pso: Particle Swarm Optimization}.
-\newblock R package version 1.0.3,
+\newblock \emph{\pkg{pso}: Particle Swarm Optimization}.
+\newblock \proglang{R} package version 1.0.3,
   \urlprefix\url{http://CRAN.R-project.org/package=pso}.
+
+\bibitem[{Beume \emph{et~al.}(2007)Beume, Naujoks, and Emmerich}]{Beume2007}
+Beume N, Naujoks B, Emmerich M (2007).
+\newblock \enquote{SMS-EMOA: Multiobjective Selection Based on Dominated
+  Hypervolume.}
+\newblock \emph{European Journal of Operational Research}, \textbf{181}(3),
+  1653--1669.
 
 \bibitem[{Bhardwaj \emph{et~al.}(2014)Bhardwaj, Dasgupta, and
   Deb}]{Bhardwaj2012}
 Bhardwaj P, Dasgupta B, Deb K (2014).
-\newblock \enquote{Modelling the {P}areto-optimal Set Using {B}-spline Basis
+\newblock \enquote{Modelling the {P}areto-optimal Set Using {B}-Spline Basis
   Functions for Continuous Multi-Objective Optimization Problems.}
 \newblock \emph{Engineering Optimization}, \textbf{46}(7), 912--938.
 
 \bibitem[{Binois \emph{et~al.}(2015{\natexlab{a}})Binois, Ginsbourger, and
   Roustant}]{Binois2015}
 Binois M, Ginsbourger D, Roustant O (2015{\natexlab{a}}).
-\newblock \enquote{Quantifying Uncertainty on Pareto Fronts With Gaussian
+\newblock \enquote{Quantifying Uncertainty on Pareto Fronts with Gaussian
   Process Conditional Simulations.}
 \newblock \emph{European Journal of Operational Research}, \textbf{243}(2),
   386--394.
-\newblock
-  \urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0377221714005980}.
 
 \bibitem[{Binois \emph{et~al.}(2015{\natexlab{b}})Binois, Ginsbourger, and
   Roustant}]{Binois2015b}
 Binois M, Ginsbourger D, Roustant O (2015{\natexlab{b}}).
 \newblock \enquote{A Warped Kernel Improving Robustness in Bayesian
-  Optimization Via Random Embeddings.}
+  Optimization via Random Embeddings.}
 \newblock In C~Dhaenens, L~Jourdan, ME~Marmion (eds.), \emph{Learning and
   Intelligent Optimization}, volume 8994 of \emph{Lecture Notes in Computer
-  Science}, pp. 281--286. Springer International Publishing.
+  Science}, pp. 281--286. Springer-Verlag.
 \newblock ISBN 978-3-319-19083-9.
+
+\bibitem[{Binois and Picheny(2018)}]{Binois2018}
+Binois M, Picheny V (2018).
+\newblock \emph{\pkg{GPareto}: Gaussian Processes for Pareto Front Estimation
+  and Optimization}.
+\newblock \proglang{R} package version 1.1.4,
+  \urlprefix\url{https://CRAN.R-project.org/package=GPareto}.
 
 \bibitem[{Calandra \emph{et~al.}(2014)Calandra, Peters, and
   Deisenroth}]{Calandra2014}
@@ -1127,8 +1145,8 @@ Calandra R, Peters J, Deisenroth M (2014).
 
 \bibitem[{Carnell(2016)}]{Carnell2016}
 Carnell R (2016).
-\newblock \emph{lhs: Latin Hypercube Samples}.
-\newblock R package version 0.13,
+\newblock \emph{\pkg{lhs}: Latin Hypercube Samples}.
+\newblock \proglang{R} package version 0.13,
   \urlprefix\url{https://CRAN.R-project.org/package=lhs}.
 
 \bibitem[{Chevalier \emph{et~al.}(2014{\natexlab{a}})Chevalier, Picheny, and
@@ -1142,15 +1160,15 @@ Chevalier C, Picheny V, Ginsbourger D (2014{\natexlab{a}}).
 \bibitem[{Chevalier \emph{et~al.}(2014{\natexlab{b}})Chevalier, Picheny, and
   Ginsbourger}]{Chevalier2014}
 Chevalier C, Picheny V, Ginsbourger D (2014{\natexlab{b}}).
-\newblock \emph{KrigInv: Kriging-based Inversion for Deterministic and Noisy
-  Computer Experiments}.
-\newblock R package version 1.3.1,
+\newblock \emph{\pkg{KrigInv}: Kriging-Based Inversion for Deterministic and
+  Noisy Computer Experiments}.
+\newblock \proglang{R} package version 1.3.1,
   \urlprefix\url{https://CRAN.R-project.org/package=KrigInv}.
 
 \bibitem[{Collette and Siarry(2003)}]{Collette2003}
 Collette Y, Siarry P (2003).
 \newblock \emph{Multiobjective Optimization: Principles and Case Studies}.
-\newblock Springer.
+\newblock Springer-Verlag.
 
 \bibitem[{Deb \emph{et~al.}(2002)Deb, Pratap, Agarwal, and Meyarivan}]{Deb2002}
 Deb K, Pratap A, Agarwal S, Meyarivan T (2002).
@@ -1158,8 +1176,6 @@ Deb K, Pratap A, Agarwal S, Meyarivan T (2002).
   {NSGA-II}.}
 \newblock \emph{Evolutionary Computation, IEEE Transactions on}, \textbf{6}(2),
   182--197.
-\newblock
-  \urlprefix\url{http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=996017}.
 
 \bibitem[{Deb \emph{et~al.}(2005)Deb, Thiele, Laumanns, and Zitzler}]{Deb2005}
 Deb K, Thiele L, Laumanns M, Zitzler E (2005).
@@ -1167,14 +1183,14 @@ Deb K, Thiele L, Laumanns M, Zitzler E (2005).
   Optimization.}
 \newblock In A~Abraham, L~Jain, R~Goldberg (eds.), \emph{Evolutionary
   Multiobjective Optimization}, Advanced Information and Knowledge Processing,
-  pp. 105--145. Springer London.
+  pp. 105--145. Springer-Verlag.
 \newblock ISBN 978-1-85233-787-2.
 
 \bibitem[{Deville \emph{et~al.}(2015)Deville, Ginsbourger, and
   Roustant}]{deville2015kergp}
 Deville Y, Ginsbourger D, Roustant O (2015).
-\newblock \emph{kergp: Gaussian Process Laboratory}.
-\newblock R package version 0.2.0,
+\newblock \emph{\pkg{kergp}: Gaussian Process Laboratory}.
+\newblock \proglang{R} package version 0.2.0,
   \urlprefix\url{http://CRAN.R-project.org/package=kergp}.
 
 \bibitem[{Dixon and Szeg{\"o}(1978)}]{dixon1978towards}
@@ -1184,26 +1200,28 @@ Dixon L, Szeg{\"o} G (1978).
 
 \bibitem[{Duong(2016)}]{Duong2016}
 Duong T (2016).
-\newblock \emph{ks: Kernel Smoothing}.
-\newblock R package version 1.10.1,
+\newblock \emph{\pkg{ks}: Kernel Smoothing}.
+\newblock \proglang{R} package version 1.10.1,
   \urlprefix\url{https://CRAN.R-project.org/package=ks}.
 
 \bibitem[{Dupuy \emph{et~al.}(2015)Dupuy, Helbert, and Franco}]{Dupuy2015}
 Dupuy D, Helbert C, Franco J (2015).
-\newblock \enquote{{DiceDesign} and {DiceEval}: Two {R} Packages for Design and
-  Analysis of Computer Experiments.}
+\newblock \enquote{\pkg{DiceDesign} and \pkg{DiceEval}: Two \proglang{R}
+  Packages for Design and Analysis of Computer Experiments.}
 \newblock \emph{Journal of Statistical Software}, \textbf{65}(11), 1--38.
 \newblock \urlprefix\url{http://www.jstatsoft.org/v65/i11/}.
 
 \bibitem[{Eddelbuettel(2013)}]{Eddelbuettel2013}
 Eddelbuettel D (2013).
-\newblock \emph{Seamless {R} and {C++} Integration with {Rcpp}}.
-\newblock Springer, New York.
+\newblock \emph{Seamless \proglang{R} and \proglang{C++} Integration with
+  \pkg{Rcpp}}.
+\newblock Springer-Verlag, New York.
 \newblock ISBN 978-1-4614-6867-7.
 
 \bibitem[{Eddelbuettel and Fran\c{c}ois(2011)}]{Eddelbuettel2011}
 Eddelbuettel D, Fran\c{c}ois R (2011).
-\newblock \enquote{{Rcpp}: Seamless {R} and {C++} Integration.}
+\newblock \enquote{\pkg{Rcpp}: Seamless \proglang{R} and \proglang{C++}
+  Integration.}
 \newblock \emph{Journal of Statistical Software}, \textbf{40}(8), 1--18.
 \newblock \urlprefix\url{http://www.jstatsoft.org/v40/i08/}.
 
@@ -1215,27 +1233,39 @@ Emmerich MT, Deutz AH, Klinkenberg JW (2011).
 \newblock In \emph{Evolutionary Computation (CEC), 2011 IEEE Congress on}, pp.
   2147--2154. IEEE.
 
+\bibitem[{Forrester \emph{et~al.}(2006)Forrester, Keane, and
+  Bressloff}]{Forrester2006}
+Forrester A, Keane A, Bressloff N (2006).
+\newblock \enquote{Design and Analysis of "Noisy" Computer Experiments.}
+\newblock \emph{AIAA journal}, \textbf{44}(10), 2331--2339.
+
 \bibitem[{Ginsbourger \emph{et~al.}(2015)Ginsbourger, Picheny, and
   Roustant}]{Ginsbourger2015}
 Ginsbourger D, Picheny V, Roustant O (2015).
-\newblock \emph{DiceOptim: Kriging-Based Optimization for Computer
+\newblock \emph{\pkg{DiceOptim}: Kriging-Based Optimization for Computer
   Experiments}.
-\newblock R package version 1.5,
+\newblock \proglang{R} package version 1.5,
   \urlprefix\url{https://CRAN.R-project.org/package=DiceOptim}.
 
 \bibitem[{Gramacy(2007)}]{Gramacy2007}
 Gramacy R (2007).
-\newblock \enquote{tgp: An R Package for Bayesian Nonstationary, Semiparametric
-  Nonlinear Regression and Design by Treed Gaussian Process Models.}
+\newblock \enquote{\pkg{tgp}: An \proglang{R} Package for Bayesian
+  Nonstationary, Semiparametric Nonlinear Regression and Design by Treed
+  Gaussian Process Models.}
 \newblock \emph{Journal of Statistical Software}, \textbf{19}(1), 1--46.
-\newblock
-  \urlprefix\url{https://www.jstatsoft.org/index.php/jss/article/view/v019i09}.
+
+\bibitem[{Gramacy(2016)}]{Gramacy2016}
+Gramacy R (2016).
+\newblock \enquote{\pkg{laGP}: Large-Scale Spatial Modeling via Local
+  Approximate Gaussian Processes in \proglang{R}.}
+\newblock \emph{Journal of Statistical Software}, \textbf{72}(1), 1--46.
+\newblock \urlprefix\url{https://www.jstatsoft.org/v072/i01}.
 
 \bibitem[{Gramacy and Taddy(2010)}]{Gramacy2010}
 Gramacy R, Taddy M (2010).
 \newblock \enquote{Categorical Inputs, Sensitivity Analysis, Optimization and
-  Importance Tempering with tgp Version 2, an R Package for Treed Gaussian
-  Process Models.}
+  Importance Tempering with \pkg{tgp} Version 2, an \proglang{R} Package for
+  Treed Gaussian Process Models.}
 \newblock \emph{Journal of Statistical Software}, \textbf{33}(1), 1--48.
 \newblock
   \urlprefix\url{https://www.jstatsoft.org/index.php/jss/article/view/v033i06}.
@@ -1244,14 +1274,12 @@ Gramacy R, Taddy M (2010).
 Henkenjohann N, Kunert J (2007).
 \newblock \enquote{An Efficient Sequential Optimization Approach Based on the
   Multivariate Expected Improvement Criterion.}
-\newblock \emph{Quality Engineering}.
-\newblock
-  \urlprefix\url{http://www.tandfonline.com/doi/abs/10.1080/08982110701621312}.
+\newblock \emph{Quality Engineering}, \textbf{19}(4), 267--280.
 
 \bibitem[{Inselberg(2009)}]{Inselberg2009}
 Inselberg A (2009).
 \newblock \emph{Parallel Coordinates}.
-\newblock Springer.
+\newblock Springer-Verlag.
 
 \bibitem[{Jones(2001)}]{Jones2001}
 Jones DR (2001).
@@ -1288,54 +1316,62 @@ Knowles J (2006).
 \bibitem[{Kobilinsky \emph{et~al.}(2015)Kobilinsky, Bouvier, and
   Monod}]{Kobilinsky2015}
 Kobilinsky A, Bouvier A, Monod H (2015).
-\newblock \emph{PLANOR: an R package for the automatic generation of regular
-  fractional factorial designs}.
-\newblock INRA, MIA, Jouy en Josas, France.
-\newblock R package version 0.2-4.
+\newblock \emph{\pkg{planor}: An \proglang{R} Package for the Automatic
+  Generation of Regular Fractional Factorial Designs}.
+\newblock \proglang{R} package version 0.2-4,
+  \urlprefix\url{https://CRAN.R-project.org/package=planor}.
+
+\bibitem[{Koch \emph{et~al.}(2015)Koch, Wagner, Emmerich, B{\"a}ck, and
+  Konen}]{Koch2015}
+Koch P, Wagner T, Emmerich MT, B{\"a}ck T, Konen W (2015).
+\newblock \enquote{Efficient Multi-Criteria Optimization on Noisy Machine
+  Learning Problems.}
+\newblock \emph{Applied Soft Computing}, \textbf{29}, 357--370.
 
 \bibitem[{MacDonald \emph{et~al.}(2015)MacDonald, Ranjan, and
   Chipman}]{macdonald2015gpfit}
 MacDonald B, Ranjan P, Chipman H (2015).
-\newblock \enquote{GPfit: An R Package for Fitting a Gaussian Process Model to
-  Deterministic Simulator Outputs.}
+\newblock \enquote{\pkg{GPfit}: An \proglang{R} Package for Fitting a Gaussian
+  Process Model to Deterministic Simulator Outputs.}
 \newblock \emph{Journal of Statistical Software}, \textbf{64}(1), 1--23.
 
-\bibitem[{Mebane \emph{et~al.}(2011)Mebane, Sekhon \emph{et~al.}}]{Mebane2011}
-Mebane WRJ, Sekhon JS, \emph{et~al.} (2011).
-\newblock \enquote{Genetic Optimization Using Derivatives: The rgenoud Package
-  for R.}
+\bibitem[{Mebane and Sekhon(2011)}]{Mebane2011}
+Mebane WRJ, Sekhon JS (2011).
+\newblock \enquote{Genetic Optimization Using Derivatives: The \pkg{rgenoud}
+  Package for \proglang{R}.}
 \newblock \emph{Journal of Statistical Software}, \textbf{42}(11), 1--26.
 
 \bibitem[{Mersmann(2012)}]{Mersmann2012}
 Mersmann O (2012).
-\newblock \emph{emoa: Evolutionary Multiobjective Optimization Algorithms}.
-\newblock R package version 0.5-0,
+\newblock \emph{\pkg{emoa}: Evolutionary Multiobjective Optimization
+  Algorithms}.
+\newblock \proglang{R} package version 0.5-0,
   \urlprefix\url{https://CRAN.R-project.org/package=emoa}.
 
 \bibitem[{Mersmann(2014)}]{Mersmann2014}
 Mersmann O (2014).
-\newblock \emph{mco: Multiple Criteria Optimization Algorithms and Related
-  Functions}.
-\newblock R package version 1.0-15.1,
+\newblock \emph{\pkg{mco}: Multiple Criteria Optimization Algorithms and
+  Related Functions}.
+\newblock \proglang{R} package version 1.0-15.1,
   \urlprefix\url{https://CRAN.R-project.org/package=mco}.
 
 \bibitem[{Molchanov(2005)}]{Molchanov2005}
 Molchanov IS (2005).
 \newblock \emph{Theory of Random Sets}.
-\newblock Springer.
+\newblock Springer-Verlag.
 
 \bibitem[{Naval(2013)}]{Naval2013}
 Naval P (2013).
-\newblock \emph{mopsocd: MOPSOCD: Multi-objective Particle Swarm Optimization
-  with Crowding Distance}.
-\newblock R package version 0.5.1,
+\newblock \emph{\pkg{mopsocd}: MOPSOCD: Multi-objective Particle Swarm
+  Optimization with Crowding Distance}.
+\newblock \proglang{R} package version 0.5.1,
   \urlprefix\url{https://CRAN.R-project.org/package=mopsocd}.
 
 \bibitem[{Novomestky(2008)}]{Novomestky2008}
 Novomestky F (2008).
-\newblock \emph{goalprog: Weighted and Lexicographical Goal Programming and
-  Optimization}.
-\newblock R package version 1.0-2.
+\newblock \emph{\pkg{goalprog}: Weighted and Lexicographical Goal Programming
+  and Optimization}.
+\newblock \proglang{R} package version 1.0-2.
 
 \bibitem[{Osborne(2010)}]{Osborne2010}
 Osborne M (2010).
@@ -1351,9 +1387,17 @@ Parr JM (2012).
 
 \bibitem[{Picheny(2015)}]{Picheny2013}
 Picheny V (2015).
-\newblock \enquote{Multiobjective Optimization using {G}aussian Process
+\newblock \enquote{Multiobjective Optimization Using {G}aussian Process
   Emulators via Stepwise Uncertainty Reduction.}
 \newblock \emph{Statistics and Computing}, \textbf{25}(6), 1265--1280.
+
+\bibitem[{Picheny \emph{et~al.}(2013)Picheny, Wagner, and
+  Ginsbourger}]{Picheny2013b}
+Picheny V, Wagner T, Ginsbourger D (2013).
+\newblock \enquote{A Benchmark of Kriging-Based Infill Criteria for Noisy
+  Optimization.}
+\newblock \emph{Structural and Multidisciplinary Optimization}, \textbf{48}(3),
+  607--626.
 
 \bibitem[{Ponweiser \emph{et~al.}(2008)Ponweiser, Wagner, Biermann, and
   Vincze}]{Ponweiser2008a}
@@ -1361,20 +1405,21 @@ Ponweiser W, Wagner T, Biermann D, Vincze M (2008).
 \newblock \enquote{Multiobjective Optimization on a Limited Budget of
   Evaluations Using Model-Assisted {S}-Metric Selection.}
 \newblock In G~Rudolph, \emph{et~al.} (eds.), \emph{PPSN X}, volume 5199 of
-  \emph{LNCS}, pp. 784--794. Springer.
+  \emph{LNCS}, pp. 784--794. Springer-Verlag.
 
-\bibitem[{{R Core Team}(2019)}]{R2019}
-{R Core Team} (2019).
-\newblock \emph{R: A Language and Environment for Statistical Computing}.
-\newblock R Foundation for Statistical Computing, Vienna, Austria.
+\bibitem[{{\proglang{R} Core Team}(2015)}]{R2015}
+{\proglang{R} Core Team} (2015).
+\newblock \emph{\proglang{R}: A Language and Environment for Statistical
+  Computing}.
+\newblock \proglang{R} Foundation for Statistical Computing, Vienna, Austria.
 \newblock \urlprefix\url{https://www.R-project.org/}.
 
 \bibitem[{Roustant \emph{et~al.}(2012)Roustant, Ginsbourger, and
   Deville}]{Roustant2012}
 Roustant O, Ginsbourger D, Deville Y (2012).
-\newblock \enquote{{DiceKriging}, {DiceOptim}: Two {R} Packages for the
-  Analysis of Computer Experiments by Kriging-Based Metamodeling and
-  Optimization.}
+\newblock \enquote{\pkg{DiceKriging}, \pkg{DiceOptim}: Two \proglang{R}
+  Packages for the Analysis of Computer Experiments by Kriging-Based
+  Metamodeling and Optimization.}
 \newblock \emph{Journal of Statistical Software}, \textbf{51}(1), 1--55.
 \newblock \urlprefix\url{http://www.jstatsoft.org/v51/i01/}.
 
@@ -1385,8 +1430,6 @@ Santana-Quintero L, Montano A, Coello C (2010).
   Evolutionary Multi-Objective Optimization.}
 \newblock \emph{Computational Intelligence in Expensive Optimization Problems},
   pp. 29--59.
-\newblock
-  \urlprefix\url{http://www.springerlink.com/index/v411231h61378w17.pdf}.
 
 \bibitem[{Shapiro(2003)}]{Shapiro2003}
 Shapiro A (2003).
@@ -1400,8 +1443,6 @@ Svenson J, Santner T (2016).
   Deterministic Computer Simulator Models.}
 \newblock \emph{Computational Statistics \& Data Analysis}, \textbf{94},
   250--264.
-\newblock
-  \urlprefix\url{http://www.sciencedirect.com/science/article/pii/S0167947315001991}.
 
 \bibitem[{Svenson(2011)}]{Svenson2011}
 Svenson JD (2011).
@@ -1413,7 +1454,7 @@ Svenson JD (2011).
   Miettinen, and Sindhya}]{Tabatabaei2015}
 Tabatabaei M, Hakanen J, Hartikainen M, Miettinen K, Sindhya K (2015).
 \newblock \enquote{A Survey on Handling Computationally Expensive
-  Multiobjective Optimization Problems using Surrogates: Non-Nature Inspired
+  Multiobjective Optimization Problems Using Surrogates: Non-Nature Inspired
   Methods.}
 \newblock \emph{Structural and Multidisciplinary Optimization}, \textbf{52}(1),
   1--25.
@@ -1426,9 +1467,9 @@ Theussl S, Borchers H (2015).
 
 \bibitem[{Tsou(2013)}]{Tsou2013}
 Tsou CS (2013).
-\newblock \emph{nsga2R: Elitist Non-dominated Sorting Genetic Algorithm based
-  on R}.
-\newblock R package version 1.0,
+\newblock \emph{\pkg{nsga2R}: Elitist Non-dominated Sorting Genetic Algorithm
+  based on \proglang{R}}.
+\newblock \proglang{R} package version 1.0,
   \urlprefix\url{https://CRAN.R-project.org/package=nsga2R}.
 
 \bibitem[{Van~Veldhuizen and Lamont(1999)}]{VanVeldhuizen1999}
@@ -1439,8 +1480,10 @@ Van~Veldhuizen DA, Lamont GB (1999).
 
 \bibitem[{Varadhan(2014)}]{Varadhan2014}
 Varadhan R (2014).
-\newblock \enquote{Numerical Optimization in R: Beyond optim.}
-\newblock \emph{Journal of Statistical Software}, \textbf{60}(1).
+\newblock \enquote{Numerical Optimization in \proglang{R}: Beyond \pkg{optim}.}
+\newblock \emph{Journal of Statistical Software}, \textbf{60}(1), 1--3.
+\newblock
+  \urlprefix\url{https://www.jstatsoft.org/index.php/jss/article/view/v060i01}.
 
 \bibitem[{Wagner \emph{et~al.}(2010)Wagner, Emmerich, Deutz, and
   Ponweiser}]{Wagner2010}
@@ -1448,8 +1491,6 @@ Wagner T, Emmerich M, Deutz A, Ponweiser W (2010).
 \newblock \enquote{On Expected-Improvement Criteria for Model-Based
   Multi-Objective Optimization.}
 \newblock \emph{Parallel Problem Solving from Nature--PPSN XI}, pp. 718--727.
-\newblock
-  \urlprefix\url{http://www.springerlink.com/index/Y23K4442J3H73444.pdf}.
 
 \bibitem[{Wang and Shan(2007)}]{Wang2007}
 Wang G, Shan S (2007).
