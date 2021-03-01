@@ -1,7 +1,10 @@
 ## GPareto 1.1.5
 
 ## change / GPareto 1.1.5
-  * update package vignette to match more the JSS paper (to be continued)
+  * update package vignette to match more the JSS paper
+  * change links from http to https
+  * update ReDice website link
+  * correct bug with upper and lower not used in easyGParetoptim (Thanks to Ian McGregor)
 
 ## GPareto 1.1.4
 

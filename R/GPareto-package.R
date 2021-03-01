@@ -8,7 +8,7 @@
 ##' \emph{European Journal of Operational Research}, 243(2), 386-394. \cr \cr
 ##' O. Roustant, D. Ginsbourger and Yves Deville (2012), DiceKriging, DiceOptim:
 ##'  Two R Packages for the Analysis of Computer Experiments by Kriging-Based Metamodeling and Optimization,
-##'   \emph{Journal of Statistical Software}, 51(1), 1-55, \url{http://www.jstatsoft.org/v51/i01/}. \cr \cr
+##'   \emph{Journal of Statistical Software}, 51(1), 1-55, \url{https://www.jstatsoft.org/v51/i01/}. \cr \cr
 ##'  M. T. Emmerich, A. H. Deutz, J. W. Klinkenberg (2011), Hypervolume-based expected improvement: Monotonicity properties and exact computation,
 ##' \emph{Evolutionary Computation (CEC)}, 2147-2154. \cr \cr
 ##' V. Picheny (2015), Multiobjective optimization using Gaussian process emulators via stepwise uncertainty reduction, 
@@ -30,7 +30,7 @@
 ##' Part of this work has been conducted within the frame of the ReDice Consortium,
 ##' gathering industrial (CEA, EDF, IFPEN, IRSN, Renault) and academic 
 ##' (Ecole des Mines de Saint-Etienne, INRIA, and the University of Bern) partners around
-##'  advanced methods for Computer Experiments. (http://www.redice-project.org/).\cr
+##'  advanced methods for Computer Experiments. (http://redice.emse.fr/).\cr
 ##' 
 ##' 
 ##' The authors would like to thank Yves Deville for his precious advices in R programming and packaging, 

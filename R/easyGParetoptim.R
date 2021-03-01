@@ -187,7 +187,7 @@ easyGParetoptim <- function (fn, ..., cheapfn = NULL, budget, lower, upper, par=
     n.init <- temp[1]
   } else {
     n.init <- max(4*d, round(budget/3))
-    design.init <- data.frame(x=lower + (upper-lower)*maximinESE_LHS(lhsDesign(n.init, d, seed=control$seed)$design)$design)
+    design.init <- data.frame(x = matrix(lower, nrow = n.init, ncol = d, byrow = TRUE) + maximinESE_LHS(lhsDesign(n.init, d, seed=control$seed)$design)$design %*% diag((upper-lower)))
   }
   #----------------------------------------
   if (!is.null(par) && !is.null(value)) {
