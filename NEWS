@@ -5,6 +5,7 @@
   * change links from http to https
   * update ReDice website link
   * correct bug with upper and lower not used in easyGParetoptim (Thanks to Ian McGregor)
+  * correct bug in checkPredict with covdist
 
 ## GPareto 1.1.4
 

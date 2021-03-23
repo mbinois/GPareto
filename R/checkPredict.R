@@ -65,7 +65,7 @@ checkPredict <- function(x, model, threshold = 1e-4, distance = "euclidean", typ
           kn_xy <- kxy - kxy %*% chol2inv(model[[i]]@T) %*% kyy # k_n(x,y)
 
           mindist <- pmin(mindist,
-                          sqrt(pmax(0, kn_xx - 2 * apply(kn_xy - matrix(kn_yy, nrow(x), model[[i]]@n, byrow = T), 1, max))/model[[i]]@covariance@sd2))
+                          sqrt(pmax(0, kn_xx - apply(2*kn_xy - matrix(kn_yy, nrow(x), model[[i]]@n, byrow = T), 1, max))/model[[i]]@covariance@sd2))
           
           # kxx <- drop(covMat1Mat2(model[[i]]@covariance, x, matrix(x, nrow = 1)))
           # kyy <- drop(diag(covMat1Mat2(model[[i]]@covariance, model[[i]]@X, model[[i]]@X)))
