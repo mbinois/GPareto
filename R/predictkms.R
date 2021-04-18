@@ -2,7 +2,7 @@
 #' @param model list of \code{\link[DiceKriging]{km}} models
 #' @param newdata,type,se.compute,cov.compute,light.return,bias.correct,checkNames,... see \code{\link[DiceKriging]{predict.km}}
 #' @export 
-#' @details So far only \code{light.return = TRUE} handled.
+#' @details So far only \code{light.return = TRUE} handled. For the cov field, a list of cov matrices is returned.
 predict_kms <- function(model, newdata, type, se.compute = TRUE, 
                         cov.compute = FALSE, light.return = TRUE,
                         bias.correct = FALSE, checkNames = FALSE, ...){

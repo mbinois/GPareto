@@ -6,6 +6,7 @@
   * update ReDice website link
   * correct bug with upper and lower not used in easyGParetoptim (Thanks to Ian McGregor)
   * correct bug in checkPredict with covdist
+  * support for cov.compute = TRUE in predict_kms
 
 ## GPareto 1.1.4
 
