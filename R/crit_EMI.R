@@ -77,7 +77,7 @@ crit_EMI <- function(x, model, paretoFront = NULL, critcontrol = list(nb.samp = 
   }
   
   critcontrol$type <- "maximin"
-  return(SAA_mEI(x, model, critcontrol, type = "UK", paretoFront = paretoFront))
+  return(SAA_mEI(x = x, model = model, critcontrol = critcontrol, type = "UK", paretoFront = paretoFront))
 }
 
 

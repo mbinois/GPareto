@@ -10,9 +10,9 @@ predict_kms(
   type,
   se.compute = TRUE,
   cov.compute = FALSE,
-  light.return = FALSE,
+  light.return = TRUE,
   bias.correct = FALSE,
-  checkNames = TRUE,
+  checkNames = FALSE,
   ...
 )
 }
@@ -25,5 +25,5 @@ predict_kms(
 Predict function for list of \code{\link[DiceKriging]{km}} models.
 }
 \details{
-So far only \code{light.return = TRUE} and \code{cov.compute = FALSE} handled.
+So far only \code{light.return = TRUE} handled. For the cov field, a list of cov matrices is returned.
 }
