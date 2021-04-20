@@ -15,7 +15,7 @@ plotSymDifRNP(set1, set2, xlim, ylim, fill = "black", add = "FALSE", ...)
 
 \item{add}{logical; if \code{TRUE} add to an already existing plot; if \code{FALSE} (default) start a new plot taking \code{xlim, ylim} as limits.}
 
-\item{...}{additional parameters for the \code{\link[graphics]{plot}} and \code{\link[graphics]{polygon}} graphic functions}
+\item{...}{additional parameters for the \code{\link[graphics]{plot.default}} and \code{\link[graphics]{polygon}} graphic functions}
 }
 \description{
 Plot the symmetrical difference between two 

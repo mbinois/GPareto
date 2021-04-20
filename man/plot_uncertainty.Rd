@@ -37,7 +37,7 @@ Displays the probability of non-domination in the variable space. In dimension l
 }
 \details{
 Function inspired by the function \code{\link[KrigInv]{print_uncertainty}} and 
-\code{\link[KrigInv]{print_uncertainty_nd}} from the package \code{\link[KrigInv]{KrigInv}}.
+\code{\link[KrigInv]{print_uncertainty_nd}} from the package \code{\link[KrigInv]{KrigInv-package}}.
 Non-dominated observations are represented with green diamonds, dominated ones by yellow triangles.
 }
 \examples{

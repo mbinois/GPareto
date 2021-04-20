@@ -40,7 +40,7 @@ weighted, \code{integration.weights} is set to \code{NULL}}
 }
 }
 \description{
-Modification of the function  \code{\link[KrigInv]{integration_design}} from the package \code{\link[KrigInv]{KrigInv}} to 
+Modification of the function  \code{\link[KrigInv]{integration_design}} from the package \code{\link[KrigInv]{KrigInv-package}} to 
 be usable for SUR-based optimization. Handles two or three objectives.
 Available important sampling schemes: none so far.
 }

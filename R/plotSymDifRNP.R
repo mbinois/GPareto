@@ -6,7 +6,7 @@
 ##' @param xlim,ylim numeric vectors of length 2, giving the \code{x} and \code{y} coordinates ranges for plotting,
 ##' @param fill optional color of the symmetric difference area,
 ##' @param add logical; if \code{TRUE} add to an already existing plot; if \code{FALSE} (default) start a new plot taking \code{xlim, ylim} as limits.
-##' @param ... additional parameters for the \code{\link[graphics]{plot}} and \code{\link[graphics]{polygon}} graphic functions
+##' @param ... additional parameters for the \code{\link[graphics]{plot.default}} and \code{\link[graphics]{polygon}} graphic functions
 ##' @export
 ##' @examples
 ##' #------------------------------------------------------------

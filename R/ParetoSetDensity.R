@@ -19,7 +19,7 @@
 ##' given by the surrogate models. Based on conditional simulations of the objectives at simulation points,
 ##' Conditional Pareto Set (CPS) simulations are obtained, out of which a density is fitted. 
 ##'  
-##' This function relies on the \code{\link[ks]{ks}} package for the kernel density estimation.
+##' This function relies on the \code{\link[ks]{ks-package}} package for the kernel density estimation.
 ##' @importFrom ks kde
 ##' @importFrom emoa nds_rank
 ##' @export

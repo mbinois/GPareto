@@ -229,7 +229,7 @@ if(!isGeneric("simulate")) {
 ##' @param nugget.sim	an optional number corresponding to a numerical nugget effect. Not used.
 ##' @param checkNames an optional boolean. Not used.
 ##' @param ... further arguments (not used)
-##' @describeIn fastfun Simulate responses values (for compatibility with methods using \code{\link[DiceKriging]{simulate}})
+##' @describeIn fastfun Simulate responses values (for compatibility with methods using [DiceKriging::simulate()])
 ##' @keywords internal
 setMethod("simulate", "fastfun", 
           function(object, nsim, seed, newdata, cond, nugget.sim, checkNames, ...) {

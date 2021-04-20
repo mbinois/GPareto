@@ -3,7 +3,7 @@
 ##' the maximization of an infill criterion and delivers
 ##' the next point to be visited in a multi-objective EGO-like procedure. \cr \cr
 ##' The latter maximization relies either on a genetic algorithm using derivatives,
-##' \code{\link[rgenoud]{genoud}}, particle swarm algorithm \code{\link[pso]{pso}},
+##' \code{\link[rgenoud]{genoud}}, particle swarm algorithm \code{\link[pso]{pso-package}},
 ##'  exhaustive search at pre-specified points or on a user defined method. 
 ##' It is important to remark that the information
 ##' needed about the objective function reduces here to the vector of response values

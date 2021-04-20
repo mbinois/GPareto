@@ -45,7 +45,7 @@ Class for fast to compute objective.
 
 \item \code{update}: Update the \code{X} and \code{y} slots with a new design and observation.
 
-\item \code{simulate}: Simulate responses values (for compatibility with methods using \code{\link[DiceKriging]{simulate}})
+\item \code{simulate}: Simulate responses values (for compatibility with methods using [DiceKriging::simulate()])
 }}
 
 \section{Slots}{
