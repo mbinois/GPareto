@@ -83,7 +83,7 @@ crit_EHI <- function(x, model, paretoFront = NULL,
     if (is.null(critcontrol$nb.samp)) critcontrol$nb.samp <- 50
     if (is.null(critcontrol$seed)) critcontrol$seed <- 42
     
-    return(SAA_mEI(x, model, critcontrol, type, paretoFront))
+    return(SAA_mEI(x = x, model = model, critcontrol = critcontrol, type = type, paretoFront = paretoFront))
   }
 }
 
