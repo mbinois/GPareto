@@ -253,6 +253,7 @@ crit_optimizer <- function(crit = "SMS", model, lower, upper, cheapfn = NULL, ty
   if(is.null(optimcontrol$method)) optimcontrol$method <- "genoud"
   if(is.null(optimcontrol$trace)) optimcontrol$trace <- 1
   if(is.null(critcontrol$refPoint) && is.null(critcontrol$extendper)) critcontrol$extendper <- 0.2
+  if(is.null(critcontrol$distance)) critcontrol$distance <- "euclidean"
   
   if (!is.null(cheapfn)) {
     fastobs <- apply(model[[1]]@X, 1, cheapfn)

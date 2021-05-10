@@ -42,7 +42,7 @@ occuring when adding points too close to the existing ones.}
        For each method, further parameters can be set.\cr 
        For "\code{discrete}", one has to provide the argument "\code{candidate.points}". \cr
        For "\code{pso}", one can control the maximum number of iterations "\code{maxit}" (\code{400}) and the population size "\code{s}"
-       (default :  \code{max(20, floor(10+2*sqrt(length(dim))))} (see \code{\link[pso]{psoptim}}). \cr
+       (default :  \code{max(20, floor(10+2*sqrt(dim)))} (see \code{\link[pso]{psoptim}}). \cr
        For "\code{genoud}", one can control, among others, "\code{pop.size}" (default :  \code{[N = 3*2^dim} for \code{dim < 6} and  \code{N = 32*dim} otherwise]),
 "\code{max.generations}" (\code{12}), "\code{wait.generations}" (\code{2}), "\code{BFGSburnin}" (\code{2}), \code{BFGSmaxit} (\code{N}) and 
 \code{solution.tolerance} (\code{1e-21})

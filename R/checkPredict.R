@@ -22,7 +22,7 @@ checkPredict <- function(x, model, threshold = 1e-4, distance = "euclidean", typ
   }
   
   if(is.null(distance))
-    distance <- "covdist"
+    distance <- "euclidean"
   if(is.null(threshold))
     threshold <- 1e-4
 
