@@ -133,7 +133,7 @@ SAA_mEI <- function(x, model, batch = FALSE,
     Samples <- matrix(0,nb.samp*length(idxOk),n.obj)
     cpt <- 1
     for (i in idxOk){
-      Samples[(1+(cpt-1)*nb.samp):(cpt*nb.samp),] <- mvrnorm(n = nb.samp, mu[i,], diag(sigma[i,]))
+      Samples[(1+(cpt-1)*nb.samp):(cpt*nb.samp),] <- mvrnorm(n = nb.samp, mu[i,], diag(sigma[i,]^2))
       cpt <- cpt+1
     }
   }
