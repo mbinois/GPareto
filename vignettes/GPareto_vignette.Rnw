@@ -104,15 +104,15 @@ opts_chunk$set(warning=FALSE)
 opts_chunk$set(message=FALSE)
 knit_hooks$set(document = function(x) {sub('\\usepackage[]{color}', '\\usepackage[dvipsnames]{xcolor}', x, fixed = TRUE)})
 
-knit_hooks$set(rgl = function(before, options, envir) {
-  if (!before) {
-    ## after a chunk has been evaluated
-    if (rgl.cur() == 0) return()  # no active device
-    name = paste(options$fig.path, options$label, sep = '')
-    rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png')
-     # rgl.postscript(paste(name, '.pdf', sep = ''), fmt = 'pdf')
-  }
-})
+# knit_hooks$set(rgl = function(before, options, envir) {
+#   if (!before) {
+#     ## after a chunk has been evaluated
+#     if (rgl.cur() == 0) return()  # no active device
+#     name = paste(options$fig.path, options$label, sep = '')
+#     rgl.snapshot(paste(name, '.png', sep = ''), fmt = 'png')
+#      # rgl.postscript(paste(name, '.pdf', sep = ''), fmt = 'pdf')
+#   }
+# })
 @
 
 
@@ -485,7 +485,7 @@ Passing any other optimization method is also possible, given that it works as t
 
 \subsubsection{Criteria functions}
 \label{subsub:crit}
-Four criteria are available in \gp 1.1.4: 
+Four criteria are available in \gp 1.1.6: 
 \begin{itemize}
   \item \code{crit_SMS} for the SMS-EGO criterion \citep{Ponweiser2008a,Wagner2010} (based on the \proglang{MATLAB} source code of the authors);
   \item \code{crit_EHI} for the expected hypervolume improvement criterion \citep{Emmerich2011} (based on the \proglang{MATLAB} source code of the authors for the bi-objective case);
@@ -783,12 +783,12 @@ The graphical output is shown in Figure \ref{fig:P1}.
 \label{fig:P1}
 \end{figure}
 
-As in the previous example, we first build an initial set of (seven) observations
+As in the previous example, we first build an initial set of (ten) observations
 and a list of two GP models:
 
 <<echo=TRUE,message=FALSE,warning=FALSE, results='hide'>>=
 set.seed(1)
-d <- 2; ninit <- 7; fun <- P1
+d <- 2; ninit <- 10; fun <- P1
 design <- lhsDesign(ninit, d, seed = 42)$design
 response <- t(apply(design, 1, fun))
 mf1 <- km(~., design = design, response = response[, 1])
@@ -906,16 +906,16 @@ filled.contour(x.grid, x.grid,
 \label{fig:ex2}
 \end{figure}
 
-Now, we apply ten steps of SUR, first with two regular objectives, then with the \texttt{fastfun} setting:
+Now, we apply four steps of SUR, first with two regular objectives, then with the \texttt{fastfun} setting:
 <<UQ_opt1, message = FALSE, warning=FALSE, results='hide', fig.show='hide'>>=
-sol <- GParetoptim(model = model, fn = fun, crit = "SUR", nsteps = 7,
+sol <- GParetoptim(model = model, fn = fun, crit = "SUR", nsteps = 4,
   lower = c(0, 0), upper = c(1, 1), optimcontrol = list(method = "pso"),
   critcontrol = list(SURcontrol = list(distrib = "SUR", n.points = 50)))
 @
 
 <<UQ_opt2, message=FALSE, warning=FALSE, results='hide', fig.show='hide'>>=
 solFast <- GParetoptim(model = list(mf1), fn = fun1, cheapfn = fun2, 
-  crit = "SUR", nsteps = 7, lower = c(0, 0), upper = c(1, 1),
+  crit = "SUR", nsteps = 4, lower = c(0, 0), upper = c(1, 1),
   optimcontrol = list(method = "pso"),
   critcontrol = list(SURcontrol = list(distrib = "SUR", n.points = 50)))
 @
@@ -927,8 +927,8 @@ Optional parameters \code{f1lim} and \code{f2lim} are used to fix bounds for the
 
 
 <<UQ_1, warning=FALSE, fig.show='hide',fig.width=6, fig.height=5>>=
-lim1 <- seq(-50, 240, length.out = 101)
-lim2 <- seq(-35, 0, length.out = 101)
+lim1 <- seq(-50, 240, length.out = 51) # 51 for speed and lighter vignette
+lim2 <- seq(-35, 0, length.out = 51)
 plotGPareto(sol, UQ_PF = TRUE, UQ_PS = TRUE, UQ_dens = TRUE,
   control = list(f1lim = lim1, f2lim = lim2))
 @
@@ -943,7 +943,7 @@ The Pareto front obtained this way is much more accurate (Figure \ref{fig:ex3}, 
 Interestingly, the two Vorob'ev expectations are similar, and provide a very good prediction of
 the actual Pareto front (Figure \ref{fig:P1}), except for the lowest values of the first objective. 
 However, the Vorob'ev deviations (gray areas) show a higher local uncertainty for this part of the front.
-Overall the Vorob'ev deviation values (346 and 212, respectively) indicate a substantially better confidence on the predicted Pareto front
+Overall the Vorob'ev deviation values (394 and 296, respectively) indicate a substantially better confidence on the predicted Pareto front
 using \code{fastfun}.
 
 The probability and density plots (Figure \ref{fig:ex3}, second and third rows, respectively) provide complementary information on the Pareto set (input space). The probability plots indicate interesting (white) and uninteresting (black) regions, as well as uncertain ones (gray), but do not provide a clear insight on the Pareto set. Here, on both cases, the large gray areas show that additional observations may be beneficial, which is consistent with the large difference between the current Pareto front and the Vorob'ev expectation (Figure \ref{fig:ex3}, top).
@@ -986,12 +986,12 @@ Finally, one may want to extract points from the Vorob'ev expectation of the Par
 To this end, the \texttt{getDesign} function returns the most probable design given a target in the objective space,
 and can be called as follow:
 <<warning=FALSE, message=FALSE>>=
-newPoint <- getDesign(model = sol$lastmodel, target = c(42, -26),
+newPoint <- getDesign(model = sol$lastmodel, target = c(55, -30),
   lower = c(0, 0), upper = c(1, 1), optimcontrol = list(method = "pso"))
 newPoint
 @
 
-Here, we have chosen a target $[42,-26]$ that is on the Vorob'ev expectation, where the uncertainty is small but where no observation is near (Figure \ref{fig:ex3}, top left). The \texttt{getDesign} output is a list with the value of the design (\texttt{par}), the value of the criterion, i.e., the probability that the \texttt{newPoint} objective is not dominated by the target) (\texttt{value}, here 60\%) and the GP prediction of each objective with the associated uncertainty ((\texttt{mean}), (\texttt{sd}) and confidence intervals). Here, the value of the second objective reaches the target with large confidence, but the first objective value is quite uncertain.
+Here, we have chosen a target $[55,-30]$ that is on the Vorob'ev expectation, where the uncertainty is small but where no observation is near (Figure \ref{fig:ex3}, top left). The \texttt{getDesign} output is a list with the value of the design (\texttt{par}), the value of the criterion, i.e., the probability that the \texttt{newPoint} objective is not dominated by the target) (\texttt{value}, here 90\%) and the GP prediction of each objective with the associated uncertainty ((\texttt{mean}), (\texttt{sd}) and confidence intervals). Here, the value of the second objective reaches the target with large confidence, but the first objective value is quite uncertain.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1025,12 +1025,13 @@ more than two objectives, only the Pareto front visualization and the probabilit
 For the latter, we changed the grid size parameter(\texttt{resolution}) and the number 
 of integration points (\texttt{nintegpoints}) to avoid overly costly figures. 
 
-<<ex3DPS, fig.show='hide',fig.width=c(5,6), fig.height=c(5,6), rgl = TRUE>>=
+<<ex3DPS, fig.show='hide',fig.width=c(5,6), fig.height=c(5,6)>>=
 library("rgl", quietly = TRUE)
 r3dDefaults$windowRect <- c(0,50, 800, 800) # for better looking figure
 plotGPareto(res, UQ_PS = TRUE, control = list(lower = rep(0, 4),
   upper = rep(1, 4), nintegpoints = 100, option = "mean",
   resolution = 25))
+rgl.snapshot("./figure/ex3DPS.png", fmt = 'png')
 @
 
 The graphical outputs are shown in Figure \ref{fig:DTLZ2}.

@@ -2,6 +2,7 @@
 
 ## change / GPareto 1.1.5
   * Correct bug in crit_EHI for more than 2 objectives
+  * Modify some vignette examples for speed
   
 ## GPareto 1.1.5
 
