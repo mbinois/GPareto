@@ -14,6 +14,7 @@
 \alias{DTLZ2}
 \alias{DTLZ3}
 \alias{DTLZ7}
+\alias{OKA1}
 \title{Test functions of x}
 \usage{
 ZDT1(x)
@@ -41,6 +42,8 @@ DTLZ2(x, nobj = 3)
 DTLZ3(x, nobj = 3)
 
 DTLZ7(x, nobj = 3)
+
+OKA1(x)
 }
 \arguments{
 \item{x}{matrix specifying the location where the function is to be evaluated, one point per row,}
@@ -64,7 +67,8 @@ Domains (sometimes rescaled to \code{[0,1]}):
 \item \code{P1}, \code{P2}: \code{[0,1]^2} 
 \item \code{MOP2}: \code{[0,1]^d}
 \item \code{MOP3}: \code{[-3,3]}, tri-objective, 2 variables
-\item \code{DTLZ1-3,7}: \code{[0,1]^d}, m-objective problems, with at least \code{d>m} variables. 
+\item \code{DTLZ1-3,7}: \code{[0,1]^d}, m-objective problems, with at least \code{d>m} variables.
+\item \code{OKA1}: [0,1]^2, initially \code{[6 sin(pi/12), 6 sin(pi/12) + 2pi cos(pi/12)] x [-2pi sin(pi/12), 6 cos(pi/12)], bi-objective}
 }
 }
 \examples{
@@ -101,4 +105,7 @@ K. Deb, L. Thiele, M. Laumanns and E. Zitzler (2002), Scalable Test Problems for
 \emph{IEEE Transactions on Evolutionary Computation}, 6(2), 182-197.
 
 D. A. Van Veldhuizen, G. B. Lamont (1999), Multiobjective evolutionary algorithm test suites, \emph{In Proceedings of the 1999 ACM symposium on Applied computing}, 351-357.
+
+T. Okabe, J. Yaochu, M. Olhofer, B. Sendhoff (2004), On test functions for evolutionary multi-objective optimization, 
+\emph{International Conference on Parallel Problem Solving from Nature}, Springer, Berlin, Heidelberg.
 }

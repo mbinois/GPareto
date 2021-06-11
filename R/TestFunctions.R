@@ -1,81 +1,84 @@
-##' @name ZDT1
-##' @aliases ZDT2
-##' @aliases ZDT3
-##' @aliases ZDT4
-##' @aliases ZDT6
-##' @aliases P1
-##' @aliases P2
-##' @aliases MOP2
-##' @aliases MOP3
-##' @aliases DTLZ1
-##' @aliases DTLZ2
-##' @aliases DTLZ3
-##' @aliases DTLZ7
-##' 
-##' @description Multi-objective test functions.
-##' @title Test functions of x
-##'
-##' @param x matrix specifying the location where the function is to be evaluated, one point per row,
-##' @param nobj optional argument to select the number of objective for the DTLZ test functions.
-##'
+#' @name ZDT1
+#' @aliases ZDT2
+#' @aliases ZDT3
+#' @aliases ZDT4
+#' @aliases ZDT6
+#' @aliases P1
+#' @aliases P2
+#' @aliases MOP2
+#' @aliases MOP3
+#' @aliases DTLZ1
+#' @aliases DTLZ2
+#' @aliases DTLZ3
+#' @aliases DTLZ7
+#' @aliases OKA1
+#' 
+#' @description Multi-objective test functions.
+#' @title Test functions of x
+#'
+#' @param x matrix specifying the location where the function is to be evaluated, one point per row,
+#' @param nobj optional argument to select the number of objective for the DTLZ test functions.
+#'
 ## ' @note \code{funs} is a generic name for the functions documented.
-##' 
-##' @details These functions are coming from different benchmarks:
-##' the \code{ZDT} test problems from an article of E. Zitzler et al., \code{P1} from the thesis of J. Parr and \code{P2}
-##' from an article of Poloni et al. . \code{MOP2} and \code{MOP3} are from Van Veldhuizen and \code{DTLZ} functions are from Deb et al. . \cr \cr
-##' 
-##' Domains (sometimes rescaled to \code{[0,1]}):
-##' \itemize{
-##' \item \code{ZDT1-6}: \code{[0,1]^d} 
-##' \item \code{P1}, \code{P2}: \code{[0,1]^2} 
-##' \item \code{MOP2}: \code{[0,1]^d}
-##' \item \code{MOP3}: \code{[-3,3]}, tri-objective, 2 variables
-##' \item \code{DTLZ1-3,7}: \code{[0,1]^d}, m-objective problems, with at least \code{d>m} variables. 
-##' }
+#' 
+#' @details These functions are coming from different benchmarks:
+#' the \code{ZDT} test problems from an article of E. Zitzler et al., \code{P1} from the thesis of J. Parr and \code{P2}
+#' from an article of Poloni et al. . \code{MOP2} and \code{MOP3} are from Van Veldhuizen and \code{DTLZ} functions are from Deb et al. . \cr \cr
+#' 
+#' Domains (sometimes rescaled to \code{[0,1]}):
+#' \itemize{
+#' \item \code{ZDT1-6}: \code{[0,1]^d} 
+#' \item \code{P1}, \code{P2}: \code{[0,1]^2} 
+#' \item \code{MOP2}: \code{[0,1]^d}
+#' \item \code{MOP3}: \code{[-3,3]}, tri-objective, 2 variables
+#' \item \code{DTLZ1-3,7}: \code{[0,1]^d}, m-objective problems, with at least \code{d>m} variables.
+#' \item \code{OKA1}: [0,1]^2, initially \code{[6 sin(pi/12), 6 sin(pi/12) + 2pi cos(pi/12)] x [-2pi sin(pi/12), 6 cos(pi/12)], bi-objective}
+#' }
 
-##' 
-##' @return Matrix of values corresponding to the objective functions, the number of colums is the number of objectives.
-##' 
-##' @references
-##' 
-##' J. M. Parr (2012), \emph{Improvement Criteria for Constraint Handling and Multiobjective Optimization}, University of Southampton, PhD thesis. 
-##' 
-##' C. Poloni, A. Giurgevich, L. Onesti, V. Pediroda (2000), Hybridization of a multi-objective genetic algorithm, a neural network and a classical optimizer for a complex design problem in fluid dynamics, \emph{Computer Methods in Applied Mechanics and Engineering}, 186(2), 403-420.
-##' 
-##' E. Zitzler, K. Deb, and L. Thiele (2000), Comparison of multiobjective evolutionary
-##' algorithms: Empirical results, \emph{Evol. Comput.}, 8(2), 173-195.
-##' 
-##' K. Deb, L. Thiele, M. Laumanns and E. Zitzler (2002), Scalable Test Problems for Evolutionary Multiobjective Optimization, 
-##' \emph{IEEE Transactions on Evolutionary Computation}, 6(2), 182-197.
-##' 
-##' D. A. Van Veldhuizen, G. B. Lamont (1999), Multiobjective evolutionary algorithm test suites, \emph{In Proceedings of the 1999 ACM symposium on Applied computing}, 351-357.
-##' 
-##' 
-##' 
-##' @rdname TestFunctions
-##' @export
-##' @examples 
-##' # ----------------------------------
-##' # 2-objectives test problems
-##' # ---------------------------------- 
-##' 
-##' plotParetoGrid("ZDT1", n.grid = 21)
-##' 
-##' plotParetoGrid("ZDT2", n.grid = 21)
-##' 
-##' plotParetoGrid("ZDT3", n.grid = 21)
-##' 
-##' plotParetoGrid("ZDT4", n.grid = 21)
-##' 
-##' plotParetoGrid("ZDT6", n.grid = 21)
-##' 
-##' plotParetoGrid("P1", n.grid = 21)
-##' 
-##' plotParetoGrid("P2", n.grid = 21)
-##' 
-##' plotParetoGrid("MOP2", n.grid = 21)
-##' 
-##' @export
+#' 
+#' @return Matrix of values corresponding to the objective functions, the number of colums is the number of objectives.
+#' 
+#' @references
+#' 
+#' J. M. Parr (2012), \emph{Improvement Criteria for Constraint Handling and Multiobjective Optimization}, University of Southampton, PhD thesis. 
+#' 
+#' C. Poloni, A. Giurgevich, L. Onesti, V. Pediroda (2000), Hybridization of a multi-objective genetic algorithm, a neural network and a classical optimizer for a complex design problem in fluid dynamics, \emph{Computer Methods in Applied Mechanics and Engineering}, 186(2), 403-420.
+#' 
+#' E. Zitzler, K. Deb, and L. Thiele (2000), Comparison of multiobjective evolutionary
+#' algorithms: Empirical results, \emph{Evol. Comput.}, 8(2), 173-195.
+#' 
+#' K. Deb, L. Thiele, M. Laumanns and E. Zitzler (2002), Scalable Test Problems for Evolutionary Multiobjective Optimization, 
+#' \emph{IEEE Transactions on Evolutionary Computation}, 6(2), 182-197.
+#' 
+#' D. A. Van Veldhuizen, G. B. Lamont (1999), Multiobjective evolutionary algorithm test suites, \emph{In Proceedings of the 1999 ACM symposium on Applied computing}, 351-357.
+#' 
+#' T. Okabe, J. Yaochu, M. Olhofer, B. Sendhoff (2004), On test functions for evolutionary multi-objective optimization, 
+#' \emph{International Conference on Parallel Problem Solving from Nature}, Springer, Berlin, Heidelberg.
+#' 
+#' @rdname TestFunctions
+#' @export
+#' @examples 
+#' # ----------------------------------
+#' # 2-objectives test problems
+#' # ---------------------------------- 
+#' 
+#' plotParetoGrid("ZDT1", n.grid = 21)
+#' 
+#' plotParetoGrid("ZDT2", n.grid = 21)
+#' 
+#' plotParetoGrid("ZDT3", n.grid = 21)
+#' 
+#' plotParetoGrid("ZDT4", n.grid = 21)
+#' 
+#' plotParetoGrid("ZDT6", n.grid = 21)
+#' 
+#' plotParetoGrid("P1", n.grid = 21)
+#' 
+#' plotParetoGrid("P2", n.grid = 21)
+#' 
+#' plotParetoGrid("MOP2", n.grid = 21)
+#' 
+#' @export
 ZDT1 <-
   function(x){
     if(is.null(dim(x))){
@@ -86,8 +89,8 @@ ZDT1 <-
     return(cbind(x[,1],g*(1-sqrt(x[,1]/g))))
   }
 
-##' @rdname TestFunctions
-##' @export
+#' @rdname TestFunctions
+#' @export
 ZDT2 <- 
   function(x){
     if(is.null(dim(x))){
@@ -98,8 +101,8 @@ ZDT2 <-
     return(cbind(x[,1],g*(1-(x[,1]/g)^2)))
   }
 
-##' @rdname TestFunctions
-##' @export
+#' @rdname TestFunctions
+#' @export
 ZDT3 <-
   function(x){
     if(is.null(dim(x))){
@@ -111,8 +114,8 @@ ZDT3 <-
     return(cbind(x[,1], g*(1 - sqrt(x[,1]/g) - x[,1]/g*sin(10*pi*x[,1]))))
   }
 
-##' @rdname TestFunctions
-##' @export
+#' @rdname TestFunctions
+#' @export
 ZDT4 <-
   function(x){
     if(is.null(dim(x))){
@@ -124,8 +127,8 @@ ZDT4 <-
     return(cbind(x[,1], g*(1 - sqrt(x[,1]/g))))
   }
 
-##' @rdname TestFunctions
-##' @export
+#' @rdname TestFunctions
+#' @export
 ZDT6 <-
   function(x){
     if(is.null(dim(x))){
@@ -137,8 +140,8 @@ ZDT6 <-
     return(cbind(f1,g*(1-(f1/g)^2)))
   }
 
-##' @rdname TestFunctions
-##' @export
+#' @rdname TestFunctions
+#' @export
 P1 <-
   function(x){
     if(is.null(dim(x))){
@@ -152,8 +155,8 @@ P1 <-
     )
   }
 
-##' @rdname TestFunctions
-##' @export
+#' @rdname TestFunctions
+#' @export
 P2 <-
   function(x){
     if(is.null(dim(x))){
@@ -194,8 +197,8 @@ GSP <- function(x, gamma=1)
   return(obj)
 }
 
-##' @rdname TestFunctions
-##' @export
+#' @rdname TestFunctions
+#' @export
 MOP2 <- function(x)
 {
   xmod <- x*4 - 2
@@ -216,8 +219,8 @@ MOP2 <- function(x)
   return(Y)
 }
 
-##' @rdname TestFunctions
-##' @export
+#' @rdname TestFunctions
+#' @export
 MOP3 <- function(x){
   if(is.null(dim(x))){
     x <- matrix(x, 1) 
@@ -229,8 +232,8 @@ MOP3 <- function(x){
   f <- cbind(f1, f2, f3)
 }
 
-##' @rdname TestFunctions
-##' @export 
+#' @rdname TestFunctions
+#' @export 
 DTLZ1 <- function(x, nobj = 3){
   
   if(is.null(dim(x))){
@@ -252,8 +255,8 @@ DTLZ1 <- function(x, nobj = 3){
   return(f)
 }
 
-##' @rdname TestFunctions
-##' @export 
+#' @rdname TestFunctions
+#' @export 
 DTLZ2 <- function(x, nobj = 3){
   if(is.null(dim(x))){
     x <- matrix(x, 1) 
@@ -277,8 +280,8 @@ DTLZ2 <- function(x, nobj = 3){
 }
 
 
-##' @rdname TestFunctions
-##' @export 
+#' @rdname TestFunctions
+#' @export 
 DTLZ3 <- function(x, nobj = 3){
   if(is.null(dim(x))){
     x <- matrix(x, 1) 
@@ -299,8 +302,8 @@ DTLZ3 <- function(x, nobj = 3){
   
 }
 
-##' @rdname TestFunctions
-##' @export 
+#' @rdname TestFunctions
+#' @export 
 DTLZ7 <- function(x, nobj = 3){
   if(is.null(dim(x))){
     x <- matrix(x, 1) 
@@ -320,4 +323,21 @@ DTLZ7 <- function(x, nobj = 3){
   
   f <- tmp * tmp2
   
+}
+
+
+#' @rdname TestFunctions
+#' @export
+OKA1 <- function(x){
+  if(is.null(dim(x))){
+    x <- matrix(x, 1) 
+  }
+  x[,1] <- x[,1] * 2 * pi * cos(pi/12) + 6 * sin(pi/12) 
+  x[,2] <-  x[,2] * (6* cos(pi/12) + 2 *pi *sin(pi/12)) - 2 * pi * sin(pi/12)
+  
+  x1p <- cos(pi/12) * x[,1] - sin(pi/12) * x[,2]
+  x2p <- sin(pi/12) * x[,1] + cos(pi/12) * x[,2]
+  f1 <- x1p
+  f2 <- sqrt(2*pi) - sqrt(abs(x1p)) + abs(x2p - 3*cos(x1p) - 3)^(1/3)
+  return(cbind(f1, f2))
 }
