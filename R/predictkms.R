@@ -10,10 +10,10 @@ predict_kms <- function(model, newdata, type, se.compute = TRUE,
   pred <- lapply(model, FUN=predict, newdata=newdata, checkNames=checkNames, type=type, cov.compute = cov.compute, light.return = light.return)
   
   if(cov.compute)
-    return(list(mean =  Reduce(rbind, lapply(pred, function(alist) alist$mean)),
-                sd = Reduce(rbind, lapply(pred, function(alist) alist$sd)),
+    return(list(mean =  Reduce(rbind, lapply(pred, function(alist) alist$mean), init = NULL),
+                sd = Reduce(rbind, lapply(pred, function(alist) alist$sd), init = NULL),
                 cov = lapply(pred, function(alist) alist$cov)))
-  return(list(mean =  Reduce(rbind, lapply(pred, function(alist) alist$mean)),
-              sd = Reduce(rbind, lapply(pred, function(alist) alist$sd))))
+  return(list(mean =  Reduce(rbind, lapply(pred, function(alist) alist$mean), init = NULL),
+              sd = Reduce(rbind, lapply(pred, function(alist) alist$sd), init = NULL)))
 }
 
