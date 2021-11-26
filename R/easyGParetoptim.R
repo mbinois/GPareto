@@ -70,7 +70,7 @@
 ##' \emph{Parallel Problem Solving from Nature}, 718-727, Springer, Berlin. \cr \cr
 ##' J. D. Svenson (2011), \emph{Computer Experiments: Multiobjective Optimization and Sensitivity Analysis}, Ohio State university, PhD thesis. \cr \cr
 ##' M. Binois, V. Picheny (2019), GPareto: An R Package for Gaussian-Process-Based Multi-Objective Optimization and Analysis,
-##' \emph{Journal of Statistical Software}, 89(8), 1--30.
+##' \emph{Journal of Statistical Software}, 89(8), 1-30, \doi{10.18637/jss.v089.i08}.
 ##' 
 ##' @importFrom DiceDesign maximinESE_LHS lhsDesign
 ##' 
@@ -190,6 +190,7 @@ easyGParetoptim <- function (fn, ..., cheapfn = NULL, budget, lower, upper, par=
     design.init <- data.frame(x = matrix(lower, nrow = n.init, ncol = d, byrow = TRUE) + maximinESE_LHS(lhsDesign(n.init, d, seed=control$seed)$design)$design %*% diag((upper-lower)))
   }
   #----------------------------------------
+  #TODO: fix this for the given_by_fn case
   if (!is.null(par) && !is.null(value)) {
     obs.init <- as.matrix(value)
     if (nrow(obs.init) != n.init) {
@@ -210,10 +211,10 @@ easyGParetoptim <- function (fn, ..., cheapfn = NULL, budget, lower, upper, par=
     obs.init <- as.matrix(obs.init)
     design.noise.var <- t(apply(design.init, 1, noise.var, ...))
   } else if (noise.var =="given_by_fn") {
-    obs.init2 <- c()
+    obs.init2 <- design.noise.var <- c()
     for (i in 1:length(obs.init)) {
       obs.init2 <- rbind(obs.init2, obs.init[[i]][[1]])
-      design.noise.var <- rbind(obs.init, obs.init[[i]][[2]])
+      design.noise.var <- rbind(design.noise.var, obs.init[[i]][[2]])
     }
     obs.init <- obs.init2
   } else {
@@ -288,4 +289,4 @@ easyGParetoptim <- function (fn, ..., cheapfn = NULL, budget, lower, upper, par=
     par   <- allX[!is_dominated(t(observations.denoised)),, drop = FALSE]
     return(list(par=par, value = value, history=list(X=allX, y=ally, y.denoised=observations.denoised), model=omEGO$lastmodel))
   }
-  }
+}

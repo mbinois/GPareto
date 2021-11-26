@@ -8,7 +8,7 @@
 ##' \emph{European Journal of Operational Research}, 243(2), 386-394. \cr \cr
 ##' O. Roustant, D. Ginsbourger and Yves Deville (2012), DiceKriging, DiceOptim:
 ##'  Two R Packages for the Analysis of Computer Experiments by Kriging-Based Metamodeling and Optimization,
-##'   \emph{Journal of Statistical Software}, 51(1), 1-55, \url{https://www.jstatsoft.org/v51/i01/}. \cr \cr
+##'   \emph{Journal of Statistical Software}, 51(1), 1-55, \doi{10.18637/jss.v051.i01}. \cr \cr
 ##'  M. T. Emmerich, A. H. Deutz, J. W. Klinkenberg (2011), Hypervolume-based expected improvement: Monotonicity properties and exact computation,
 ##' \emph{Evolutionary Computation (CEC)}, 2147-2154. \cr \cr
 ##' V. Picheny (2015), Multiobjective optimization using Gaussian process emulators via stepwise uncertainty reduction, 
@@ -18,7 +18,7 @@
 ##' J. D. Svenson (2011), \emph{Computer Experiments: Multiobjective Optimization and Sensitivity Analysis}, Ohio State University, PhD thesis. \cr \cr
 ##' C. Chevalier (2013), \emph{Fast uncertainty reduction strategies relying on Gaussian process models}, University of Bern, PhD thesis. \cr \cr
 ##' M. Binois, V. Picheny (2019), GPareto: An R Package for Gaussian-Process-Based Multi-Objective Optimization and Analysis,
-##' \emph{Journal of Statistical Software}, 89(8), 1--30.
+##' \emph{Journal of Statistical Software}, 89(8), 1-30, \doi{10.18637/jss.v089.i08}. 
 ##' @details 
 ##' Important functions: \cr
 ##' \code{\link[GPareto]{GParetoptim}} \cr

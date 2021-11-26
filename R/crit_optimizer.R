@@ -62,7 +62,7 @@
 ##' @importFrom KrigInv precomputeUpdateData
 ##' @references
 ##' W.R. Jr. Mebane and J.S. Sekhon (2011), Genetic optimization using derivatives: The rgenoud package for R, 
-##' \emph{Journal of Statistical Software}, 42(11), 1-26 \cr
+##' \emph{Journal of Statistical Software}, 42(11), 1-26 \doi{10.18637/jss.v042.i11} \cr
 ##' 
 ##' D.R. Jones, M. Schonlau, and W.J. Welch (1998), Efficient global optimization of expensive black-box functions, 
 ##' \emph{Journal of Global Optimization}, 13, 455-492.

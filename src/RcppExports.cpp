@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // hvolume2d_Rcpp
 double hvolume2d_Rcpp(NumericMatrix S, double x1, double x2);
 RcppExport SEXP _GPareto_hvolume2d_Rcpp(SEXP SSEXP, SEXP x1SEXP, SEXP x2SEXP) {
