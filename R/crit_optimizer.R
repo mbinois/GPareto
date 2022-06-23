@@ -1,249 +1,249 @@
-##' Given a list of objects of class \code{\link[DiceKriging]{km}} and a set of tuning
-##' parameters (\code{lower, upper and critcontrol}), \code{crit_optimizer} performs
-##' the maximization of an infill criterion and delivers
-##' the next point to be visited in a multi-objective EGO-like procedure. \cr \cr
-##' The latter maximization relies either on a genetic algorithm using derivatives,
-##' \code{\link[rgenoud]{genoud}}, particle swarm algorithm \code{\link[pso]{pso-package}},
-##'  exhaustive search at pre-specified points or on a user defined method. 
-##' It is important to remark that the information
-##' needed about the objective function reduces here to the vector of response values
-##' embedded in the models (no call to the objective functions or simulators (except with \code{cheapfn})).
-##'
-##' @title Maximization of multiobjective infill criterion
-##' 
-##' @param crit sampling criterion. Four choices are available : "\code{SMS}", "\code{EHI}", "\code{EMI}" and "\code{SUR}",
-##' @param model list of objects of class \code{\link[DiceKriging]{km}}, one for each objective functions,
-##' @param lower vector of lower bounds for the variables to be optimized over,
-##' @param upper vector of upper bounds for the variables to be optimized over,
-##' @param cheapfn optional additional fast-to-evaluate objective function (handled next with class \code{\link[GPareto]{fastfun}}), which does not need a kriging model,
-##' @param type "\code{SK}" or "\code{UK}" (default), depending whether uncertainty related to trend estimation has to be taken into account.
-##' @param paretoFront (optional) matrix corresponding to the Pareto front of size \code{[n.pareto x n.obj]}, or any reference set of observations,  
-##' @param critcontrol optional list of control parameters for criterion \code{crit}, see details.
-##' Options for the \code{\link[GPareto]{checkPredict}} function: \code{threshold} (\code{1e-4}) and \code{distance} (\code{covdist}) are used to avoid numerical issues 
-##' occuring when adding points too close to the existing ones.
-##' @param optimcontrol optional list of control parameters for optimization of the selected infill criterion. 
-##'       "\code{method}" set the optimization method; one can 
-##'        choose between "\code{discrete}", "\code{pso}" and "\code{genoud}" or a user defined method name (passed to \code{\link[base]{match.fun}}). 
-##'        For each method, further parameters can be set.\cr 
-##'        For "\code{discrete}", one has to provide the argument "\code{candidate.points}". \cr
-##'        For "\code{pso}", one can control the maximum number of iterations "\code{maxit}" (\code{400}) and the population size "\code{s}"
-##'        (default :  \code{max(20, floor(10+2*sqrt(dim)))} (see \code{\link[pso]{psoptim}}). \cr
-##'        For "\code{genoud}", one can control, among others, "\code{pop.size}" (default :  \code{[N = 3*2^dim} for \code{dim < 6} and  \code{N = 32*dim} otherwise]),
-##' "\code{max.generations}" (\code{12}), "\code{wait.generations}" (\code{2}), "\code{BFGSburnin}" (\code{2}), \code{BFGSmaxit} (\code{N}) and 
-##' \code{solution.tolerance} (\code{1e-21})
-##'  of function "\code{genoud}" (see \code{\link[rgenoud]{genoud}}). Numbers into brackets are the default values.\cr
-##'  For a user defined method, it must have arguments like the default \code{\link[stats]{optim}} method, i.e. \code{par}, \code{fn}, \code{lower}, \code{upper}, \code{...} 
-##'  and possibly \code{control}, 
-##'  and return a list with \code{par} and \code{value}.
-##'  A trace \code{trace} argument is available, it can be set to \code{0} to suppress all messages, to \code{1} (default) for displaying the optimization progresses,
-##'  and \code{>1} for the highest level of details.
-##' 
-##' @param ncores number of CPU available (> 1 makes mean parallel \code{TRUE}). Only used with \code{discrete} optimization for now.
-##' @return A list with components: 
-##'  \itemize{
-##'  \item{\code{par}}{: The best set of parameters found,}
-##'  \item{\code{value}}{: The value of expected improvement at \code{par}.}
-##'  }
-##' 
-##' @details
-##' Extension of the function \code{\link[DiceOptim]{max_EI}} for multi-objective optimization.\cr
-##' Available infill criteria with \code{crit} are : \cr
-##' \itemize{
-##' \item Expected Hypervolume Improvement (\code{EHI}) \code{\link[GPareto]{crit_EHI}},
-##' \item SMS criterion (\code{SMS}) \code{\link[GPareto]{crit_SMS}},
-##' \item Expected Maximin Improvement (\code{EMI}) \code{\link[GPareto]{crit_EMI}},
-##' \item Stepwise Uncertainty Reduction of the excursion volume (\code{SUR}) \code{\link[GPareto]{crit_SUR}}
-##' }
-##' Depending on the selected criterion, parameters such as a reference point for \code{SMS} and \code{EHI} or arguments for 
-##' \code{\link[GPareto]{integration_design_optim}} with \code{SUR} can be given with \code{critcontrol}.
-##' Also options for \code{\link[GPareto]{checkPredict}} are available.
-##' More precisions are given in the corresponding help pages. 
-##' @importFrom pso psoptim
-##' @importFrom KrigInv precomputeUpdateData
-##' @references
-##' W.R. Jr. Mebane and J.S. Sekhon (2011), Genetic optimization using derivatives: The rgenoud package for R, 
-##' \emph{Journal of Statistical Software}, 42(11), 1-26 \doi{10.18637/jss.v042.i11} \cr
-##' 
-##' D.R. Jones, M. Schonlau, and W.J. Welch (1998), Efficient global optimization of expensive black-box functions, 
-##' \emph{Journal of Global Optimization}, 13, 455-492.
-##' @examples
-##' \dontrun{
-##' #---------------------------------------------------------------------------
-##' # EHI surface associated with the "P1" problem at a 15 points design
-##' #---------------------------------------------------------------------------
-##' 
-##' set.seed(25468)
-##' library(DiceDesign)
-##' 
-##' d <- 2
-##' n.obj <- 2 
-##' fname <- "P1" 
-##' n.grid <- 51
-##' test.grid <- expand.grid(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid))
-##' nappr <- 15 
-##' design.grid <- round(maximinESE_LHS(lhsDesign(nappr, d, seed = 42)$design)$design, 1)
-##' response.grid <- t(apply(design.grid, 1, fname))
-##' paretoFront <- t(nondominated_points(t(response.grid)))
-##' mf1 <- km(~., design = design.grid, response = response.grid[,1])
-##' mf2 <- km(~., design = design.grid, response = response.grid[,2])
-##' model <- list(mf1, mf2)
-##' 
-##' EHI_grid <- apply(test.grid, 1, crit_EHI, model = list(mf1, mf2),
-##'                   critcontrol = list(refPoint = c(300, 0)))
-##'
-##' lower <- rep(0, d)
-##' upper <- rep(1, d)     
-##' 
-##' omEGO <- crit_optimizer(crit = "EHI", model = model,  lower = lower, upper = upper, 
-##'                  optimcontrol = list(method = "genoud", pop.size = 200, BFGSburnin = 2),
-##'                  critcontrol = list(refPoint = c(300, 0)))
-##'                  
-##' print(omEGO)
-##'  
-##' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid), nlevels = 50,
-##'                matrix(EHI_grid, nrow = n.grid), main = "Expected Hypervolume Improvement", 
-##'                xlab = expression(x[1]), ylab = expression(x[2]), color = terrain.colors,
-##'                plot.axes = {axis(1); axis(2);
-##'                             points(design.grid[, 1], design.grid[, 2], pch = 21, bg = "white");
-##'                             points(omEGO$par, col = "red", pch = 4)
-##'                             }
-##'               )
-##'               
-##' #---------------------------------------------------------------------------
-##' # SMS surface associated with the "P1" problem at a 15 points design
-##' #---------------------------------------------------------------------------
-##' 
-##' 
-##' SMS_grid <- apply(test.grid, 1, crit_SMS, model = model,
-##'                   critcontrol = list(refPoint = c(300, 0)))
-##'
-##' lower <- rep(0, d)
-##' upper <- rep(1, d)     
-##' 
-##' omEGO2 <- crit_optimizer(crit = "SMS", model = model,  lower = lower, upper = upper, 
-##'                  optimcontrol = list(method="genoud", pop.size = 200, BFGSburnin = 2),
-##'                  critcontrol = list(refPoint = c(300, 0)))
-##'                  
-##' print(omEGO2)
-##'  
-##' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid), nlevels = 50,
-##'                matrix(pmax(0,SMS_grid), nrow = n.grid), main = "SMS Criterion (>0)",
-##'                xlab = expression(x[1]), ylab = expression(x[2]), color = terrain.colors,
-##'                plot.axes = {axis(1); axis(2);
-##'                             points(design.grid[, 1], design.grid[, 2], pch = 21, bg = "white");
-##'                             points(omEGO2$par, col = "red", pch = 4)
-##'                             }
-##'               )
-##' #---------------------------------------------------------------------------
-##' # Maximin Improvement surface associated with the "P1" problem at a 15 points design
-##' #---------------------------------------------------------------------------
-##' 
-##' 
-##' EMI_grid <- apply(test.grid, 1, crit_EMI, model = model,
-##'                   critcontrol = list(nb_samp = 20, type ="EMI"))
-##'
-##' lower <- rep(0, d)
-##' upper <- rep(1, d)     
-##' 
-##' omEGO3 <- crit_optimizer(crit = "EMI", model = model,  lower = lower, upper = upper, 
-##'                  optimcontrol = list(method = "genoud", pop.size = 200, BFGSburnin = 2))
-##'                  
-##' print(omEGO3)
-##'  
-##' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid), nlevels = 50,
-##'                matrix(EMI_grid, nrow = n.grid), main = "Expected Maximin Improvement",
-##'                xlab = expression(x[1]), ylab = expression(x[2]), color = terrain.colors, 
-##'                plot.axes = {axis(1);axis(2);
-##'                             points(design.grid[, 1], design.grid[, 2], pch = 21, bg = "white");
-##'                             points(omEGO3$par, col = "red", pch = 4)
-##'                             }
-##'               )
-##' #---------------------------------------------------------------------------
-##' # crit_SUR surface associated with the "P1" problem at a 15 points design
-##' #---------------------------------------------------------------------------
-##' library(KrigInv)
-##' 
-##' integration.param <- integration_design_optim(lower = c(0, 0), upper = c(1, 1), model = model)
-##' integration.points <- as.matrix(integration.param$integration.points)
-##' integration.weights <- integration.param$integration.weights
-##' 
-##' precalc.data <- list()
-##' mn.X <- sn.X <- matrix(0, n.obj, nrow(integration.points))
-##' 
-##' for (i in 1:n.obj){
-##'   p.tst.all <- predict(model[[i]], newdata = integration.points, type = "UK",
-##'                        checkNames = FALSE)
-##'   mn.X[i,] <- p.tst.all$mean
-##'   sn.X[i,]   <- p.tst.all$sd
-##'   precalc.data[[i]] <- precomputeUpdateData(model[[i]], integration.points)
-##' }
-##' critcontrol <- list(integration.points = integration.points,
-##'                     integration.weights = integration.weights,
-##'                     mn.X = mn.X, sn.X = sn.X, precalc.data = precalc.data)
-##' EEV_grid <- apply(test.grid, 1, crit_SUR, model=model, paretoFront = paretoFront,
-##'                   critcontrol = critcontrol)
-##' lower <- rep(0, d)
-##' upper <- rep(1, d)
-##'                   
-##' omEGO4 <- crit_optimizer(crit = "SUR", model = model,  lower = lower, upper = upper, 
-##'                  optimcontrol = list(method = "genoud", pop.size = 200, BFGSburnin = 2))
-##' print(omEGO4)
-##' 
-##' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid),
-##'                matrix(pmax(0,EEV_grid), n.grid), main = "EEV criterion", nlevels = 50,
-##'                xlab = expression(x[1]), ylab = expression(x[2]), color = terrain.colors,
-##'                plot.axes = {axis(1); axis(2);
-##'                             points(design.grid[,1], design.grid[,2], pch = 21, bg = "white")
-##'                             points(omEGO4$par, col = "red", pch = 4)
-##'                             }
-##'               )
-##' 
-##' # example using user defined optimizer, here L-BFGS-B from base optim
-##' userOptim <- function(par, fn, lower, upper, control, ...){
-##'   return(optim(par = par, fn = fn, method = "L-BFGS-B", lower = lower, upper = upper,
-##'          control = control, ...))
-##' }
-##' omEGO4bis <- crit_optimizer(crit = "SUR", model = model,  lower = lower, upper = upper, 
-##'                  optimcontrol = list(method = "userOptim"))
-##' print(omEGO4bis)
-##' 
-##' 
-##' #---------------------------------------------------------------------------
-##' # crit_SMS surface with problem "P1" with 15 design points, using cheapfn
-##' #---------------------------------------------------------------------------
-##' 
-##' # Optimization with fastfun: SMS with discrete search
-##' # Separation of the problem P1 in two objectives: 
-##' # the first one to be kriged, the second one with fastobj
-##' 
-##' # Definition of the fastfun
-##' f2 <-   function(x){
-##'   return(P1(x)[2])
-##' }
-##'  
-##' SMS_grid_cheap <- apply(test.grid, 1, crit_SMS, model = list(mf1, fastfun(f2, design.grid)),
-##'                         paretoFront = paretoFront, critcontrol = list(refPoint = c(300, 0)))
-##' 
-##' 
-##' optimcontrol <- list(method = "pso")
-##' model2 <- list(mf1)
-##' omEGO5 <- crit_optimizer(crit = "SMS", model = model2,  lower = lower, upper = upper,
-##'                          cheapfn = f2, critcontrol = list(refPoint = c(300, 0)),
-##'                          optimcontrol = list(method = "genoud", pop.size = 200, BFGSburnin = 2))
-##' print(omEGO5)
-##' 
-##' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid), 
-##'                matrix(pmax(0, SMS_grid_cheap), nrow = n.grid), nlevels = 50,
-##'                main = "SMS criterion with cheap 2nd objective (>0)", xlab = expression(x[1]),
-##'                ylab = expression(x[2]), color = terrain.colors,
-##'                plot.axes = {axis(1); axis(2);
-##'                             points(design.grid[,1], design.grid[,2], pch = 21, bg = "white")
-##'                             points(omEGO5$par, col = "red", pch = 4)
-##'                             }
-##'               )
-##' }
-##' @import parallel
-##' @export
+#' Given a list of objects of class \code{\link[DiceKriging]{km}} and a set of tuning
+#' parameters (\code{lower, upper and critcontrol}), \code{crit_optimizer} performs
+#' the maximization of an infill criterion and delivers
+#' the next point to be visited in a multi-objective EGO-like procedure. \cr \cr
+#' The latter maximization relies either on a genetic algorithm using derivatives,
+#' \code{\link[rgenoud]{genoud}}, particle swarm algorithm \code{\link[pso]{pso-package}},
+#'  exhaustive search at pre-specified points or on a user defined method. 
+#' It is important to remark that the information
+#' needed about the objective function reduces here to the vector of response values
+#' embedded in the models (no call to the objective functions or simulators (except with \code{cheapfn})).
+#'
+#' @title Maximization of multiobjective infill criterion
+#' 
+#' @param crit sampling criterion. Four choices are available : "\code{SMS}", "\code{EHI}", "\code{EMI}" and "\code{SUR}",
+#' @param model list of objects of class \code{\link[DiceKriging]{km}}, one for each objective functions,
+#' @param lower vector of lower bounds for the variables to be optimized over,
+#' @param upper vector of upper bounds for the variables to be optimized over,
+#' @param cheapfn optional additional fast-to-evaluate objective function (handled next with class \code{\link[GPareto]{fastfun}}), which does not need a kriging model,
+#' @param type "\code{SK}" or "\code{UK}" (default), depending whether uncertainty related to trend estimation has to be taken into account.
+#' @param paretoFront (optional) matrix corresponding to the Pareto front of size \code{[n.pareto x n.obj]}, or any reference set of observations,  
+#' @param critcontrol optional list of control parameters for criterion \code{crit}, see details.
+#' Options for the \code{\link[GPareto]{checkPredict}} function: \code{threshold} (\code{1e-4}) and \code{distance} (\code{covdist}) are used to avoid numerical issues 
+#' occuring when adding points too close to the existing ones.
+#' @param optimcontrol optional list of control parameters for optimization of the selected infill criterion. 
+#'       "\code{method}" set the optimization method; one can 
+#'        choose between "\code{discrete}", "\code{pso}" and "\code{genoud}" or a user defined method name (passed to \code{\link[base]{match.fun}}). 
+#'        For each method, further parameters can be set.\cr 
+#'        For "\code{discrete}", one has to provide the argument "\code{candidate.points}". \cr
+#'        For "\code{pso}", one can control the maximum number of iterations "\code{maxit}" (\code{400}) and the population size "\code{s}"
+#'        (default :  \code{max(20, floor(10+2*sqrt(dim)))} (see \code{\link[pso]{psoptim}}). \cr
+#'        For "\code{genoud}", one can control, among others, "\code{pop.size}" (default :  \code{[N = 3*2^dim} for \code{dim < 6} and  \code{N = 32*dim} otherwise]),
+#' "\code{max.generations}" (\code{12}), "\code{wait.generations}" (\code{2}), "\code{BFGSburnin}" (\code{2}), \code{BFGSmaxit} (\code{N}) and 
+#' \code{solution.tolerance} (\code{1e-21})
+#'  of function "\code{genoud}" (see \code{\link[rgenoud]{genoud}}). Numbers into brackets are the default values.\cr
+#'  For a user defined method, it must have arguments like the default \code{\link[stats]{optim}} method, i.e. \code{par}, \code{fn}, \code{lower}, \code{upper}, \code{...} 
+#'  and possibly \code{control}, 
+#'  and return a list with \code{par} and \code{value}.
+#'  A trace \code{trace} argument is available, it can be set to \code{0} to suppress all messages, to \code{1} (default) for displaying the optimization progresses,
+#'  and \code{>1} for the highest level of details.
+#' 
+#' @param ncores number of CPU available (> 1 makes mean parallel \code{TRUE}). Only used with \code{discrete} optimization for now.
+#' @return A list with components: 
+#'  \itemize{
+#'  \item{\code{par}}{: The best set of parameters found,}
+#'  \item{\code{value}}{: The value of expected improvement at \code{par}.}
+#'  }
+#' 
+#' @details
+#' Extension of the function \code{\link[DiceOptim]{max_EI}} for multi-objective optimization.\cr
+#' Available infill criteria with \code{crit} are : \cr
+#' \itemize{
+#' \item Expected Hypervolume Improvement (\code{EHI}) \code{\link[GPareto]{crit_EHI}},
+#' \item SMS criterion (\code{SMS}) \code{\link[GPareto]{crit_SMS}},
+#' \item Expected Maximin Improvement (\code{EMI}) \code{\link[GPareto]{crit_EMI}},
+#' \item Stepwise Uncertainty Reduction of the excursion volume (\code{SUR}) \code{\link[GPareto]{crit_SUR}}
+#' }
+#' Depending on the selected criterion, parameters such as a reference point for \code{SMS} and \code{EHI} or arguments for 
+#' \code{\link[GPareto]{integration_design_optim}} with \code{SUR} can be given with \code{critcontrol}.
+#' Also options for \code{\link[GPareto]{checkPredict}} are available.
+#' More precisions are given in the corresponding help pages. 
+#' @importFrom pso psoptim
+#' @importFrom KrigInv precomputeUpdateData
+#' @references
+#' W.R. Jr. Mebane and J.S. Sekhon (2011), Genetic optimization using derivatives: The rgenoud package for R, 
+#' \emph{Journal of Statistical Software}, 42(11), 1-26 \doi{10.18637/jss.v042.i11} \cr
+#' 
+#' D.R. Jones, M. Schonlau, and W.J. Welch (1998), Efficient global optimization of expensive black-box functions, 
+#' \emph{Journal of Global Optimization}, 13, 455-492.
+#' @examples
+#' \dontrun{
+#' #---------------------------------------------------------------------------
+#' # EHI surface associated with the "P1" problem at a 15 points design
+#' #---------------------------------------------------------------------------
+#' 
+#' set.seed(25468)
+#' library(DiceDesign)
+#' 
+#' d <- 2
+#' n.obj <- 2 
+#' fname <- "P1" 
+#' n.grid <- 51
+#' test.grid <- expand.grid(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid))
+#' nappr <- 15 
+#' design.grid <- round(maximinESE_LHS(lhsDesign(nappr, d, seed = 42)$design)$design, 1)
+#' response.grid <- t(apply(design.grid, 1, fname))
+#' paretoFront <- t(nondominated_points(t(response.grid)))
+#' mf1 <- km(~., design = design.grid, response = response.grid[,1])
+#' mf2 <- km(~., design = design.grid, response = response.grid[,2])
+#' model <- list(mf1, mf2)
+#' 
+#' EHI_grid <- apply(test.grid, 1, crit_EHI, model = list(mf1, mf2),
+#'                   critcontrol = list(refPoint = c(300, 0)))
+#'
+#' lower <- rep(0, d)
+#' upper <- rep(1, d)     
+#' 
+#' omEGO <- crit_optimizer(crit = "EHI", model = model,  lower = lower, upper = upper, 
+#'                  optimcontrol = list(method = "genoud", pop.size = 200, BFGSburnin = 2),
+#'                  critcontrol = list(refPoint = c(300, 0)))
+#'                  
+#' print(omEGO)
+#'  
+#' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid), nlevels = 50,
+#'                matrix(EHI_grid, nrow = n.grid), main = "Expected Hypervolume Improvement", 
+#'                xlab = expression(x[1]), ylab = expression(x[2]), color = terrain.colors,
+#'                plot.axes = {axis(1); axis(2);
+#'                             points(design.grid[, 1], design.grid[, 2], pch = 21, bg = "white");
+#'                             points(omEGO$par, col = "red", pch = 4)
+#'                             }
+#'               )
+#'               
+#' #---------------------------------------------------------------------------
+#' # SMS surface associated with the "P1" problem at a 15 points design
+#' #---------------------------------------------------------------------------
+#' 
+#' 
+#' SMS_grid <- apply(test.grid, 1, crit_SMS, model = model,
+#'                   critcontrol = list(refPoint = c(300, 0)))
+#'
+#' lower <- rep(0, d)
+#' upper <- rep(1, d)     
+#' 
+#' omEGO2 <- crit_optimizer(crit = "SMS", model = model,  lower = lower, upper = upper, 
+#'                  optimcontrol = list(method="genoud", pop.size = 200, BFGSburnin = 2),
+#'                  critcontrol = list(refPoint = c(300, 0)))
+#'                  
+#' print(omEGO2)
+#'  
+#' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid), nlevels = 50,
+#'                matrix(pmax(0,SMS_grid), nrow = n.grid), main = "SMS Criterion (>0)",
+#'                xlab = expression(x[1]), ylab = expression(x[2]), color = terrain.colors,
+#'                plot.axes = {axis(1); axis(2);
+#'                             points(design.grid[, 1], design.grid[, 2], pch = 21, bg = "white");
+#'                             points(omEGO2$par, col = "red", pch = 4)
+#'                             }
+#'               )
+#' #---------------------------------------------------------------------------
+#' # Maximin Improvement surface associated with the "P1" problem at a 15 points design
+#' #---------------------------------------------------------------------------
+#' 
+#' 
+#' EMI_grid <- apply(test.grid, 1, crit_EMI, model = model,
+#'                   critcontrol = list(nb_samp = 20, type ="EMI"))
+#'
+#' lower <- rep(0, d)
+#' upper <- rep(1, d)     
+#' 
+#' omEGO3 <- crit_optimizer(crit = "EMI", model = model,  lower = lower, upper = upper, 
+#'                  optimcontrol = list(method = "genoud", pop.size = 200, BFGSburnin = 2))
+#'                  
+#' print(omEGO3)
+#'  
+#' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid), nlevels = 50,
+#'                matrix(EMI_grid, nrow = n.grid), main = "Expected Maximin Improvement",
+#'                xlab = expression(x[1]), ylab = expression(x[2]), color = terrain.colors, 
+#'                plot.axes = {axis(1);axis(2);
+#'                             points(design.grid[, 1], design.grid[, 2], pch = 21, bg = "white");
+#'                             points(omEGO3$par, col = "red", pch = 4)
+#'                             }
+#'               )
+#' #---------------------------------------------------------------------------
+#' # crit_SUR surface associated with the "P1" problem at a 15 points design
+#' #---------------------------------------------------------------------------
+#' library(KrigInv)
+#' 
+#' integration.param <- integration_design_optim(lower = c(0, 0), upper = c(1, 1), model = model)
+#' integration.points <- as.matrix(integration.param$integration.points)
+#' integration.weights <- integration.param$integration.weights
+#' 
+#' precalc.data <- list()
+#' mn.X <- sn.X <- matrix(0, n.obj, nrow(integration.points))
+#' 
+#' for (i in 1:n.obj){
+#'   p.tst.all <- predict(model[[i]], newdata = integration.points, type = "UK",
+#'                        checkNames = FALSE)
+#'   mn.X[i,] <- p.tst.all$mean
+#'   sn.X[i,]   <- p.tst.all$sd
+#'   precalc.data[[i]] <- precomputeUpdateData(model[[i]], integration.points)
+#' }
+#' critcontrol <- list(integration.points = integration.points,
+#'                     integration.weights = integration.weights,
+#'                     mn.X = mn.X, sn.X = sn.X, precalc.data = precalc.data)
+#' EEV_grid <- apply(test.grid, 1, crit_SUR, model=model, paretoFront = paretoFront,
+#'                   critcontrol = critcontrol)
+#' lower <- rep(0, d)
+#' upper <- rep(1, d)
+#'                   
+#' omEGO4 <- crit_optimizer(crit = "SUR", model = model,  lower = lower, upper = upper, 
+#'                  optimcontrol = list(method = "genoud", pop.size = 200, BFGSburnin = 2))
+#' print(omEGO4)
+#' 
+#' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid),
+#'                matrix(pmax(0,EEV_grid), n.grid), main = "EEV criterion", nlevels = 50,
+#'                xlab = expression(x[1]), ylab = expression(x[2]), color = terrain.colors,
+#'                plot.axes = {axis(1); axis(2);
+#'                             points(design.grid[,1], design.grid[,2], pch = 21, bg = "white")
+#'                             points(omEGO4$par, col = "red", pch = 4)
+#'                             }
+#'               )
+#' 
+#' # example using user defined optimizer, here L-BFGS-B from base optim
+#' userOptim <- function(par, fn, lower, upper, control, ...){
+#'   return(optim(par = par, fn = fn, method = "L-BFGS-B", lower = lower, upper = upper,
+#'          control = control, ...))
+#' }
+#' omEGO4bis <- crit_optimizer(crit = "SUR", model = model,  lower = lower, upper = upper, 
+#'                  optimcontrol = list(method = "userOptim"))
+#' print(omEGO4bis)
+#' 
+#' 
+#' #---------------------------------------------------------------------------
+#' # crit_SMS surface with problem "P1" with 15 design points, using cheapfn
+#' #---------------------------------------------------------------------------
+#' 
+#' # Optimization with fastfun: SMS with discrete search
+#' # Separation of the problem P1 in two objectives: 
+#' # the first one to be kriged, the second one with fastobj
+#' 
+#' # Definition of the fastfun
+#' f2 <-   function(x){
+#'   return(P1(x)[2])
+#' }
+#'  
+#' SMS_grid_cheap <- apply(test.grid, 1, crit_SMS, model = list(mf1, fastfun(f2, design.grid)),
+#'                         paretoFront = paretoFront, critcontrol = list(refPoint = c(300, 0)))
+#' 
+#' 
+#' optimcontrol <- list(method = "pso")
+#' model2 <- list(mf1)
+#' omEGO5 <- crit_optimizer(crit = "SMS", model = model2,  lower = lower, upper = upper,
+#'                          cheapfn = f2, critcontrol = list(refPoint = c(300, 0)),
+#'                          optimcontrol = list(method = "genoud", pop.size = 200, BFGSburnin = 2))
+#' print(omEGO5)
+#' 
+#' filled.contour(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = n.grid), 
+#'                matrix(pmax(0, SMS_grid_cheap), nrow = n.grid), nlevels = 50,
+#'                main = "SMS criterion with cheap 2nd objective (>0)", xlab = expression(x[1]),
+#'                ylab = expression(x[2]), color = terrain.colors,
+#'                plot.axes = {axis(1); axis(2);
+#'                             points(design.grid[,1], design.grid[,2], pch = 21, bg = "white")
+#'                             points(omEGO5$par, col = "red", pch = 4)
+#'                             }
+#'               )
+#' }
+#' @import parallel
+#' @export
 
 crit_optimizer <- function(crit = "SMS", model, lower, upper, cheapfn = NULL, type = "UK", paretoFront = NULL, 
                            critcontrol = NULL, optimcontrol = NULL, ncores = 1){

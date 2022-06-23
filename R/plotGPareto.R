@@ -1,105 +1,105 @@
-##' Display results of multi-objective optimization returned by either \code{\link[GPareto]{GParetoptim}} or \code{\link[GPareto]{easyGParetoptim}},
-##' possibly completed with various post-processings of uncertainty quantification.  
-##' @title Plot multi-objective optimization results and post-processing
-##' @param res list returned by \code{\link[GPareto]{GParetoptim}} or \code{\link[GPareto]{easyGParetoptim}},
-##' @param add logical; if \code{TRUE} adds the first graphical output to an already existing plot; 
-##' if \code{FALSE}, (default) starts a new plot,
-##' @param UQ_PF logical; for 2 objectives, if \code{TRUE} perform a quantification of uncertainty on
-##'  the Pareto front to display the symmetric deviation function with \code{\link[GPareto]{plotSymDevFun}} (cannot be added to existing graph),
-##' @param UQ_PS logical; if \code{TRUE} call \code{\link[GPareto]{plot_uncertainty}} representing the probability of non-domination in the variable space,
-##' @param UQ_dens logical; for 2D problems, if \code{TRUE} call \code{\link[GPareto]{ParetoSetDensity}} to estimate and display the density of Pareto optimal points in the variable space,
-##' @param lower optional vector of lower bounds for the variables. 
-##' Necessary if \code{UQ_PF} and/or \code{UQ_PS} are \code{TRUE} (if not provided, variables are supposed to vary between 0 and 1),
-##' @param upper optional vector of upper bounds for the variables. 
-##' Necessary if \code{UQ_PF} and/or \code{UQ_PS} are \code{TRUE} (if not provided, variables are supposed to vary between 0 and 1),
-##' @param control optional list, see details.
-##' @details 
-##' By default, \code{plotGPareto} displays the Pareto front delimiting the non-dominated area with 2 objectives,
-##'  by a perspective view with 3 objectives and using parallel coordinates with more objectives.\cr 
-##' 
-##' Setting one or several of UQ_PF, UQ_PS and UQ_dens allows to run and display post-processing tools that assess
-##' the precision and confidence of the optimization run, either in the objective (\code{UQ_PF}) or the variable spaces 
-##' (\code{UQ_PS}, \code{UQ_dens}). Note that these options are computationally intensive.
-##' 
-##' Various parameters can be used for the display of results and/or passed to subsequent function:
-##' \itemize{
-##'   \item \code{col}, \code{pch} correspond the color and plotting character for observations,
-##'   \item \code{PF.line.col}, \code{PF.pch}, \code{PF.points.col} define the color of the line denoting the current Pareto front,
-##'   the plotting character and color of non-dominated observations, respectively,
-##'   \item \code{nsim}, \code{npsim} and \code{gridtype} define the number of conditional simulations performed with [DiceKriging::simulate()]
-##'    along with the number of simulation points (in case \code{UQ_PF} and/or \code{UQ_dens} are \code{TRUE}),
-##'   \item \code{gridtype} to define how simulation points are selected; 
-##'   alternatives are '\code{runif}' (default) for uniformly sampled points,
-##'   '\code{LHS}' for a Latin Hypercube design using \code{\link[DiceDesign]{lhsDesign}} and 
-##'   '\code{grid2d}' for a two dimensional grid,
-##'   \item \code{f1lim}, \code{f2lim} can be passed to \code{\link[GPareto]{CPF}},
-##'   \item \code{resolution}, \code{option}, \code{nintegpoints} are to be passed to \code{\link[GPareto]{plot_uncertainty}}
-##'   \item \code{displaytype} type of display for \code{UQ_dens}, see \code{\link[ks]{plot.kde}},
-##'   \item \code{printVD} logical, if \code{TRUE} and \code{UQ_PF} is \code{TRUE} as well, print the value of the Vorob'ev deviation,
-##'   \item \code{use.rgl} if \code{TRUE}, use rgl for 3D plots, else \code{\link[graphics]{persp}} is used,
-##'   \item \code{bounds} if \code{use.rgl} is \code{TRUE}, optional \code{2*nobj} matrix of boundaries, see \code{\link[GPareto]{plotParetoEmp}}
-##'   \item \code{meshsize3d} mesh size of the perspective view for 3-objective problems,
-##'   \item \code{theta}, \code{phi} angles for perspective view of 3-objective problems,
-##'   \item \code{add_denoised_PF} if \code{TRUE}, in the noisy case, add the Pareto front from the estimated mean of the observations.
-##' }
-##' @export
-##' @importFrom graphics abline persp
-##' @importFrom rgl points3d
-##' @references
-##' M. Binois, D. Ginsbourger and O. Roustant (2015), Quantifying Uncertainty on Pareto Fronts with Gaussian process conditional simulations, 
-##' \emph{European Journal of Operational Research}, 243(2), 386-394. \cr \cr
-##' A. Inselberg (2009), \emph{Parallel coordinates}, Springer.
-##' @examples 
-##' \dontrun{
-##' #---------------------------------------------------------------------------
-##' # 2D objective function
-##' #---------------------------------------------------------------------------
-##' set.seed(25468)
-##' n_var <- 2 
-##' fname <- P1
-##' lower <- rep(0, n_var)
-##' upper <- rep(1, n_var)
-##' res <- easyGParetoptim(fn=fname, lower=lower, upper=upper, budget=15, 
-##' control=list(method="EHI", inneroptim="pso", maxit=20))
-##' 
-##' ## Pareto front only
-##' plotGPareto(res)
-##' 
-##' ## With post-processing
-##' plotGPareto(res, UQ_PF = TRUE, UQ_PS = TRUE, UQ_dens = TRUE)
-##' 
-##' ## With noise
-##' noise.var <- c(10, 2)
-##' funnoise <- function(x) {P1(x) + sqrt(noise.var)*rnorm(n=2)}
-##' res2 <- easyGParetoptim(fn=funnoise, lower=lower, upper=upper, budget=15, noise.var=noise.var,
-##'                        control=list(method="EHI", inneroptim="pso", maxit=20))
-##'                        
-##' plotGPareto(res2, control=list(add_denoised_PF=FALSE)) # noisy observations only
-##' plotGPareto(res2)
-##' 
-##' #---------------------------------------------------------------------------
-##' # 3D objective function
-##' #---------------------------------------------------------------------------
-##' set.seed(1)
-##' n_var <- 3 
-##' fname <- DTLZ1
-##' lower <- rep(0, n_var)
-##' upper <- rep(1, n_var)
-##' res3 <- easyGParetoptim(fn=fname, lower=lower, upper=upper, budget=50, 
-##' control=list(method="EHI", inneroptim="pso", maxit=20))
-##' 
-##' ## Pareto front only
-##' plotGPareto(res3)
-##' 
-##' ## With noise
-##' noise.var <- c(10, 2, 5)
-##' funnoise <- function(x) {fname(x) + sqrt(noise.var)*rnorm(n=3)}
-##' res4 <- easyGParetoptim(fn=funnoise, lower=lower, upper=upper, budget=100, noise.var=noise.var,
-##'                        control=list(method="EHI", inneroptim="pso", maxit=20))
-##'                        
-##' plotGPareto(res4, control=list(add_denoised_PF=FALSE)) # noisy observations only
-##' plotGPareto(res4)   
-##' }
+#' Display results of multi-objective optimization returned by either \code{\link[GPareto]{GParetoptim}} or \code{\link[GPareto]{easyGParetoptim}},
+#' possibly completed with various post-processings of uncertainty quantification.  
+#' @title Plot multi-objective optimization results and post-processing
+#' @param res list returned by \code{\link[GPareto]{GParetoptim}} or \code{\link[GPareto]{easyGParetoptim}},
+#' @param add logical; if \code{TRUE} adds the first graphical output to an already existing plot; 
+#' if \code{FALSE}, (default) starts a new plot,
+#' @param UQ_PF logical; for 2 objectives, if \code{TRUE} perform a quantification of uncertainty on
+#'  the Pareto front to display the symmetric deviation function with \code{\link[GPareto]{plotSymDevFun}} (cannot be added to existing graph),
+#' @param UQ_PS logical; if \code{TRUE} call \code{\link[GPareto]{plot_uncertainty}} representing the probability of non-domination in the variable space,
+#' @param UQ_dens logical; for 2D problems, if \code{TRUE} call \code{\link[GPareto]{ParetoSetDensity}} to estimate and display the density of Pareto optimal points in the variable space,
+#' @param lower optional vector of lower bounds for the variables. 
+#' Necessary if \code{UQ_PF} and/or \code{UQ_PS} are \code{TRUE} (if not provided, variables are supposed to vary between 0 and 1),
+#' @param upper optional vector of upper bounds for the variables. 
+#' Necessary if \code{UQ_PF} and/or \code{UQ_PS} are \code{TRUE} (if not provided, variables are supposed to vary between 0 and 1),
+#' @param control optional list, see details.
+#' @details 
+#' By default, \code{plotGPareto} displays the Pareto front delimiting the non-dominated area with 2 objectives,
+#'  by a perspective view with 3 objectives and using parallel coordinates with more objectives.\cr 
+#' 
+#' Setting one or several of UQ_PF, UQ_PS and UQ_dens allows to run and display post-processing tools that assess
+#' the precision and confidence of the optimization run, either in the objective (\code{UQ_PF}) or the variable spaces 
+#' (\code{UQ_PS}, \code{UQ_dens}). Note that these options are computationally intensive.
+#' 
+#' Various parameters can be used for the display of results and/or passed to subsequent function:
+#' \itemize{
+#'   \item \code{col}, \code{pch} correspond the color and plotting character for observations,
+#'   \item \code{PF.line.col}, \code{PF.pch}, \code{PF.points.col} define the color of the line denoting the current Pareto front,
+#'   the plotting character and color of non-dominated observations, respectively,
+#'   \item \code{nsim}, \code{npsim} and \code{gridtype} define the number of conditional simulations performed with [DiceKriging::simulate()]
+#'    along with the number of simulation points (in case \code{UQ_PF} and/or \code{UQ_dens} are \code{TRUE}),
+#'   \item \code{gridtype} to define how simulation points are selected; 
+#'   alternatives are '\code{runif}' (default) for uniformly sampled points,
+#'   '\code{LHS}' for a Latin Hypercube design using \code{\link[DiceDesign]{lhsDesign}} and 
+#'   '\code{grid2d}' for a two dimensional grid,
+#'   \item \code{f1lim}, \code{f2lim} can be passed to \code{\link[GPareto]{CPF}},
+#'   \item \code{resolution}, \code{option}, \code{nintegpoints} are to be passed to \code{\link[GPareto]{plot_uncertainty}}
+#'   \item \code{displaytype} type of display for \code{UQ_dens}, see \code{\link[ks]{plot.kde}},
+#'   \item \code{printVD} logical, if \code{TRUE} and \code{UQ_PF} is \code{TRUE} as well, print the value of the Vorob'ev deviation,
+#'   \item \code{use.rgl} if \code{TRUE}, use rgl for 3D plots, else \code{\link[graphics]{persp}} is used,
+#'   \item \code{bounds} if \code{use.rgl} is \code{TRUE}, optional \code{2*nobj} matrix of boundaries, see \code{\link[GPareto]{plotParetoEmp}}
+#'   \item \code{meshsize3d} mesh size of the perspective view for 3-objective problems,
+#'   \item \code{theta}, \code{phi} angles for perspective view of 3-objective problems,
+#'   \item \code{add_denoised_PF} if \code{TRUE}, in the noisy case, add the Pareto front from the estimated mean of the observations.
+#' }
+#' @export
+#' @importFrom graphics abline persp
+#' @importFrom rgl points3d
+#' @references
+#' M. Binois, D. Ginsbourger and O. Roustant (2015), Quantifying Uncertainty on Pareto Fronts with Gaussian process conditional simulations, 
+#' \emph{European Journal of Operational Research}, 243(2), 386-394. \cr \cr
+#' A. Inselberg (2009), \emph{Parallel coordinates}, Springer.
+#' @examples 
+#' \dontrun{
+#' #---------------------------------------------------------------------------
+#' # 2D objective function
+#' #---------------------------------------------------------------------------
+#' set.seed(25468)
+#' n_var <- 2 
+#' fname <- P1
+#' lower <- rep(0, n_var)
+#' upper <- rep(1, n_var)
+#' res <- easyGParetoptim(fn=fname, lower=lower, upper=upper, budget=15, 
+#' control=list(method="EHI", inneroptim="pso", maxit=20))
+#' 
+#' ## Pareto front only
+#' plotGPareto(res)
+#' 
+#' ## With post-processing
+#' plotGPareto(res, UQ_PF = TRUE, UQ_PS = TRUE, UQ_dens = TRUE)
+#' 
+#' ## With noise
+#' noise.var <- c(10, 2)
+#' funnoise <- function(x) {P1(x) + sqrt(noise.var)*rnorm(n=2)}
+#' res2 <- easyGParetoptim(fn=funnoise, lower=lower, upper=upper, budget=15, noise.var=noise.var,
+#'                        control=list(method="EHI", inneroptim="pso", maxit=20))
+#'                        
+#' plotGPareto(res2, control=list(add_denoised_PF=FALSE)) # noisy observations only
+#' plotGPareto(res2)
+#' 
+#' #---------------------------------------------------------------------------
+#' # 3D objective function
+#' #---------------------------------------------------------------------------
+#' set.seed(1)
+#' n_var <- 3 
+#' fname <- DTLZ1
+#' lower <- rep(0, n_var)
+#' upper <- rep(1, n_var)
+#' res3 <- easyGParetoptim(fn=fname, lower=lower, upper=upper, budget=50, 
+#' control=list(method="EHI", inneroptim="pso", maxit=20))
+#' 
+#' ## Pareto front only
+#' plotGPareto(res3)
+#' 
+#' ## With noise
+#' noise.var <- c(10, 2, 5)
+#' funnoise <- function(x) {fname(x) + sqrt(noise.var)*rnorm(n=3)}
+#' res4 <- easyGParetoptim(fn=funnoise, lower=lower, upper=upper, budget=100, noise.var=noise.var,
+#'                        control=list(method="EHI", inneroptim="pso", maxit=20))
+#'                        
+#' plotGPareto(res4, control=list(add_denoised_PF=FALSE)) # noisy observations only
+#' plotGPareto(res4)   
+#' }
 plotGPareto <- function(res, add = FALSE, UQ_PF = FALSE, UQ_PS = FALSE, UQ_dens = FALSE,
                         lower = NULL, upper = NULL,
                         control = list(pch = 20, col = "red", PF.line.col = "cyan", PF.pch = 17,

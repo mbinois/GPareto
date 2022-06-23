@@ -1,26 +1,26 @@
-##' Plot the symmetrical difference between two 
-##' Random Non-Dominated Point (RNP) sets.
-##' 
-##' @title Symmetrical difference of RNP sets
-##' @param set1,set2 RNP sets considered,
-##' @param xlim,ylim numeric vectors of length 2, giving the \code{x} and \code{y} coordinates ranges for plotting,
-##' @param fill optional color of the symmetric difference area,
-##' @param add logical; if \code{TRUE} add to an already existing plot; if \code{FALSE} (default) start a new plot taking \code{xlim, ylim} as limits.
-##' @param ... additional parameters for the \code{\link[graphics]{plot.default}} and \code{\link[graphics]{polygon}} graphic functions
-##' @export
-##' @examples
-##' #------------------------------------------------------------
-##' # Simple example
-##' #------------------------------------------------------------
-##' set1 <- rbind(c(0.2, 0.35, 0.5, 0.8),
-##'               c(0.8, 0.6, 0.55, 0.3))
-##' 
-##' set2 <- rbind(c(0.3, 0.4),
-##'               c(0.7, 0.4))
-##' 
-##' plotSymDifRNP(set1, set2, xlim = c(0, 1), ylim = c(0, 1), fill = "grey")
-##' points(t(set1), col = "red", pch = 20)
-##' points(t(set2), col = "blue", pch = 20)
+#' Plot the symmetrical difference between two 
+#' Random Non-Dominated Point (RNP) sets.
+#' 
+#' @title Symmetrical difference of RNP sets
+#' @param set1,set2 RNP sets considered,
+#' @param xlim,ylim numeric vectors of length 2, giving the \code{x} and \code{y} coordinates ranges for plotting,
+#' @param fill optional color of the symmetric difference area,
+#' @param add logical; if \code{TRUE} add to an already existing plot; if \code{FALSE} (default) start a new plot taking \code{xlim, ylim} as limits.
+#' @param ... additional parameters for the \code{\link[graphics]{plot.default}} and \code{\link[graphics]{polygon}} graphic functions
+#' @export
+#' @examples
+#' #------------------------------------------------------------
+#' # Simple example
+#' #------------------------------------------------------------
+#' set1 <- rbind(c(0.2, 0.35, 0.5, 0.8),
+#'               c(0.8, 0.6, 0.55, 0.3))
+#' 
+#' set2 <- rbind(c(0.3, 0.4),
+#'               c(0.7, 0.4))
+#' 
+#' plotSymDifRNP(set1, set2, xlim = c(0, 1), ylim = c(0, 1), fill = "grey")
+#' points(t(set1), col = "red", pch = 20)
+#' points(t(set2), col = "blue", pch = 20)
 
 
 plotSymDifRNP <- function(set1, set2, xlim, ylim, fill = "black", add = "FALSE", ...){

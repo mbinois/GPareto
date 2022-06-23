@@ -1,47 +1,47 @@
-##' Displays the probability of non-domination in the variable space. In dimension larger than two, projections in 2D subspaces are displayed.
-##' @title Plot uncertainty
-##' @param model list of objects of class \code{\link[DiceKriging]{km}}, one for each objective functions,
-##' @param paretoFront (optional) matrix corresponding to the Pareto front of size \code{[n.pareto x n.obj]},
-##' @param type type of uncertainty, for now only the probability of improvement over the Pareto front,
-##' @param lower vector of lower bounds for the variables,
-##' @param upper vector of upper bounds for the variables,
-##' @param resolution grid size (the total number of points is \code{resolution^d}),
-##' @param option optional argument (string) for n > 2 variables to define the projection type. The 3 possible values are "mean" (default), "max" and "min",
-##' @param nintegpoints number of integration points for computation of mean, max and min values. 
-##' @export
-##' @importFrom grDevices grey.colors
-##' @importFrom graphics image plot.new
-##' @details Function inspired by the function \code{\link[KrigInv]{print_uncertainty}} and 
-##' \code{\link[KrigInv]{print_uncertainty_nd}} from the package \code{\link[KrigInv]{KrigInv-package}}.
-##' Non-dominated observations are represented with green diamonds, dominated ones by yellow triangles. 
-##' @examples
-##' \dontrun{ 
-##' #---------------------------------------------------------------------------
-##' # 2D, bi-objective function
-##' #---------------------------------------------------------------------------
-##' set.seed(25468)
-##' n_var <- 2 
-##' fname <- P1
-##' lower <- rep(0, n_var)
-##' upper <- rep(1, n_var)
-##' res1 <- easyGParetoptim(fn=fname, lower=lower, upper=upper, budget=15, 
-##' control=list(method="EHI", inneroptim="pso", maxit=20))
-##' 
-##' plot_uncertainty(res1$model, lower = lower, upper = upper)
-##' 
-##' #---------------------------------------------------------------------------
-##' # 4D, bi-objective function
-##' #---------------------------------------------------------------------------
-##' set.seed(25468)
-##' n_var <- 4
-##' fname <- DTLZ2
-##' lower <- rep(0, n_var)
-##' upper <- rep(1, n_var)
-##' res <- easyGParetoptim(fn=fname, lower=lower, upper=upper, budget = 40, 
-##' control=list(method="EHI", inneroptim="pso", maxit=40))
-##' 
-##' plot_uncertainty(res$model, lower = lower, upper = upper, resolution = 31)
-##' } 
+#' Displays the probability of non-domination in the variable space. In dimension larger than two, projections in 2D subspaces are displayed.
+#' @title Plot uncertainty
+#' @param model list of objects of class \code{\link[DiceKriging]{km}}, one for each objective functions,
+#' @param paretoFront (optional) matrix corresponding to the Pareto front of size \code{[n.pareto x n.obj]},
+#' @param type type of uncertainty, for now only the probability of improvement over the Pareto front,
+#' @param lower vector of lower bounds for the variables,
+#' @param upper vector of upper bounds for the variables,
+#' @param resolution grid size (the total number of points is \code{resolution^d}),
+#' @param option optional argument (string) for n > 2 variables to define the projection type. The 3 possible values are "mean" (default), "max" and "min",
+#' @param nintegpoints number of integration points for computation of mean, max and min values. 
+#' @export
+#' @importFrom grDevices grey.colors
+#' @importFrom graphics image plot.new
+#' @details Function inspired by the function \code{\link[KrigInv]{print_uncertainty}} and 
+#' \code{\link[KrigInv]{print_uncertainty_nd}} from the package \code{\link[KrigInv]{KrigInv-package}}.
+#' Non-dominated observations are represented with green diamonds, dominated ones by yellow triangles. 
+#' @examples
+#' \dontrun{ 
+#' #---------------------------------------------------------------------------
+#' # 2D, bi-objective function
+#' #---------------------------------------------------------------------------
+#' set.seed(25468)
+#' n_var <- 2 
+#' fname <- P1
+#' lower <- rep(0, n_var)
+#' upper <- rep(1, n_var)
+#' res1 <- easyGParetoptim(fn=fname, lower=lower, upper=upper, budget=15, 
+#' control=list(method="EHI", inneroptim="pso", maxit=20))
+#' 
+#' plot_uncertainty(res1$model, lower = lower, upper = upper)
+#' 
+#' #---------------------------------------------------------------------------
+#' # 4D, bi-objective function
+#' #---------------------------------------------------------------------------
+#' set.seed(25468)
+#' n_var <- 4
+#' fname <- DTLZ2
+#' lower <- rep(0, n_var)
+#' upper <- rep(1, n_var)
+#' res <- easyGParetoptim(fn=fname, lower=lower, upper=upper, budget = 40, 
+#' control=list(method="EHI", inneroptim="pso", maxit=40))
+#' 
+#' plot_uncertainty(res$model, lower = lower, upper = upper, resolution = 31)
+#' } 
 plot_uncertainty <- function(model, paretoFront = NULL, type = "pn", lower, upper,
                              resolution = 51, option = "mean", nintegpoints = 400){
   if(is.null(resolution)) resolution <- 51

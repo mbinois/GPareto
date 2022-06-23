@@ -2,6 +2,8 @@
 
 ## change / GPareto 1.1.6
   * unify xcolor options in vignette to avoid error
+  * use is to test class names
+  * simplify roxygen comments ##' to #'
 
 ## GPareto 1.1.6
 
