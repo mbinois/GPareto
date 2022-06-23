@@ -346,7 +346,7 @@ crit_optimizer <- function(crit = "SMS", model, lower, upper, cheapfn = NULL, ty
         }
         
         wrapped_precomputeUpdateData <- function(model, integration.points){
-          if(class(model) != "km") return(NULL)
+          if(is(model, "km")) return(NULL)
           else return(precomputeUpdateData(model, integration.points))
         }
         precalc.data <- lapply(model, FUN=wrapped_precomputeUpdateData, integration.points=integration.points)

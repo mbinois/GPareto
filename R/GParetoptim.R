@@ -349,7 +349,7 @@ GParetoptim <- function (model, fn, ..., cheapfn = NULL, crit = "SMS", nsteps, l
     # Reinterpolation models
     build.optim.model <- function(model) {
       # if (!.hasSlot(cheapfn, "covariance")){
-      if(class(model) == "fastfun"){
+      if(is(model, "fastfun")){
         return(model)
       } else {
         observations.denoised <- predict(model, newdata=model@X, checkNames=FALSE, type=type)$mean

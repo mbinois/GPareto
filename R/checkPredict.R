@@ -41,7 +41,7 @@ checkPredict <- function(x, model, threshold = 1e-4, distance = "euclidean", typ
       
       mindist <- Inf
       for(i in 1:length(model)){
-        if(class(model[[i]]) != "fastfun"){
+        if(is(model[[i]], "fastfun")){
           pred.sd <- predict(object = model[[i]], newdata = x, type = type, checkNames = FALSE, light.return = TRUE)
           mindist <- pmin(mindist, pred.sd$sd/sqrt(model[[i]]@covariance@sd2))
         }
@@ -55,7 +55,7 @@ checkPredict <- function(x, model, threshold = 1e-4, distance = "euclidean", typ
 
       mindist <- Inf
       for(i in 1:length(model)){
-        if(class(model[[i]]) != "fastfun"){
+        if(is(model[[i]], "fastfun")){
           
           kn_xx <- (predict(model[[i]], newdata = x, type = type, checkNames = FALSE)$sd)^2 # k_n(x,x)
           kn_yy <- (predict(model[[i]], newdata = model[[i]]@X, type = type, checkNames = FALSE)$sd)^2 # k_n(y,y)

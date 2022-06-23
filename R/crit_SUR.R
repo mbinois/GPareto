@@ -119,7 +119,7 @@ crit_SUR <- function(x, model, paretoFront = NULL, critcontrol = NULL, type = "U
       sn.X <- p.tst$sd
       
       wrapped_precomputeUpdateData <- function(model, integration.points){
-        if(class(model) != "km") return(NULL)
+        if(is(model, "km")) return(NULL)
         else return(precomputeUpdateData(model, integration.points))
       }
       precalc.data <- lapply(model, FUN=wrapped_precomputeUpdateData, integration.points=integration.points)
