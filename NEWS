@@ -1,9 +1,14 @@
+## GPareto 1.1.8
+
+## change / GPareto 1.1.7
+
 ## GPareto 1.1.7
 
 ## change / GPareto 1.1.6
   * unify xcolor options in vignette to avoid error
   * use is to test class names
   * simplify roxygen comments ##' to #'
+  * add DiceOptim to Suggests
 
 ## GPareto 1.1.6
 
