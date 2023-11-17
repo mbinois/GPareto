@@ -1,9 +1,9 @@
 %\VignetteEncoding{UTF-8}
 %\VignetteIndexEntry{a guide to the GPareto package}
 %\VignetteEngine{knitr::knitr}
-\PassOptionsToPackage{usenames,dvipsnames}{xcolor}
+\PassOptionsToPackage{dvipsnames}{xcolor}
 \documentclass[nojss]{jss}
-% \usepackage[usenames, dvipsnames]{xcolor}
+% \usepackage[dvipsnames]{xcolor}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -102,7 +102,7 @@ opts_chunk$set(background='#FFFFFF')
 opts_chunk$set(comment=NA)
 opts_chunk$set(warning=FALSE)
 opts_chunk$set(message=FALSE)
-knit_hooks$set(document = function(x) {sub('\\usepackage[]{color}', '\\usepackage[usenames,dvipsnames]{xcolor}', x, fixed = TRUE)})
+knit_hooks$set(document = function(x) {sub('\\usepackage[]{color}', '\\usepackage[dvipsnames]{xcolor}', x, fixed = TRUE)})
 
 # knit_hooks$set(rgl = function(before, options, envir) {
 #   if (!before) {
