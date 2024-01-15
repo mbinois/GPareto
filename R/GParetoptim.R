@@ -59,11 +59,11 @@
 #' @return
 #' A list with components:
 #' \itemize{
-#' \item{\code{par}}{: a data frame representing the additional points visited during the algorithm,}
-#' \item{\code{values}}{: a data frame representing the response values at the points given in \code{par},}
-#' \item{\code{nsteps}}{: an integer representing the desired number of iterations (given in argument),}
-#' \item{\code{lastmodel}}{: a list of objects of class \code{\link[DiceKriging]{km}} corresponding to the last kriging models fitted.}
-#' \item{\code{observations.denoised}}{:  if \code{noise.var!=NULL}, a matrix representing the mean values of the \code{\link[DiceKriging]{km}} models at observation points.}
+#' \item \code{par}: a data frame representing the additional points visited during the algorithm,
+#' \item \code{values}: a data frame representing the response values at the points given in \code{par},
+#' \item \code{nsteps}: an integer representing the desired number of iterations (given in argument),
+#' \item \code{lastmodel}: a list of objects of class \code{\link[DiceKriging]{km}} corresponding to the last kriging models fitted.
+#' \item \code{observations.denoised}:  if \code{noise.var!=NULL}, a matrix representing the mean values of the \code{\link[DiceKriging]{km}} models at observation points.
 #' If a problem occurs during either model updates or criterion maximization, the last working model and corresponding values are returned.
 #' }
 #' 

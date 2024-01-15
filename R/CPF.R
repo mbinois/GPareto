@@ -20,16 +20,16 @@
 #' should be computed. Default is \code{TRUE}.
 #' @return A list which is given the S3 class "\code{CPF}".
 #' \itemize{
-#'  \item{\code{x, y}}{: locations of grid lines at which the values of the attainment
-#'   are computed,}
-#'  \item{\code{values}}{: numeric matrix containing the values of the attainment on the grid,}
-#'  \item{\code{PF}}{: matrix corresponding to the Pareto front of the observations,}
-#'  \item{\code{responses}}{: matrix containing the value of the two objective functions, one
-#' objective per column,}
-#' \item{\code{fun1sims, fun2sims}}{: conditional simulations of the first/second output,}
-#' \item{\code{VE}}{: Vorob'ev expectation, computed if \code{compute.VorobExp = TRUE} (default),}
-#' \item{\code{beta_star}}{: Vorob'ev threshold, computed if \code{compute.VorobExp = TRUE} (default),}
-#' \item{\code{VD}}{: Vorov'ev deviation, computed if \code{compute.VorobDev = TRUE} (default),}
+#'  \item \code{x, y}: locations of grid lines at which the values of the attainment
+#'   are computed,
+#'  \item \code{values}: numeric matrix containing the values of the attainment on the grid,
+#'  \item \code{PF}: matrix corresponding to the Pareto front of the observations,
+#'  \item \code{responses}: matrix containing the value of the two objective functions, one
+#' objective per column,
+#' \item \code{fun1sims, fun2sims}: conditional simulations of the first/second output,
+#' \item \code{VE}: Vorob'ev expectation, computed if \code{compute.VorobExp = TRUE} (default),
+#' \item \code{beta_star}: Vorob'ev threshold, computed if \code{compute.VorobExp = TRUE} (default),
+#' \item \code{VD}: Vorov'ev deviation, computed if \code{compute.VorobDev = TRUE} (default),
 #' }
 #' @details Works with two objectives. The user can provide locations of grid lines for
 #'  computation of the attainement function with vectors \code{f1lim} and \code{f2lim}, in the form of regularly spaced points. 

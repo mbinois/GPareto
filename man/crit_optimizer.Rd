@@ -58,8 +58,8 @@ occuring when adding points too close to the existing ones.}
 \value{
 A list with components: 
  \itemize{
- \item{\code{par}}{: The best set of parameters found,}
- \item{\code{value}}{: The value of expected improvement at \code{par}.}
+ \item \code{par}: The best set of parameters found,
+ \item \code{value}: The value of expected improvement at \code{par}.
  }
 }
 \description{

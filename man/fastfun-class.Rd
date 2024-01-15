@@ -41,13 +41,13 @@ Class for fast to compute objective.
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{predict}: Predict(by evaluating \code{fun}) the result at a new observation.
+\item \code{predict(fastfun)}: Predict(by evaluating \code{fun}) the result at a new observation.
 
-\item \code{update}: Update the \code{X} and \code{y} slots with a new design and observation.
+\item \code{update(fastfun)}: Update the \code{X} and \code{y} slots with a new design and observation.
 
-\item \code{simulate}: Simulate responses values (for compatibility with methods using [DiceKriging::simulate()])
+\item \code{simulate(fastfun)}: Simulate responses values (for compatibility with methods using [DiceKriging::simulate()])
+
 }}
-
 \section{Slots}{
 
 \describe{

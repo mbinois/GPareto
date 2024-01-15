@@ -48,9 +48,9 @@
 #' @return 
 #' A list with components:
 #' \itemize{
-#' \item{\code{integration.points}}{ \code{p x d} matrix of p points used for the numerical calculation of integrals}
-#' \item{\code{integration.weights}}{ a vector of size \code{p} corresponding to the weight of each point. If all the points are equally 
-#' weighted, \code{integration.weights} is set to \code{NULL}}
+#' \item \code{integration.points}, \code{p x d} matrix of p points used for the numerical calculation of integrals,
+#' \item \code{integration.weights}, a vector of size \code{p} corresponding to the weight of each point. If all the points are equally 
+#' weighted, \code{integration.weights} is set to \code{NULL}.
 #' }
 #' @importFrom randtoolbox sobol
 #' @export

@@ -12,10 +12,10 @@ plotGPareto(
   UQ_dens = FALSE,
   lower = NULL,
   upper = NULL,
-  control = list(pch = 20, col = "red", PF.line.col = "cyan", PF.pch = 17,
-    PF.points.col = "blue", VE.line.col = "cyan", nsim = 100, npsim = 1500, gridtype =
-    "runif", displaytype = "persp", printVD = TRUE, use.rgl = TRUE, bounds = NULL,
-    meshsize3d = 50, theta = -25, phi = 10, add_denoised_PF = TRUE)
+  control = list(pch = 20, col = "red", PF.line.col = "cyan", PF.pch = 17, PF.points.col
+    = "blue", VE.line.col = "cyan", nsim = 100, npsim = 1500, gridtype = "runif",
+    displaytype = "persp", printVD = TRUE, use.rgl = TRUE, bounds = NULL, meshsize3d =
+    50, theta = -25, phi = 10, add_denoised_PF = TRUE)
 )
 }
 \arguments{

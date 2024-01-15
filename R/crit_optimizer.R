@@ -41,8 +41,8 @@
 #' @param ncores number of CPU available (> 1 makes mean parallel \code{TRUE}). Only used with \code{discrete} optimization for now.
 #' @return A list with components: 
 #'  \itemize{
-#'  \item{\code{par}}{: The best set of parameters found,}
-#'  \item{\code{value}}{: The value of expected improvement at \code{par}.}
+#'  \item \code{par}: The best set of parameters found,
+#'  \item \code{value}: The value of expected improvement at \code{par}.
 #'  }
 #' 
 #' @details

@@ -48,10 +48,10 @@ Alternatively, set \code{noise.var="given_by_fn"}, see details.}
 \value{
 A list with components:
 \itemize{
-\item{\code{par}}{: all the non-dominated points found,}
-\item{\code{value}}{: the matrix of objective values at the points given in \code{par},}
-\item{\code{history}}{: a list containing all the points visited by the algorithm (\code{X}) and their corresponding objectives (\code{y}),}
-\item{\code{model}}{: a list of objects of class \code{\link[DiceKriging]{km}}, corresponding to the last kriging models fitted.}
+\item \code{par}: all the non-dominated points found,
+\item \code{value}: the matrix of objective values at the points given in \code{par},
+\item \code{history}: a list containing all the points visited by the algorithm (\code{X}) and their corresponding objectives (\code{y}),
+\item \code{model}: a list of objects of class \code{\link[DiceKriging]{km}}, corresponding to the last kriging models fitted.
 }
 Note that in the case of noisy problems, \code{value} and \code{history$y.denoised} are denoised values. The original observations are available in the slot
 \code{history$y}.
@@ -67,18 +67,18 @@ Does not require specific knowledge on kriging models (objects of class \code{\l
 The problem considered is of the form: \eqn{min f(x) = f_1(x), ..., f_p(x)}. 
 The \code{control} argument is a list that can supply any of the following optional components: \cr
 \itemize{
-\item \code{method}{: choice of multiobjective improvement function: "\code{SMS}", "\code{EHI}", "\code{EMI}" or "\code{SUR}" 
-(see \code{\link[GPareto]{crit_SMS}}, \code{\link[GPareto]{crit_EHI}}, \code{\link[GPareto]{crit_EMI}}, \code{\link[GPareto]{crit_SUR}}),}
-\item \code{trace}{: if positive, tracing information on the progress of the optimization is produced (\code{1} (default) for general progress,
- \code{>1} for more details, e.g., warnings from \code{\link[rgenoud]{genoud}}),}
-\item \code{inneroptim}{: choice of the inner optimization algorithm: "\code{genoud}", "\code{pso}" or "\code{random}"
- (see \code{\link[rgenoud]{genoud}} and \code{\link[pso]{psoptim}}),}
-\item \code{maxit}{: maximum number of iterations of the inner loop,}
-\item \code{seed}{: to fix the random variable generator,}
-\item \code{refPoint}{: reference point for hypervolume computations (for "\code{SMS}" and "\code{EHI}" methods),}
-\item \code{extendper}{: if no reference point \code{refPoint} is provided,
+\item \code{method}: choice of multiobjective improvement function: "\code{SMS}", "\code{EHI}", "\code{EMI}" or "\code{SUR}" 
+(see \code{\link[GPareto]{crit_SMS}}, \code{\link[GPareto]{crit_EHI}}, \code{\link[GPareto]{crit_EMI}}, \code{\link[GPareto]{crit_SUR}}),
+\item \code{trace}: if positive, tracing information on the progress of the optimization is produced (\code{1} (default) for general progress,
+ \code{>1} for more details, e.g., warnings from \code{\link[rgenoud]{genoud}}),
+\item \code{inneroptim}: choice of the inner optimization algorithm: "\code{genoud}", "\code{pso}" or "\code{random}"
+ (see \code{\link[rgenoud]{genoud}} and \code{\link[pso]{psoptim}}),
+\item \code{maxit}: maximum number of iterations of the inner loop,
+\item \code{seed}: to fix the random variable generator,
+\item \code{refPoint}: reference point for hypervolume computations (for "\code{SMS}" and "\code{EHI}" methods),
+\item \code{extendper}: if no reference point \code{refPoint} is provided,
  for each objective it is fixed to the maximum over the Pareto front plus extendper times the range. 
- Default value to \code{0.2}, corresponding to \code{1.1} for a scaled objective with a Pareto front in \code{[0,1]^n.obj}.}
+ Default value to \code{0.2}, corresponding to \code{1.1} for a scaled objective with a Pareto front in \code{[0,1]^n.obj}.
 }
 
 If \code{noise.var="given_by_fn"}, \code{fn} must return a list of two vectors, the first being the objective functions and the second 
