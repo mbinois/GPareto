@@ -6,7 +6,8 @@ Date: 2025-08-22
 Authors@R: c(person(given = "Mickael",
                         family = "Binois",
                         role = c("aut", "cre"),
-                        email = "mickael.binois@inria.fr"),
+                        email = "mickael.binois@inria.fr",
+                        comment = c(ORCID = "0000-0002-7225-1680")),
                  person(given = c("Victor"),
                         family = "Picheny",
                         role = "aut"))

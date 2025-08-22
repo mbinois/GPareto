@@ -20,7 +20,7 @@
 #' @return The Expected Maximin Improvement at \code{x}.
 #' @details It is recommanded to scale objectives, e.g. to \code{[0,1]}. 
 #' If the Pareto front does not belong to [-2,2]^2, then SAA is used. 
-#' @seealso \code{\link[DiceOptim]{EI}} from package DiceOptim, \code{\link[GPareto]{crit_EHI}}, \code{\link[GPareto]{crit_SUR}}, \code{\link[GPareto]{crit_SMS}}.
+#' @seealso \code{[DiceOptim]{EI}} from package DiceOptim, \code{\link[GPareto]{crit_EHI}}, \code{\link[GPareto]{crit_SUR}}, \code{\link[GPareto]{crit_SMS}}.
 #' @export
 #' @importFrom MASS mvrnorm
 #' @importFrom stats dnorm integrate

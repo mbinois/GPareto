@@ -23,7 +23,7 @@
 #' @param type "\code{SK}" or "\code{UK}" (by default), depending whether uncertainty related to trend estimation 
 #'        has to be taken into account. 
 #' @return The Expected Hypervolume Improvement at \code{x}.
-#' @seealso \code{\link[DiceOptim]{EI}} from package DiceOptim, \code{\link[GPareto]{crit_EMI}}, \code{\link[GPareto]{crit_SUR}}, \code{\link[GPareto]{crit_SMS}}.
+#' @seealso \code{[DiceOptim]{EI}} from package DiceOptim, \code{\link[GPareto]{crit_EMI}}, \code{\link[GPareto]{crit_SUR}}, \code{\link[GPareto]{crit_SMS}}.
 #' 
 #' @export
 #' @importFrom MASS mvrnorm
@@ -109,7 +109,7 @@ crit_EHI <- function(x, model, paretoFront = NULL,
 #' @param type "\code{SK}" or "\code{UK}" (by default), depending whether uncertainty related to trend estimation 
 #'        has to be taken into account. 
 #' @return The Expected Hypervolume Improvement at \code{x}.
-#' @seealso \code{\link[DiceOptim]{EI}} from package DiceOptim, \code{\link[GPareto]{crit_EMI}}, \code{\link[GPareto]{crit_SUR}}, \code{\link[GPareto]{crit_SMS}}.
+#' @seealso \code{[DiceOptim]{EI}} from package DiceOptim, \code{\link[GPareto]{crit_EMI}}, \code{\link[GPareto]{crit_SUR}}, \code{\link[GPareto]{crit_SMS}}.
 #' 
 #' @export
 #' @details
