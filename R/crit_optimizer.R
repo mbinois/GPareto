@@ -46,7 +46,7 @@
 #'  }
 #' 
 #' @details
-#' Extension of the function \code{\link[DiceOptim]{max_EI}} for multi-objective optimization.\cr
+#' Extension of the function \code{[DiceOptim]{max_EI}} for multi-objective optimization.\cr
 #' Available infill criteria with \code{crit} are : \cr
 #' \itemize{
 #' \item Expected Hypervolume Improvement (\code{EHI}) \code{\link[GPareto]{crit_EHI}},

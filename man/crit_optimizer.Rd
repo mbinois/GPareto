@@ -75,7 +75,7 @@ needed about the objective function reduces here to the vector of response value
 embedded in the models (no call to the objective functions or simulators (except with \code{cheapfn})).
 }
 \details{
-Extension of the function \code{\link[DiceOptim]{max_EI}} for multi-objective optimization.\cr
+Extension of the function \code{[DiceOptim]{max_EI}} for multi-objective optimization.\cr
 Available infill criteria with \code{crit} are : \cr
 \itemize{
 \item Expected Hypervolume Improvement (\code{EHI}) \code{\link[GPareto]{crit_EHI}},

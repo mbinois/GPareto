@@ -86,7 +86,7 @@ At each step, kriging models are re-estimated (including covariance parameters r
  Handles noiseless and noisy objective functions.
 }
 \details{
-Extension of the function \code{\link[DiceOptim]{EGO.nsteps}} for multi-objective optimization.\cr
+Extension of the function \code{[DiceOptim]{EGO.nsteps}} for multi-objective optimization.\cr
 Available infill criteria with \code{crit} are: \cr
 \itemize{
 \item Expected Hypervolume Improvement (\code{EHI}) \code{\link[GPareto]{crit_EHI}},

@@ -177,7 +177,7 @@ M. Binois, V. Picheny (2019), GPareto: An R Package for Gaussian-Process-Based M
 \emph{Journal of Statistical Software}, 89(8), 1-30, \doi{10.18637/jss.v089.i08}.
 }
 \seealso{
-\code{\link[DiceKriging]{DiceKriging-package}}, \code{\link[DiceOptim]{DiceOptim-package}}
+\code{\link[DiceKriging]{DiceKriging-package}}, \code{[DiceOptim]{DiceOptim-package}}
 }
 \author{
 Mickael Binois, Victor Picheny

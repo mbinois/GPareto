@@ -5,7 +5,7 @@
 #'  Handles noiseless and noisy objective functions.
 #' @title Sequential multi-objective Expected Improvement maximization and model re-estimation,
 #'  with a number of iterations fixed in advance by the user
-#' @details Extension of the function \code{\link[DiceOptim]{EGO.nsteps}} for multi-objective optimization.\cr
+#' @details Extension of the function \code{[DiceOptim]{EGO.nsteps}} for multi-objective optimization.\cr
 #' Available infill criteria with \code{crit} are: \cr
 #' \itemize{
 #' \item Expected Hypervolume Improvement (\code{EHI}) \code{\link[GPareto]{crit_EHI}},

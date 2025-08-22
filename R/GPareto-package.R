@@ -37,7 +37,7 @@
 #' as well as Olivier Roustant and David Ginsbourger for testing and suggestions of improvements for this package.
 #' We would also like to thank Tobias Wagner for providing his Matlab codes for the SMS-EGO strategy.
 #' 
-#' @seealso \code{\link[DiceKriging]{DiceKriging-package}}, \code{\link[DiceOptim]{DiceOptim-package}}
+#' @seealso \code{\link[DiceKriging]{DiceKriging-package}}, \code{[DiceOptim]{DiceOptim-package}}
 #' @examples
 #' \dontrun{
 #' #------------------------------------------------------------

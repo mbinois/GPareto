@@ -1,10 +1,14 @@
 ## GPareto 1.1.9
 
+## change / GPareto 1.1.8
+  * add Authors@R in DESCRIPTION
+  * remove links to DiceOptim until it is back on CRAN
+
 ## GPareto 1.1.8
-  * update vignette to account for new version of xcolor
-  * update formatting of @return fields
 
 ## change / GPareto 1.1.7
+  * update vignette to account for new version of xcolor
+  * update formatting of @return fields
 
 ## GPareto 1.1.7
 
