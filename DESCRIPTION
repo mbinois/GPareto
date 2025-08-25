@@ -1,7 +1,7 @@
 Package: GPareto
 Type: Package
 Title: Gaussian Processes for Pareto Front Estimation and Optimization
-Version: 1.1.9
+Version: 1.2.0
 Date: 2025-08-22
 Authors@R: c(person(given = "Mickael",
                         family = "Binois",
