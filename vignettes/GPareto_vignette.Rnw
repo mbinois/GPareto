@@ -1010,7 +1010,8 @@ This time we simply use \code{easyGParetoptim} to solve the problem without havi
 
 
 <<echo=TRUE,message=FALSE,warnings=FALSE, results='hide'>>=
-res <- easyGParetoptim(fn = DTLZ2, budget = 40, lower = rep(0, 4),
+X0 <- lhsDesign(30, 4, seed = 42)$design
+res <- easyGParetoptim(fn = DTLZ2, par = X0, budget = 40, lower = rep(0, 4),
   upper = rep(1, 4))
 @
 
@@ -1029,7 +1030,7 @@ of integration points (\texttt{nintegpoints}) to avoid overly costly figures.
 library("rgl", quietly = TRUE)
 r3dDefaults$windowRect <- c(0,50, 800, 800) # for better looking figure
 plotGPareto(res, UQ_PS = TRUE, control = list(lower = rep(0, 4),
-  upper = rep(1, 4), nintegpoints = 70, option = "mean",
+  upper = rep(1, 4), nintegpoints = 60, option = "mean",
   resolution = 25))
 rgl.snapshot("./figure/ex3DPS.png", fmt = 'png')
 @

@@ -84,5 +84,5 @@ M. T. Emmerich, A. H. Deutz, J. W. Klinkenberg (2011), Hypervolume-based expecte
 \emph{Evolutionary Computation (CEC)}, 2147-2154. \cr \cr
 }
 \seealso{
-\code{\link[DiceOptim]{EI}} from package DiceOptim, \code{\link[GPareto]{crit_EMI}}, \code{\link[GPareto]{crit_SUR}}, \code{\link[GPareto]{crit_SMS}}.
+\code{[DiceOptim]{EI}} from package DiceOptim, \code{\link[GPareto]{crit_EMI}}, \code{\link[GPareto]{crit_SUR}}, \code{\link[GPareto]{crit_SMS}}.
 }

@@ -79,5 +79,5 @@ Functions via Expected Maximin Improvement, Technical Report.\cr
 J. D. Svenson (2011), \emph{Computer Experiments: Multiobjective Optimization and Sensitivity Analysis}, Ohio State University, PhD thesis.
 }
 \seealso{
-\code{\link[DiceOptim]{EI}} from package DiceOptim, \code{\link[GPareto]{crit_EHI}}, \code{\link[GPareto]{crit_SUR}}, \code{\link[GPareto]{crit_SMS}}.
+\code{[DiceOptim]{EI}} from package DiceOptim, \code{\link[GPareto]{crit_EHI}}, \code{\link[GPareto]{crit_SUR}}, \code{\link[GPareto]{crit_SMS}}.
 }
