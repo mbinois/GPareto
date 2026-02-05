@@ -27,7 +27,6 @@
 #' 
 #' @export
 #' @importFrom MASS mvrnorm
-#' @importFrom emoa hypervolume_indicator
 #' @useDynLib GPareto, .registration = TRUE
 #' @importFrom Rcpp evalCpp
 #' @details
