@@ -155,14 +155,14 @@ plotGPareto <- function(res, add = FALSE, UQ_PF = FALSE, UQ_PS = FALSE, UQ_dens 
       }
       ## easyGParetoptim
       if(!is.null(res$history)){
-        plotParetoEmp(t(nondominated_points(t(res$history$y))), col = control$PF.line.col)
+        plotParetoEmp(filter_dominated(res$history$y), col = control$PF.line.col)
         if(res$model[[1]]@noise.flag && control$add_denoised_PF) 
           points(res$value, col = control$PF.points.col, pch = control$PF.pch)
       } else {## GParetoptim
-        plotParetoEmp(t(nondominated_points(t(cbind(res$lastmodel[[1]]@y, res$lastmodel[[2]]@y)))),
+        plotParetoEmp(filter_dominated(cbind(res$lastmodel[[1]]@y, res$lastmodel[[2]]@y)),
                       col = control$PF.line.col)
         if(res$lastmodel[[1]]@noise.flag && control$add_denoised_PF)
-          points(t(nondominated_points(t(cbind(res$lastmodel[[1]]@y, res$lastmodel[[2]]@y)))),
+          points(filter_dominated(cbind(res$lastmodel[[1]]@y, res$lastmodel[[2]]@y)),
                  col = control$PF.points.col, pch = control$PF.pch)
       }
       
@@ -172,7 +172,7 @@ plotGPareto <- function(res, add = FALSE, UQ_PF = FALSE, UQ_PS = FALSE, UQ_dens 
           if(res$model[[1]]@noise.flag){
             smoothed_preds <- predict_kms(res$model, newdata=res$model[[1]]@X, type="UK", checkNames = FALSE, 
                                           light.return = TRUE, cov.compute = FALSE)$mean
-            smoothed_preds <- t(nondominated_points(smoothed_preds))
+            smoothed_preds <- filter_dominated(t(smoothed_preds))
             plotParetoEmp(smoothed_preds, col = control$PF.line.col, lty = 3)
             points(smoothed_preds, col = control$PF.points.col, pch = 2)
           }
@@ -180,7 +180,7 @@ plotGPareto <- function(res, add = FALSE, UQ_PF = FALSE, UQ_PS = FALSE, UQ_dens 
           if(res$lastmodel[[1]]@noise.flag){
             smoothed_preds <- predict_kms(res$lastmodel, newdata=res$lastmodel[[1]]@X, type="UK", checkNames = FALSE, 
                                           light.return = TRUE, cov.compute = FALSE)$mean
-            smoothed_preds <- t(nondominated_points(smoothed_preds))
+            smoothed_preds <- filter_dominated(t(smoothed_preds))
             plotParetoEmp(smoothed_preds, col = control$PF.line.col, lty = 3)
             points(smoothed_preds, col = control$PF.points.col, pch = 2)
           }
@@ -209,9 +209,9 @@ plotGPareto <- function(res, add = FALSE, UQ_PF = FALSE, UQ_PS = FALSE, UQ_dens 
       if(n.obj == 3){
         
         if(control$use.rgl){
-          plotParetoEmp(t(nondominated_points(t(ally))), bounds = control$bounds, add = add)
+          plotParetoEmp(filter_dominated(ally), bounds = control$bounds, add = add)
           points3d(ally, col = control$PF.points.col)
-          if(exists("ally.noisy")) plotParetoEmp(t(nondominated_points(t(ally.noisy))), add = TRUE)
+          if(exists("ally.noisy")) plotParetoEmp(filter_dominated(ally.noisy), add = TRUE)
           
         }else{
           
@@ -245,9 +245,9 @@ plotGPareto <- function(res, add = FALSE, UQ_PF = FALSE, UQ_PS = FALSE, UQ_dens 
           
           # rawGrid <- as.matrix(expand.grid(ally[,1], ally[,2], ally[,3]))
           rawGrid <- as.matrix(expand.grid(xax, yax, zlevels))
-          dom_elements <- apply(rawGrid, 1, function(x){is_dominated(cbind(as.vector(x), t(ally + 1e-6)))[1]})
+          dom_elements <- apply(rawGrid, 1, function(x){!is_nondominated(rbind(as.vector(x), t(ally + 1e-6)))[1]})
           rawGrid <- rawGrid[!dom_elements,]
-          dom_elements <- apply(rawGrid, 1, function(x){is_dominated(cbind(as.vector(x), t(ally - 1e-6)))[1]})
+          dom_elements <- apply(rawGrid, 1, function(x){!is_nondominated(rbind(as.vector(x), t(ally - 1e-6)))[1]})
           rawGrid <- rawGrid[dom_elements,]
           
           
@@ -363,7 +363,7 @@ plotGPareto <- function(res, add = FALSE, UQ_PF = FALSE, UQ_PS = FALSE, UQ_dens 
     
     non_dom_set <- NULL
     for (i in 1:control$nsim){
-      non_dom_order <- nds_rank(rbind(Simu_f1[i,], Simu_f2[i,]))
+      non_dom_order <- pareto_rank(cbind(Simu_f1[i,], Simu_f2[i,]))
       non_dom_set <- rbind(simPoints[which(non_dom_order == 1),], non_dom_set)
     }
     

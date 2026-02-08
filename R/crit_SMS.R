@@ -38,12 +38,12 @@
 #' n_appr <- 15 
 #' design.grid <- round(maximinESE_LHS(lhsDesign(n_appr, n_var, seed = 42)$design)$design, 1)
 #' response.grid <- t(apply(design.grid, 1, f_name))
-#' PF <- t(nondominated_points(t(response.grid)))
+#' PF <- filter_dominated(response.grid)
 #' mf1 <- km(~., design = design.grid, response = response.grid[,1])
 #' mf2 <- km(~., design = design.grid, response = response.grid[,2])
 #' 
 #' model <- list(mf1, mf2)
-#' critcontrol <- list(refPoint = c(300, 0), currentHV = dominated_hypervolume(t(PF), c(300, 0)))
+#' critcontrol <- list(refPoint = c(300, 0), currentHV = hypervolume(PF, c(300, 0)))
 #' SMSEGO_grid <- apply(test.grid, 1, crit_SMS, model = model,
 #'                      paretoFront = PF, critcontrol = critcontrol)
 #' 
@@ -79,7 +79,7 @@ crit_SMS <- function(x, model, paretoFront=NULL, critcontrol=NULL, type="UK")
   if(is.null(paretoFront) || is.null(refPoint)) {
     observations <- Reduce(cbind, lapply(model, slot, "y"))
   }
-  if(is.null(paretoFront)) paretoFront <- t(nondominated_points(t(observations)))
+  if(is.null(paretoFront)) paretoFront <- filter_dominated(observations)
   if (is.null(refPoint)){
     if(is.null(critcontrol$extendper)) critcontrol$extendper <- 0.2
     # refPoint    <- matrix(apply(paretoFront, 2, max) + 1, 1, n.obj)
@@ -89,7 +89,7 @@ crit_SMS <- function(x, model, paretoFront=NULL, critcontrol=NULL, type="UK")
   }
   n.pareto <- nrow(paretoFront)
   
-  if (is.null(currentHV)) currentHV <- dominated_hypervolume(points=t(paretoFront), ref=refPoint)
+  if (is.null(currentHV)) currentHV <- hypervolume(x=paretoFront, reference = refPoint)
   if (is.null(nsteps.remaining)) nsteps.remaining <- 1
   if (is.null(gain))  gain <- -qnorm( 0.5*(0.5^(1/n.obj)) )
   
@@ -126,9 +126,9 @@ crit_SMS <- function(x, model, paretoFront=NULL, critcontrol=NULL, type="UK")
   if (penalty == 0){
     # non epsilon-dominated solution
     potFront <- rbind(paretoFront, potSol)
-    mypoints <- t(nondominated_points(t(potFront)))
+    mypoints <- filter_dominated(potFront)
     if (is.null(nrow(mypoints))) mypoints <- matrix(mypoints, 1, n.obj)
-    myhv <- dominated_hypervolume(points=t(mypoints), ref=refPoint)
+    myhv <- hypervolume(x=mypoints, reference = refPoint)
     f    <- currentHV - myhv
   } else{
     f <- penalty

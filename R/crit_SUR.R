@@ -41,7 +41,7 @@
 #' n_appr <- 15 
 #' design.grid <- round(maximinESE_LHS(lhsDesign(n_appr, n_var, seed = 42)$design)$design, 1)
 #' response.grid <- t(apply(design.grid, 1, f_name))
-#' paretoFront <- t(nondominated_points(t(response.grid)))
+#' paretoFront <- filter_dominated(response.grid)
 #' mf1 <- km(~., design = design.grid, response = response.grid[,1])
 #' mf2 <- km(~., design = design.grid, response = response.grid[,2])
 #' 
@@ -137,7 +137,7 @@ crit_SUR <- function(x, model, paretoFront = NULL, critcontrol = NULL, type = "U
     
     if(is.null(paretoFront)){
       observations <- Reduce(cbind, lapply(model, slot, "y"))
-      paretoFront <- t(nondominated_points(t(observations)))
+      paretoFront <- filter_dominated(observations)
     }
     
     #--- Remove integration points with zero variance -----------------------
@@ -296,7 +296,7 @@ crit_SUR <- function(x, model, paretoFront = NULL, critcontrol = NULL, type = "U
           
           # res <- allres[[i]]
           # Subset of the Pareto front
-          nondominated.sub <- which(!is_dominated((nondominated_points(t(paretoFront[(i:n.pareto),1:2, drop=FALSE])))))
+          nondominated.sub <- which(is_nondominated((filter_dominated(paretoFront[(i:n.pareto),1:2, drop=FALSE]))))
           # Reorder by increasing first objective
           nondominated.sub <- i-1+nondominated.sub[sort(paretoFront[(i:n.pareto)[nondominated.sub],1],index.return=TRUE)[[2]]]
           n.pareto.sub     <- length(nondominated.sub)

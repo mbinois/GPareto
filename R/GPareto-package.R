@@ -140,7 +140,7 @@
 #' design.grid <- maximinESE_LHS(lhsDesign(nappr, nvar, seed = 42)$design)$design
 #' response.grid <- t(apply(design.grid, 1, fname))
 #' 
-#' PF <- t(nondominated_points(t(response.grid)))
+#' PF <- filter_dominated(response.grid)
 #' 
 #' # kriging models : matern5_2 covariance structure, linear trend, no nugget effect
 #' mf1 <- km(~., design = design.grid, response = response.grid[,1])

@@ -37,7 +37,7 @@
 ## ' n_appr <- 15 
 ## ' design.grid <- round(maximinESE_LHS(lhsDesign(n_appr, n_var, seed = 42)$design)$design, 1)
 ## ' response.grid <- t(apply(design.grid, 1, f_name))
-## ' Front_Pareto <- t(nondominated_points(t(response.grid)))
+## ' Front_Pareto <- filter_dominated(response.grid)
 ## ' mf1 <- km(~., design = design.grid, response = response.grid[,1])
 ## ' mf2 <- km(~., design = design.grid, response = response.grid[,2])
 ## ' 
@@ -63,7 +63,7 @@ EHI_2d <- function(x, model, critcontrol=NULL, type = "UK", paretoFront = NULL){
   if(is.null(paretoFront) || is.null(critcontrol$refPoint)){
     observations <- Reduce(cbind, lapply(model, slot, "y"))
     if(is.null(paretoFront))
-      paretoFront <- t(nondominated_points(t(observations)))
+      paretoFront <- filter_dominated(observations)
   }
   
   if (is.unsorted(paretoFront[,1])){

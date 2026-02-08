@@ -59,7 +59,7 @@ test.grid <- as.matrix(test.grid)
 n_appr <- 15
 design.grid <- round(maximinESE_LHS(lhsDesign(n_appr, n_var, seed = 42)$design)$design, 1)
 response.grid <- t(apply(design.grid, 1, f_name))
-Front_Pareto <- t(nondominated_points(t(response.grid)))
+Front_Pareto <- filter_dominated(response.grid)
 mf1 <- km(~., design = design.grid, response = response.grid[,1])
 mf2 <- km(~., design = design.grid, response = response.grid[,2])
 

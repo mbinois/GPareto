@@ -94,7 +94,7 @@
 #' nappr <- 15 
 #' design.grid <- maximinESE_LHS(lhsDesign(nappr, d, seed = 42)$design)$design
 #' response.grid <- t(apply(design.grid, 1, fname))
-#' Front_Pareto <- t(nondominated_points(t(response.grid)))
+#' Front_Pareto <- filter_dominated(response.grid)
 #' 
 #' mf1 <- km(~1, design = design.grid, response = response.grid[, 1], lower=c(.1,.1))
 #' mf2 <- km(~., design = design.grid, response = response.grid[, 2], lower=c(.1,.1))
@@ -343,7 +343,7 @@ GParetoptim <- function (model, fn, ..., cheapfn = NULL, crit = "SMS", nsteps, l
   
   # Regroup all observations
   observations <- Reduce(cbind, lapply(model, slot, "y"))
-  paretoFront <- unique(t(nondominated_points(t(observations))))
+  paretoFront <- unique(filter_dominated(observations))
   
   if (reinterpolation) {
     # Reinterpolation models
@@ -376,14 +376,14 @@ GParetoptim <- function (model, fn, ..., cheapfn = NULL, crit = "SMS", nsteps, l
     
     # Denoised observations
     observations.denoised <- Reduce(cbind, lapply(reinterp.model, slot, "y"))
-    paretoFront <- unique(t(nondominated_points(t(observations.denoised))))
+    paretoFront <- unique(filter_dominated(observations.denoised))
     
   } else {
     if(!is.null(noise.var)) { # noisy case
       # Denoised observations
       pred <- predict_kms(model, newdata=model[[1]]@X, type=type, checkNames = FALSE, light.return = TRUE, cov.compute = FALSE)
       observations.denoised <- t(pred$mean)
-      paretoFront <- unique(t(nondominated_points(t(observations.denoised))))
+      paretoFront <- unique(filter_dominated(observations.denoised))
     }
   }
   
@@ -419,7 +419,7 @@ GParetoptim <- function (model, fn, ..., cheapfn = NULL, crit = "SMS", nsteps, l
     if (i>1) {
       
       ## Compute current Pareto front
-      paretoFront <- unique(t(nondominated_points(t(observations))))
+      paretoFront <- unique(filter_dominated(observations))
       
       if (reinterpolation) {
         reinterp.model <- lapply(model, FUN=build.optim.model)
@@ -433,13 +433,13 @@ GParetoptim <- function (model, fn, ..., cheapfn = NULL, crit = "SMS", nsteps, l
         }
         observations.denoised <- Reduce(cbind, lapply(reinterp.model, slot, "y"))
         ## Compute current denoised Pareto front
-        paretoFront <- unique(t(nondominated_points(t(observations.denoised)))) 
+        paretoFront <- unique(filter_dominated(observations.denoised)) 
       } else {
         if (!is.null(noise.var)) {
           pred <- predict_kms(model, newdata=model[[1]]@X, type=type, checkNames = FALSE, light.return = TRUE, cov.compute = FALSE)
           observations.denoised <- t(pred$mean)
           ## Compute current denoised Pareto front
-          paretoFront <- unique(t(nondominated_points(t(observations.denoised))))
+          paretoFront <- unique(filter_dominated(observations.denoised))
         }
       }
     }

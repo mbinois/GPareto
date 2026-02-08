@@ -30,7 +30,7 @@
 #' library(rgl)
 #' set.seed(5)
 #' X <- matrix(runif(60), ncol=3)
-#' Xnd <- t(nondominated_points(t(X)))
+#' Xnd <- filter_dominated(X)
 #' plot3d(X)
 #' plot3d(Xnd, col="red", size=8, add=TRUE)
 #' plot3d(x=min(Xnd[,1]), y=min(Xnd[,2]), z=min(Xnd[,3]), col="green", size=8, add=TRUE)
@@ -121,7 +121,7 @@ plotParetoEmp <- function(nondominatedPoints, add = TRUE, max = FALSE, bounds=NU
           z1 <- paretoFront[i,3]
           
           # Subset of the Pareto front
-          front2D <- t(nondominated_points(t(paretoFront[(i:n.pareto),1:2, drop=FALSE])))
+          front2D <- filter_dominated(paretoFront[(i:n.pareto),1:2, drop=FALSE])
           # Reorder by increasing first objective
           front2D <- front2D[order(front2D[,1]),, drop=FALSE]
           
@@ -146,7 +146,7 @@ plotParetoEmp <- function(nondominatedPoints, add = TRUE, max = FALSE, bounds=NU
           x1 <- paretoFront[i,1]
           
           # Subset of the Pareto front
-          front2D <- t(nondominated_points(t(paretoFront[(i:n.pareto),2:3, drop=FALSE])))
+          front2D <- filter_dominated(paretoFront[(i:n.pareto),2:3, drop=FALSE])
           # Reorder by increasing first objective
           front2D <- front2D[order(front2D[,1]),, drop=FALSE]
           

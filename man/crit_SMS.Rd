@@ -49,12 +49,12 @@ test.grid <- expand.grid(seq(0, 1, length.out = n.grid), seq(0, 1, length.out = 
 n_appr <- 15 
 design.grid <- round(maximinESE_LHS(lhsDesign(n_appr, n_var, seed = 42)$design)$design, 1)
 response.grid <- t(apply(design.grid, 1, f_name))
-PF <- t(nondominated_points(t(response.grid)))
+PF <- filter_dominated(response.grid)
 mf1 <- km(~., design = design.grid, response = response.grid[,1])
 mf2 <- km(~., design = design.grid, response = response.grid[,2])
 
 model <- list(mf1, mf2)
-critcontrol <- list(refPoint = c(300, 0), currentHV = dominated_hypervolume(t(PF), c(300, 0)))
+critcontrol <- list(refPoint = c(300, 0), currentHV = hypervolume(PF, c(300, 0)))
 SMSEGO_grid <- apply(test.grid, 1, crit_SMS, model = model,
                      paretoFront = PF, critcontrol = critcontrol)
 

@@ -83,7 +83,7 @@
 #' nappr <- 15 
 #' design.grid <- round(maximinESE_LHS(lhsDesign(nappr, d, seed = 42)$design)$design, 1)
 #' response.grid <- t(apply(design.grid, 1, fname))
-#' paretoFront <- t(nondominated_points(t(response.grid)))
+#' paretoFront <- filter_dominated(response.grid)
 #' mf1 <- km(~., design = design.grid, response = response.grid[,1])
 #' mf2 <- km(~., design = design.grid, response = response.grid[,2])
 #' model <- list(mf1, mf2)
@@ -266,7 +266,7 @@ crit_optimizer <- function(crit = "SMS", model, lower, upper, cheapfn = NULL, ty
   
   if (is.null(paretoFront)){
     observations <- Reduce(cbind, lapply(model, slot, "y"))
-    paretoFront <- t(nondominated_points(t(observations)))
+    paretoFront <- filter_dominated(observations)
   } 
   n.pareto <- nrow(paretoFront)
   if(is.null(critcontrol)) 
@@ -284,7 +284,7 @@ crit_optimizer <- function(crit = "SMS", model, lower, upper, cheapfn = NULL, ty
   if (crit=="SMS"){
     if (!is.null(critcontrol$nsteps.remaining)) nsteps.remaining <- critcontrol$nsteps.remaining else nsteps.remaining <- 1
     #-------------------------------------------------------
-    currentHV <- dominated_hypervolume(points=t(paretoFront), ref=critcontrol$refPoint)
+    currentHV <- hypervolume(x=paretoFront, reference=critcontrol$refPoint)
     if (n.pareto < 2){
       epsilon <- rep(0, n.obj)
     } else {

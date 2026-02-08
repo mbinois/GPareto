@@ -36,7 +36,7 @@
 ## ' n_appr <- 15 
 ## ' design.grid <- round(maximinESE_LHS(lhsDesign(n_appr, n_var, seed = 42)$design)$design, 1)
 ## ' response.grid <- t(apply(design.grid, 1, f_name))
-## ' Front_Pareto <- t(nondominated_points(t(response.grid)))
+## ' Front_Pareto <- filter_dominated(response.grid)
 ## ' mf1 <- km(~., design = design.grid, response = response.grid[,1])
 ## ' mf2 <- km(~., design = design.grid, response = response.grid[,2])
 ## ' 
@@ -72,7 +72,7 @@ SAA_mEI <- function(x, model, batch = FALSE,
   
   if(is.null(paretoFront)){
     observations <- Reduce(cbind, lapply(model, slot, "y"))
-    paretoFront <- t(nondominated_points(t(observations)))
+    paretoFront <- filter_dominated(observations)
   }
   
   refPoint <- critcontrol$refPoint
@@ -146,14 +146,14 @@ SAA_mEI <- function(x, model, batch = FALSE,
   
   if(batch){
     if(critcontrol$type == "hypervolume"){
-      H0 <- dominated_hypervolume(points = t(paretoFront), ref = refPoint)
+      H0 <- hypervolume(x = paretoFront, reference = refPoint)
       ImprovementSamples <- apply(Samples, 1, Hypervolume_improvement, front = paretoFront, refPoint = refPoint, H0 = H0)
     }else{stop("Batch EMI not supported.")}
     return(mean(ImprovementSamples))
     
   }else{
     if(critcontrol$type == "hypervolume"){
-      H0 <- dominated_hypervolume(points = t(paretoFront), ref = refPoint)
+      H0 <- hypervolume(x = paretoFront, reference = refPoint)
       ImprovementSamples <- Hypervolume_improvement_vec(points = Samples, front = paretoFront, refPoint = refPoint, HypInitial = H0)
     } 
     else ImprovementSamples <- apply(Samples, 1, Maximin_Improvement, front = paretoFront, refPoint = refPoint)
@@ -165,20 +165,20 @@ SAA_mEI <- function(x, model, batch = FALSE,
 }
 
 Hypervolume_improvement <- function(pts, front, refPoint, H0 = NULL){
-  if(is.null(H0)) H0 <- dominated_hypervolume(points = t(front), ref = refPoint)
+  if(is.null(H0)) H0 <- hypervolume(x = front, reference = refPoint)
   # if(!is_dominated(t(rbind(points,front)))[1:nrow(points)]){
-  Hi <- dominated_hypervolume(t(rbind(pts,front)), refPoint)
+  Hi <- hypervolume(rbind(pts,front), reference = refPoint)
   # }
   return(Hi - H0)
 }
 
 contribution_to_front <- function(point, front, refPoint){
-  return(dominated_hypervolume(t(rbind(point,front)),refPoint))
+  return(hypervolume(rbind(point,front), reference = refPoint))
 }
 
 Hypervolume_improvement_vec <- function(points, front, refPoint, HypInitial = NULL){
   Hi <- rep(0,nrow(points))
-  if(is.null(HypInitial)) HypInitial <- dominated_hypervolume(t(front),refPoint)
+  if(is.null(HypInitial)) HypInitial <- hypervolume(front,refPoint)
   idxND <- which(nonDomSet(points,front))
   Hi[idxND] <- apply(points[idxND,,drop=FALSE], 1, contribution_to_front, front = front, refPoint = refPoint) - HypInitial
   #for (i in idxND) Hi[i] <- dominated_hypervolume(t(rbind(points[i,],front)),refPoint)
@@ -190,7 +190,7 @@ Hypervolume_improvement_vec <- function(points, front, refPoint, HypInitial = NU
 # ref_point added to have the same arguments than Hypervolume_improvement
 Maximin_Improvement <- function(point, front, refPoint){
   Em <- 0
-  if(!is_dominated(t(rbind(point,front)))[1]){
+  if(is_nondominated(rbind(point,front))[1]){
     Em <- -Inf
     for(i in 1:nrow(front)){
       # for(j in 1:ncol(front)){

@@ -37,7 +37,7 @@ n.grid <- 21
 nappr <- 11 
 design.grid <- maximinESE_LHS(lhsDesign(nappr, d, seed = 42)$design)$design
 response.grid <- t(apply(design.grid, 1, fname))
-Front_Pareto <- t(nondominated_points(t(response.grid)))
+Front_Pareto <- filter_dominated(response.grid)
 
 mf1 <- km(~., design = design.grid, response = response.grid[,1])
 mf2 <- km(~., design = design.grid, response = response.grid[,2])

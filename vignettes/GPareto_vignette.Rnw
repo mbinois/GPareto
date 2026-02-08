@@ -369,37 +369,37 @@ simus2 <- simulate(model2, nsim = n_sim, newdata = data.frame(x = x), cond = TRU
 par(mfrow = c(1, 3))
 # plot observations and simulations of the first objective
 plot(x, simus1[1,], col = "red", type = "l", xlab = "x", ylab = expression(f[1]))
-points(x[!is_dominated(rbind(simus1[1,], simus2[1,]))], simus1[1,!is_dominated(rbind(simus1[1,], simus2[1,]))], 
+points(x[is_nondominated(cbind(simus1[1,], simus2[1,]))], simus1[1,is_nondominated(cbind(simus1[1,], simus2[1,]))], 
 pch = 20, col = "red")
 lines(x, simus1[2,], col = "blue")
-points(x[!is_dominated(rbind(simus1[2,], simus2[2,]))], simus1[2,!is_dominated(rbind(simus1[2,], simus2[2,]))],
+points(x[is_nondominated(cbind(simus1[2,], simus2[2,]))], simus1[2,is_nondominated(cbind(simus1[2,], simus2[2,]))],
 pch = 20, col = "blue")
 lines(x, simus1[3,], col = "green")
-points(x[!is_dominated(rbind(simus1[3,], simus2[3,]))], simus1[3,!is_dominated(rbind(simus1[3,], simus2[3,]))],
+points(x[is_nondominated(cbind(simus1[3,], simus2[3,]))], simus1[3,is_nondominated(cbind(simus1[3,], simus2[3,]))],
 pch = 20, col = "green")
 points(design.grid, response1, pch = 17)
 
 # plot observations and simulations of the second objective
 plot(x, simus2[1,], col = "red", type = "l", xlab = "x", ylab = expression(f[2]), ylim = c(-15, 20))
-points(x[!is_dominated(rbind(simus1[1,], simus2[1,]))], simus2[1,!is_dominated(rbind(simus1[1,], simus2[1,]))], 
+points(x[is_nondominated(cbind(simus1[1,], simus2[1,]))], simus2[1,is_nondominated(cbind(simus1[1,], simus2[1,]))], 
 pch = 20, col = "red")
 lines(x, simus2[2,], col = "blue")
-points(x[!is_dominated(rbind(simus1[2,], simus2[2,]))], simus2[2,!is_dominated(rbind(simus1[2,], simus2[2,]))],
+points(x[is_nondominated(cbind(simus1[2,], simus2[2,]))], simus2[2,is_nondominated(cbind(simus1[2,], simus2[2,]))],
 pch = 20, col = "blue")
 lines(x, simus2[3,], col = "green")
-points(x[!is_dominated(rbind(simus1[3,], simus2[3,]))], simus2[3,!is_dominated(rbind(simus1[3,], simus2[3,]))],
+points(x[is_nondominated(cbind(simus1[3,], simus2[3,]))], simus2[3,is_nondominated(cbind(simus1[3,], simus2[3,]))],
 pch = 20, col = "green")
 points(design.grid, response2, pch = 17)
 
 # plot observations and simulations of both objective
 plot(simus1[1,], simus2[1,], col = "red", type = "l", xlab = expression(f[1]), ylab = expression(f[2]), ylim = c(-15, 20))
-points(simus1[1,!is_dominated(rbind(simus1[1,], simus2[1,]))], simus2[1,!is_dominated(rbind(simus1[1,], simus2[1,]))], 
+points(simus1[1,is_nondominated(cbind(simus1[1,], simus2[1,]))], simus2[1,is_nondominated(cbind(simus1[1,], simus2[1,]))], 
 pch = 20, col = "red")
 lines(simus1[2,], simus2[2,], col = "blue")
-points(simus1[2,!is_dominated(rbind(simus1[2,], simus2[2,]))], simus2[2,!is_dominated(rbind(simus1[2,], simus2[2,]))],
+points(simus1[2,is_nondominated(cbind(simus1[2,], simus2[2,]))], simus2[2,is_nondominated(cbind(simus1[2,], simus2[2,]))],
 pch = 20, col = "blue")
 lines(simus1[3,], simus2[3,], col = "green")
-points(simus1[3, !is_dominated(rbind(simus1[3,], simus2[3,]))], simus2[3,!is_dominated(rbind(simus1[3,], simus2[3,]))],
+points(simus1[3, is_nondominated(cbind(simus1[3,], simus2[3,]))], simus2[3,is_nondominated(cbind(simus1[3,], simus2[3,]))],
 pch = 20, col = "green")
 points(response1, response2, pch = 17)
 
@@ -509,7 +509,7 @@ several alternatives to select integration points are provided using the functio
 as well as importance sampling schemes \citep[as described in][]{Picheny2013}.
 For now \code{crit_SUR} is available for two and three objectives.
 
-In terms of complexity, both \code{crit_EHI} with $m>2$ and \code{crit_SMS} use hypervolume computations provided in the \pkg{emoa} package (much more frequently for the first one, which is thus slower). Those have an exponential complexity in the number of objectives and also depend on the number of points in the Pareto front. For \code{crit_EMI} the complexity mainly depends on the number of sample points for the SAA approximation and linearly in the number of objectives, it is more affordable than \code{crit_EHI} for more than two objectives. For \code{crit_SUR}, the complexity is essentially related to the integration over the input domain which can become cumbersome with many variables.
+In terms of complexity, both \code{crit_EHI} with $m>2$ and \code{crit_SMS} use hypervolume computations provided in the \pkg{emoa} package (much more frequently for the first one, which is thus slower). As of version 1.2, \pkg{emoa} is replaced bu \pkg{moocore} \citep{Lopez2026}. Those have an exponential complexity in the number of objectives and also depend on the number of points in the Pareto front. For \code{crit_EMI} the complexity mainly depends on the number of sample points for the SAA approximation and linearly in the number of objectives, it is more affordable than \code{crit_EHI} for more than two objectives. For \code{crit_SUR}, the complexity is essentially related to the integration over the input domain which can become cumbersome with many variables.
 
 Importantly, except for \code{crit_SUR}, these criteria depend on the relative scaling of the objectives, i.e., multiplying one objective by a constant modifies the results. Scaling may be performed by the user, e.g., from the maximum and minimum values observed for each objective as in \cite{Parr2012} or \cite{Svenson2011}. In addition, \code{crit_EHI} and \code{crit_SMS} need a reference point for bounding hypervolume computations. 
 If no reference point is given by the user, with \code{refPoint},
@@ -634,7 +634,7 @@ set.seed(42)
 n <- 100
 X <- matrix(seq(0, 1, length.out = n), ncol = 1)
 F <- MOP2(X)
-I <- !is_dominated(t(F))
+I <- is_nondominated(F)
 Fstar <- F[I,]
 Xstar <- X[I]
 @
@@ -650,7 +650,7 @@ model <- list(mf1, mf2)
 
 <<echo=FALSE, warning=FALSE, results='hide'>>=
 # Prediction
-ParetoFront.init <- t(nondominated_points(t(response.init)))
+ParetoFront.init <- filter_dominated(response.init)
 p1 <- predict(object = mf1, newdata = X, checkNames = FALSE, type = "UK")
 p2 <- predict(object = mf2, newdata = X, checkNames = FALSE, type = "UK")
 
@@ -676,7 +676,7 @@ mf2.res <- res$lastmodel[[2]]
 p1.res <- predict(mf1.res, newdata = X, checkNames = FALSE, type = "UK")
 p2.res <- predict(mf2.res, newdata = X, checkNames = FALSE, type = "UK")
 # current Pareto front from non-dominated solutions
-ParetoFront.res <- t(nondominated_points(t(cbind(mf1.res@y, mf2.res@y))))
+ParetoFront.res <- filter_dominated(cbind(mf1.res@y, mf2.res@y))
 @
 
 
@@ -1329,6 +1329,11 @@ Koch P, Wagner T, Emmerich MT, B{\"a}ck T, Konen W (2015).
 \newblock \enquote{Efficient Multi-Criteria Optimization on Noisy Machine
   Learning Problems.}
 \newblock \emph{Applied Soft Computing}, \textbf{29}, 357--370.
+
+\bibitem[{López-Ibáñez (2026) López-Ibáñez}]{Lopez2026} 
+López-Ibáñez M (2026).
+\newblock \endquote{\pkg{moocore}: Core Mathematical Functions for Multi-Objective Optimization.}
+\newblock R package version 0.2.0.
 
 \bibitem[{MacDonald \emph{et~al.}(2015)MacDonald, Ranjan, and
   Chipman}]{macdonald2015gpfit}

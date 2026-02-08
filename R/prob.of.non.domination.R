@@ -78,7 +78,7 @@ prob.of.non.domination <- function(paretoFront=NULL, model=NULL, integration.poi
     } else {
       observations <- Reduce(cbind, lapply(model, slot, "y"))
     }
-    paretoFront <- matrix(t(nondominated_points(t(observations))),ncol=n.obj)
+    paretoFront <- matrix(filter_dominated(observations),ncol=n.obj)
   }
   n.pareto <- nrow(paretoFront)
   
@@ -145,7 +145,7 @@ prob.of.non.domination <- function(paretoFront=NULL, model=NULL, integration.poi
       if (i ==1){ p.obj.zi <- 1 - phi.z.tilde[i,]
       } else    { p.obj.zi <- phi.z.tilde[i-1,] - phi.z.tilde[i,] }
       
-      nondominated.sub <- which(!is_dominated(t(paretoFront[(i:n.pareto),1:2, drop=FALSE]))) 
+      nondominated.sub <- which(is_nondominated(paretoFront[(i:n.pareto),1:2, drop=FALSE]))
       #       nondominated.sub <- which(!is_dominated((nondominated_points(t(paretoFront[(i:n.pareto),1:2, drop=FALSE])))))
       # nondominated.sub <- which(!is_dominated(t(nondominated_points(t(paretoFront[(i:n.pareto),1:2, drop=FALSE])))))
       #       nondominated.sub <- paretocheck(paretoFront[(i:n.pareto),1:2, drop=FALSE])                         # Subset of the Pareto front

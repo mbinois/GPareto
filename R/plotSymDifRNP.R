@@ -26,7 +26,7 @@
 plotSymDifRNP <- function(set1, set2, xlim, ylim, fill = "black", add = "FALSE", ...){
   
   #plot(t(cbind(set1,set2)),pch='.')
-  lo <- nondominated_points(cbind(set1,set2))
+  lo <- t(filter_dominated(t(cbind(set1,set2))))
   #points(t(lo),col="red")
   
   i1 <- length(set1[1,])
@@ -35,10 +35,10 @@ plotSymDifRNP <- function(set1, set2, xlim, ylim, fill = "black", add = "FALSE",
   set1bis <- set1[,order(set1[1,])]
   set2bis <- set2[,order(set2[1,])]
   
-  up <- -nondominated_points(-cbind(set1,set2,rbind(set1bis[1,2:i1],set1bis[2,1:(i1-1)]),
-                                    rbind(set2bis[1,2:i2],set2bis[2,1:(i2-1)]),
-                                    c(max(set1bis[1,1],set2bis[1,1]),ylim[2]),
-                                    c(xlim[2],max(set1bis[2,i1],set2bis[2,i2]))
+  up <- -t(filter_dominated(-t(cbind(set1,set2,rbind(set1bis[1,2:i1],set1bis[2,1:(i1-1)]),
+                                   rbind(set2bis[1,2:i2],set2bis[2,1:(i2-1)]),
+                                   c(max(set1bis[1,1],set2bis[1,1]),ylim[2]),
+                                   c(xlim[2],max(set1bis[2,i1],set2bis[2,i2]))))
   )
   )
   #points(t(up),col="blue")

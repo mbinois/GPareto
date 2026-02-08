@@ -24,9 +24,10 @@ plotParetoGrid <- function(fname = "ZDT1", xlim = c(0,1), ylim = c(0,1), n.grid 
                       seq(ylim[1], ylim[2], length.out = n.grid))
   
   response.grid <- apply(Plan, 1, fname)
-  
-  ParetoFront <- t(nondominated_points(response.grid))
   response.grid <- t(response.grid)
+  
+  ParetoFront <- filter_dominated(response.grid)
+
   
   ParetoSet <- Plan[which(response.grid[,1] %in% ParetoFront[,1] & response.grid[,2] %in% ParetoFront[,2]),]
   

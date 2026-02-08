@@ -37,7 +37,7 @@
 #'  When missing, values are determined from the axis-wise extrema of the simulations.
 #' @seealso Methods \code{coef}, \code{summary} and \code{plot} can be used to get the coefficients from a \code{CPF} object, 
 #' to obtain a summary or to display the attainment function (with the Vorob'ev expectation if \code{compute.VorobExp} is \code{TRUE}). 
-#' @importFrom emoa nondominated_points is_dominated dominated_hypervolume
+#' @importFrom moocore filter_dominated is_nondominated hypervolume
 #' @import DiceKriging
 #' @importFrom rgenoud genoud
 #' @importFrom grDevices gray
@@ -98,7 +98,7 @@ CPF <-
     ## should be computed after the attainment , compute.VorobExpect = TRUE
     
     if(is.null(paretoFront)){
-      paretoFront <- t(nondominated_points(t(response)))
+      paretoFront <- filter_dominated(response)
     }
     
     # Determination of the grid for computation of the attainment (if X is NULL)
@@ -142,9 +142,9 @@ CPF <-
     
     
     for(i in 1:nsim){
-      tmp <- nondominated_points(cbind(rbind(fun1sims[i,],fun2sims[i,]), t(paretoFront)))
+      tmp <- filter_dominated(rbind(cbind(fun1sims[i,],fun2sims[i,]), paretoFront))
       for(j in 1:dim(X)[1]){
-        if(ActivePoints[j] == 0 && is_dominated(cbind(X[j,], tmp))[1]){
+        if(ActivePoints[j] == 0 && !is_nondominated(rbind(X[j,], tmp))[1]){
           Pdom[j] = Pdom[j]+1
         }
       }  
@@ -381,7 +381,7 @@ VorobExpect <- function(A){
   
   VE <- cbind(VE, A$y)
   
-  VE <- t(nondominated_points(t(VE[which(!is.na(VE[,1])),])))
+  VE <- filter_dominated(VE[which(!is.na(VE[,1])),])
   
   return(VE)
 }
@@ -439,12 +439,12 @@ VorobDev <- function(CPF, refPoint = NULL){
   VD <- 0 #Vorob'ev deviation
   
   # symmetric difference : 2*H(AUB) - H(A) - H(B)
-  H2 <- dominated_hypervolume(t(CPF$VE), ref = c(ma1, ma2))
+  H2 <- hypervolume(x = CPF$VE, reference = c(ma1, ma2))
   for(i in 1:nsim){
-    H1 <- dominated_hypervolume(rbind(CPF$fun1sims[i,],CPF$fun2sims[i,]), ref = c(ma1, ma2))
+    H1 <- hypervolume(cbind(CPF$fun1sims[i,],CPF$fun2sims[i,]), reference = c(ma1, ma2))
     
-    H12 <- dominated_hypervolume(cbind(rbind(CPF$fun1sims[i,],CPF$fun2sims[i,]),
-                                       t(CPF$VE)), ref = c(ma1, ma2))
+    H12 <- hypervolume(rbind(cbind(CPF$fun1sims[i,],CPF$fun2sims[i,]),
+                                       CPF$VE), reference = c(ma1, ma2))
     VD = VD + 2*H12 -H1 -H2
     
   }

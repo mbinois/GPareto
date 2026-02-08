@@ -21,7 +21,7 @@
 #'  
 #' This function relies on the \code{\link[ks]{ks-package}} package for the kernel density estimation.
 #' @importFrom ks kde
-#' @importFrom emoa nds_rank
+#' @importFrom moocore pareto_rank
 #' @export
 #' @examples
 #' \dontrun{ 
@@ -67,7 +67,7 @@ ParetoSetDensity <- function(model, lower, upper, CPS = NULL, nsim = 50, simpoin
     
     # Creation of CPS
     for (i in 1:nsim){
-      non_dom_order <- nds_rank(Simus[,i,])
+      non_dom_order <- pareto_rank(t(Simus[,i,]))
       CPS <- rbind(simpoints[which(non_dom_order == 1),], CPS)
     }
   }

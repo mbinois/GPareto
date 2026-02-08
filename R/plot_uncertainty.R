@@ -50,9 +50,9 @@ plot_uncertainty <- function(model, paretoFront = NULL, type = "pn", lower, uppe
   n.obj <- length(model)
   observations <- matrix(0, model[[1]]@n, n.obj)
   for (i in 1:n.obj) observations[,i] <- model[[i]]@y
-  if (is.null(paretoFront)) paretoFront <- t(nondominated_points(t(observations)))
+  if (is.null(paretoFront)) paretoFront <- filter_dominated(observations)
   
-  is.dom <- is_dominated(t(observations))
+  is.dom <- !is_nondominated(observations)
   
   ## 1D case
   if(model[[1]]@d == 1){

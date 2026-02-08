@@ -23,7 +23,7 @@
 #' design.grid <- maximinESE_LHS(lhsDesign(nappr, nvar, seed = 42)$design)$design
 #' response.grid <- t(apply(design.grid, 1, fname))
 #' 
-#' ParetoFront <- t(nondominated_points(t(response.grid)))
+#' ParetoFront <- filter_dominated(response.grid)
 #' 
 #' # kriging models : matern5_2 covariance structure, linear trend, no nugget effect
 #' mf1 <- km(~., design = design.grid, response = response.grid[, 1])
@@ -58,10 +58,10 @@ plotSymDevFun <- function(CPF, n.grid = 100){
   SymDevGraph = matrix(0,n.grid, n.grid)
   for(i in 1:dim(CPF$fun1sims)[1]){
     SymDevGraph = SymDevGraph +
-      SymDiffRaw(nondominated_points(cbind(rbind(CPF$fun1sims[i,], 
+      SymDiffRaw(t(filter_dominated(t(cbind(rbind(CPF$fun1sims[i,], 
                                                  CPF$fun2sims[i,]), 
-                                           t(CPF$PF))), 
-                 nondominated_points(t(CPF$VE)),c(flim1[1],flim1[2]),
+                                           t(CPF$PF))))), 
+                 t(filter_dominated(CPF$VE)),c(flim1[1],flim1[2]),
                  c(flim2[1],flim2[2]),n.grid)
   }
   filled.contour(seq(flim1[1], flim1[2],,n.grid), seq(flim2[1], flim2[2],,n.grid),
@@ -87,12 +87,11 @@ SymDiffRaw <- function(set1,set2, xlim, ylim, resGrid){
   matRes <- rep(0,resGrid*resGrid)
   
   for (i in 1:dim(grille)[1]){
-    a = is_dominated(cbind(grille[i,], set1))[1]
-    b = is_dominated(cbind(grille[i,], set2))[1]
+    a = !is_nondominated(t(cbind(grille[i,], set1)))[1]
+    b = !is_nondominated(t(cbind(grille[i,], set2)))[1]
     if(a != b)
       matRes[i] = 1
   }
-  
   
   return(matRes)
 }

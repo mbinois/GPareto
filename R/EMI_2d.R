@@ -6,7 +6,7 @@ EMI_2d <- function(x, model, type = "UK", critcontrol = NULL, paretoFront = NULL
   
   if(is.null(paretoFront)){
     observations <- Reduce(cbind, lapply(model, slot, "y"))
-    paretoFront <- t(nondominated_points(t(observations)))
+    paretoFront <- filter_dominated(observations)
   }
   
   if (is.unsorted(paretoFront[,1])){
